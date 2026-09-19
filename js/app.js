@@ -3,25 +3,43 @@ window.giaphaData = null;
 let danhSachGhiChu = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // ============ CHUYỂN TAB ============
-  const tabButtons = document.querySelectorAll('.tab-btn');
+  // ============ CHUYỂN TAB + ĐỔI BANNER ============
+  const menuButtons = document.querySelectorAll('.menu-btn');
   const tabContents = document.querySelectorAll('.tab-content');
-  tabButtons.forEach(btn => {
+  const bannerImg = document.getElementById('banner-img');
+
+  const bannerMap = {
+    'trangchu': 'assets/banner-trangchu.png',
+    'danhtinh': 'assets/banner-danhtinh.png',
+    'phahe': 'assets/banner-phahe.png',
+    'ngoipha': 'assets/banner-ngoipha.png'
+  };
+
+  menuButtons.forEach(btn => {
     btn.addEventListener('click', function() {
       const tabId = this.dataset.tab;
-      tabButtons.forEach(b => b.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
+
+      // Đổi trạng thái nút menu
+      menuButtons.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
+
+      // Đổi nội dung tab
+      tabContents.forEach(c => c.classList.remove('active'));
       const tab = document.getElementById('tab-' + tabId);
       if (tab) tab.classList.add('active');
+
+      // Đổi banner
+      if (bannerImg && bannerMap[tabId]) {
+        bannerImg.src = bannerMap[tabId];
+      }
     });
   });
 
   // ============ TẢI DỮ LIỆU GIA PHẢ ============
   try {
     const response = await fetch('data/giapha.json');
-    giaphaData = await response.json();
-    console.log('Đã tải gia phả:', giaphaData.nguoi.length, 'người');
+    window.giaphaData = await response.json();
+    console.log('Đã tải gia phả:', window.giaphaData.nguoi.length, 'người');
     hienThiDanhSachDoi();
     hienThiDanhSachChi();
     hienThiNghiVan();
@@ -39,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.getElementById('ds-nguoi').innerHTML = '';
         return;
       }
-      const ketQua = giaphaData.nguoi.filter(n => {
+      const ketQua = window.giaphaData.nguoi.filter(n => {
         const ten = (n.ho_ten || '').toLowerCase();
         const chu = (n.ten_chu || '').toLowerCase();
         const hieu = (n.ten_hieu || '').toLowerCase();
@@ -49,17 +67,41 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // ============ KHỞI TẢI GHI CHÚ TỪ LOCALSTORAGE ============
+  // ============ KHỞI TẢI GHI CHÚ ============
   taiGhiChuTuLocal();
   hienThiDanhSachGhiChu();
   ganSuKienFormGhiChu();
+
+  // ============ TẢI LỜI NÓI ĐẦU ============
+  taiLoiNoiDau();
 });
+
+// ============ TẢI LỜI NÓI ĐẦU TỪ noipha.json ============
+async function taiLoiNoiDau() {
+  try {
+    const response = await fetch('data/noipha.json');
+    const data = await response.json();
+
+    const loiCoTo = document.getElementById('loi-co-to');
+    const loiHauThe = document.getElementById('loi-hau-the');
+
+    if (loiCoTo && data.loi_co_to) {
+      loiCoTo.innerHTML = data.loi_co_to;
+    }
+    if (loiHauThe && data.loi_hau_the) {
+      loiHauThe.innerHTML = data.loi_hau_the;
+    }
+    console.log('Đã tải lời nói đầu từ noipha.json');
+  } catch (err) {
+    console.log('Chưa có file noipha.json — hiển thị mặc định');
+  }
+}
 
 // ============ HIỂN THỊ DANH SÁCH ĐỜI ============
 function hienThiDanhSachDoi() {
   const container = document.getElementById('danh-sach-doi');
   if (!container) return;
-  const dsDoi = [...new Set(giaphaData.nguoi.map(n => n.doi))].sort((a,b) => a-b);
+  const dsDoi = [...new Set(window.giaphaData.nguoi.map(n => n.doi))].sort((a,b) => a-b);
   dsDoi.forEach(doi => {
     const btn = document.createElement('button');
     btn.textContent = 'Đời thứ ' + doi;
@@ -67,7 +109,7 @@ function hienThiDanhSachDoi() {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.danh-sach-doi button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const dsNguoiDoi = giaphaData.nguoi.filter(n => n.doi === doi);
+      const dsNguoiDoi = window.giaphaData.nguoi.filter(n => n.doi === doi);
       hienThiKetQua(dsNguoiDoi);
     });
     container.appendChild(btn);
@@ -78,14 +120,14 @@ function hienThiDanhSachDoi() {
 function hienThiDanhSachChi() {
   const container = document.getElementById('danh-sach-chi');
   if (!container) return;
-  giaphaData.chi.forEach(chi => {
+  window.giaphaData.chi.forEach(chi => {
     const btn = document.createElement('button');
     btn.textContent = chi.ten;
     btn.dataset.chi = chi.id;
     btn.addEventListener('click', () => {
       document.querySelectorAll('.danh-sach-chi button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const dsChi = giaphaData.nguoi.filter(n => n.chi === chi.ten);
+      const dsChi = window.giaphaData.nguoi.filter(n => n.chi === chi.ten);
       hienThiKetQua(dsChi);
     });
     container.appendChild(btn);
@@ -156,7 +198,6 @@ function hienThiChiTiet(nguoi) {
     html += '</ul>';
   }
 
-  // Hiển thị ghi chú liên quan đến người này
   const gcLienQuan = danhSachGhiChu.filter(gc => gc.nguoi_id === nguoi.id);
   if (gcLienQuan.length > 0) {
     html += '<h3 style="color:#7A6320;margin:20px 0 10px;font-style:italic;">Ghi chú bổ sung</h3>';
@@ -185,8 +226,8 @@ function dongPanel() {
 // ============ HIỂN THỊ NGHI VẤN ============
 function hienThiNghiVan() {
   const container = document.getElementById('ds-nghi-van');
-  if (!container || !giaphaData) return;
-  const nghiVan = giaphaData.nguoi.filter(n => n.ghi_chu && (n.ghi_chu.includes('Nghi vấn') || n.ghi_chu.includes('?')));
+  if (!container || !window.giaphaData) return;
+  const nghiVan = window.giaphaData.nguoi.filter(n => n.ghi_chu && (n.ghi_chu.includes('Nghi vấn') || n.ghi_chu.includes('?')));
   if (nghiVan.length === 0) {
     container.innerHTML = '<p style="color:#888;font-style:italic;">Chưa có nghi vấn nào.</p>';
     return;
@@ -198,6 +239,7 @@ function hienThiNghiVan() {
     container.appendChild(div);
   });
 }
+
 // ============ FORM GHI CHÚ ============
 function ganSuKienFormGhiChu() {
   const nutLuu = document.getElementById('nut-luu-ghichu');
@@ -211,9 +253,9 @@ function ganSuKienFormGhiChu() {
 
 function dienDropdownNguoi() {
   const select = document.getElementById('gc-nguoi');
-  if (!select || !giaphaData) return;
+  if (!select || !window.giaphaData) return;
   select.innerHTML = '<option value="">— Chọn người —</option>';
-  const dsSapXep = [...giaphaData.nguoi].sort((a, b) => {
+  const dsSapXep = [...window.giaphaData.nguoi].sort((a, b) => {
     if (a.doi !== b.doi) return a.doi - b.doi;
     return (a.ho_ten || '').localeCompare(b.ho_ten || '');
   });
@@ -240,7 +282,7 @@ function luuGhiChu() {
     return;
   }
 
-  const nguoi = giaphaData.nguoi.find(n => n.id === nguoiId);
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
   const ghiChuMoi = {
     id: 'gc-' + Date.now(),
     nguoi_id: nguoiId,
@@ -362,5 +404,5 @@ function xuatFileGhiChu() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  alert('Đã xuất file chuthich.json! Bạn có thể upload lên GitHub để mọi người cùng thấy.');
+  alert('Đã xuất file chuthich.json!');
 }
