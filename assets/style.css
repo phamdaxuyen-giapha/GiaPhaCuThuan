@@ -59,13 +59,13 @@ body {
 .banner-dong {
   background: var(--xam-nau);
   padding: 0;
-  max-height: 180px;
+  max-height: 120px;
   overflow: hidden;
 }
 .banner-dong img {
   width: 100%;
   height: auto;
-  max-height: 180px;
+  max-height: 120px;
   object-fit: cover;
   display: block;
 }
@@ -498,7 +498,7 @@ body {
 .main-footer a:hover { text-decoration: underline; }
 .phien-ban { font-size: 9.5pt; opacity: 0.7; margin-top: 8px; }
 
-/* ============ RESPONSIVE — ĐIỆN THOẠI ============ */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
   .layout-2cot { grid-template-columns: 1fr; }
   .cot-trai { position: static; }
@@ -515,10 +515,10 @@ body {
     min-width: 80px;
   }
   .banner-dong {
-    max-height: 120px;
+    max-height: 80px;
   }
   .banner-dong img {
-    max-height: 120px;
+    max-height: 80px;
   }
   .card {
     padding: 20px 16px;
