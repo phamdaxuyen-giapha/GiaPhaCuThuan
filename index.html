@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia phả họ Phạm Đà Xuyên — Tiền phả</title>
+<link rel="stylesheet" href="assets/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="main-header">
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="trangchu"><img src="assets/banner-trangchu.png" alt="Trang chủ"></button>
+    <button class="tab-btn" data-tab="danhtinh"><img src="assets/banner-danhtinh.png" alt="Danh tính"></button>
+    <button class="tab-btn" data-tab="phahe"><img src="assets/banner-phahe.png" alt="Phả hệ"></button>
+    <button class="tab-btn" data-tab="ngoipha"><img src="assets/banner-ngoipha.png" alt="Ngoại phả"></button>
+  </nav>
+</header>
+
+<main>
+
+  <section id="tab-trangchu" class="tab-content active">
+    <div class="container">
+      <div class="card">
+        <h1 class="tieu-de-lon">LỜI NÓI ĐẦU</h1>
+        <div class="loi-noi-dau">
+          <h2 class="de-muc">Lời thứ nhất — Nguyên văn gia phả gốc</h2>
+          <div class="noi-dung-loi"><p class="ghi-chu-nhap">[Vui lòng nhập nguyên văn lời cụ Tổ vào file data/noipha.json]</p></div>
+        </div>
+        <div class="loi-noi-dau">
+          <h2 class="de-muc">Lời thứ hai — Lý do và lời ngỏ</h2>
+          <div class="noi-dung-loi"><p class="ghi-chu-nhap">[Vui lòng nhập lời ngỏ của bạn vào file data/noipha.json]</p></div>
+        </div>
+      </div>
+      <div class="card thong-tin-tong-quan">
+        <h2 class="de-muc">Đôi nét về dòng họ</h2>
+        <ul>
+          <li><strong>Thủy tổ:</strong> Cụ Pháp Tân công (Biệt tổ họ Phạm — Đà Xuyên)</li>
+          <li><strong>Quê quán:</strong> Xã Đà Xuyên, huyện Lý Nhân, tỉnh Hà Nam</li>
+          <li><strong>Số đời ghi chép:</strong> 7 đời (tính đến cụ Huy Toàn)</li>
+          <li><strong>Nguồn tư liệu:</strong> Bản dịch "Trọn bộ phả chí Họ Phạm ở Đà Xuyên" do cụ Phạm Văn Thuần và cháu Tổng đoàn Giai soạn</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-danhtinh" class="tab-content">
+    <div class="container">
+      <div class="layout-2cot">
+        <aside class="cot-trai">
+          <h2 class="de-muc">Tra cứu theo đời</h2>
+          <div id="danh-sach-doi" class="danh-sach-doi"></div>
+          <h2 class="de-muc">Tra cứu theo chi</h2>
+          <div id="danh-sach-chi" class="danh-sach-chi"></div>
+          <div class="o-tim-kiem"><input type="text" id="o-tim-kiem" placeholder="Tìm tên..."></div>
+        </aside>
+        <div class="cot-phai"><div id="ds-nguoi" class="ds-nguoi"></div></div>
+      </div>
+      <div id="panel-chi-tiet" class="panel-chi-tiet an"></div>
+    </div>
+  </section>
+  <section id="tab-phahe" class="tab-content">
+    <div class="container">
+      <div class="thanh-cong-cu">
+        <button id="nut-doc" class="nut-tool active">⇅ Cây dọc</button>
+        <button id="nut-ngang" class="nut-tool">⇆ Cây ngang</button>
+        <button id="nut-truc-he" class="nut-tool">✨ Tô sáng trực hệ</button>
+        <button id="nut-bo-truc-he" class="nut-tool">↺ Bỏ tô sáng</button>
+        <select id="loc-chi" class="nut-tool"><option value="">— Tất cả các chi —</option></select>
+      </div>
+      <div id="pha-do" class="pha-do"></div>
+    </div>
+  </section>
+
+  <section id="tab-ngoipha" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h2 class="de-muc">Ghi chú & Nghi vấn cần kiểm chứng</h2>
+
+        <div class="form-them-ghichu">
+          <h3 class="tieu-de-nho">+ Thêm ghi chú mới</h3>
+          <div class="form-row">
+            <label>Người liên quan:</label>
+            <select id="gc-nguoi">
+              <option value="">— Chọn người —</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Loại ghi chú:</label>
+            <select id="gc-loai">
+              <option value="sua-chinh-ta">Sửa chính tả</option>
+              <option value="nghi-van">Nghi vấn cần kiểm chứng</option>
+              <option value="bo-sung">Bổ sung thông tin</option>
+              <option value="khac">Khác</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Nội dung:</label>
+            <textarea id="gc-noidung" rows="3" placeholder="Nhập nội dung ghi chú..."></textarea>
+          </div>
+          <div class="form-row">
+            <label>Người đề xuất:</label>
+            <input type="text" id="gc-nguoidexuat" placeholder="Tên bạn...">
+          </div>
+          <div class="form-row">
+            <button id="nut-luu-ghichu" class="nut-chinh">Lưu ghi chú</button>
+            <button id="nut-xuat-ghichu" class="nut-phu">Xuất file chuthich.json</button>
+            <button id="nut-xoa-het-ghichu" class="nut-canhbao">Xóa tất cả ghi chú</button>
+          </div>
+        </div>
+
+        <div id="ds-ghi-chu" class="ds-ghi-chu"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="de-muc">Tư liệu & Hình ảnh bổ sung</h2>
+        <p class="ghi-chu-nhap">
+          Ảnh được tự động cắt theo tỷ lệ 2/3 (ngang: 1200×800, dọc: 800×1200),
+          nén định dạng WebP chất lượng 82%.
+        </p>
+        <div id="ds-ngoai-pha" class="ds-ngoai-pha"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="main-footer">
+  <p>Gia phả họ Phạm Đà Xuyên — Tiền phả</p>
+  <p>Người quản trị: <span id="ten-quan-tri">[Tên bạn]</span> — Góp ý xin gửi về: <a id="email-lien-he" href="mailto:hsnampham@gmail.com">hsnampham@gmail.com</a></p>
+  <p class="phien-ban">Phiên bản 1.0 — Xây dựng trên nền tảng miễn phí GitHub Pages</p>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/phahe.js"></script>
+<script src="js/anhtool.js"></script>
+</body>
+</html>
