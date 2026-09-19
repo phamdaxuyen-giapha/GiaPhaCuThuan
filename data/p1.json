@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "ten": "Gia phả họ Phạm Đà Xuyên — Tiền phả",
+    "phien_ban": "1.0",
+    "ngay_tao": "2026-09-18",
+    "nguon_chinh": "Bản dịch 'Trọn bộ phả chí Họ Phạm ở Đà Xuyên' do cụ Phạm Văn Thuần và cháu Tổng đoàn Giai soạn",
+    "email_lien_he": "hsnampham@gmail.com",
+    "nguoi_quan_tri": "Cháu đời thứ 6"
+  },
+  "chi": [
+    { "id": "chi-ba-he", "ten": "Chi Bá Hệ (Trọng Lương)" },
+    { "id": "chi-trong-quat", "ten": "Chi Trọng Quát" },
+    { "id": "chi-trong-xuyen", "ten": "Chi Trọng Xuyên" }
+  ],
+  "nguoi": [
+    {
+      "id": "P1",
+      "ho_ten": "Phạm Pháp Tân",
+      "ten_chu": "PHÁP TÂN",
+      "ten_hieu": null,
+      "ten_huy": null,
+      "gioi_tinh": "nam",
+      "doi": 1,
+      "chi": "Thủy tổ",
+      "cha_id": null,
+      "me_id": null,
+      "nguyen_van": "Đệ nhất thế Đà Xuyên Biệt tổ Phạm phủ quân tự Pháp Tân công. Công nguyên người Nghĩa Phú con của Phúc Tân công. Khoảng năm Lê Chánh Hòa dời nhà đến ở bờ bãi liong xuên thuộc địa phận thôn Nội xã Đà xuên, giáp với thôn Chanh (chợ búa) còn gọi là Màn trong. Vốn dĩ làm nghề thầy thuốc và phù thủy. Công lấy con gái nhà họ Đặng sinh được 3 trai 5 gái.",
+      "su_kien": [
+        { "loai": "ngay_gio", "ngay_am": "10 tháng 7", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+        { "loai": "an_tang", "dia_diem": "xứ Đầu lang, thôn Nội", "mo_ta": "Thế đất như hình lá cờ; lại như hình con Mộc mở miệng. Để hướng bắc nhìn về hướng nam. Hiện còn bia chép rõ.", "ghi_chu": "Có bia ghi rõ" }
+      ],
+      "hon_nhan": [
+        { "vo_id": "P1-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Đặng, người thôn Nội, xã Đà Xuyên" }
+      ],
+      "con_ids": ["P2-1", "P2-2", "P2-3"],
+      "ghi_chu": "Thủy tổ dòng họ Phạm Đà Xuyên"
+    },
+    {
+      "id": "P1-v1",
+      "ho_ten": "Bà họ Đặng",
+      "ten_chu": "TỪ HUỆ",
+      "ten_hieu": "TỪ HUỆ",
+      "ten_huy": null,
+      "gioi_tinh": "nu",
+      "doi": 1,
+      "chi": "Vợ Thủy tổ",
+      "cha_id": null,
+      "me_id": null,
+      "nguyen_van": "Quê quán: Bà họ Đặng người thôn Nội, xã Đà Xuyên",
+      "su_kien": [
+        { "loai": "ngay_gio", "ngay_am": "4 tháng 1", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+        { "loai": "an_tang", "dia_diem": "thôn Nội xứ Cây hoa", "mo_ta": "Có bia ghi", "ghi_chu": "Có bia" }
+      ],
+      "hon_nhan": [],
+      "con_ids": ["P2-1", "P2-2", "P2-3"],
+      "ghi_chu": "Chính thất của cụ Pháp Tân"
+  },

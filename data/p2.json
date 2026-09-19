@@ -1,0 +1,145 @@
+  {
+    "id": "P2-1",
+    "ho_ten": "Phạm Trọng Lương",
+    "ten_chu": "TRỌNG LƯƠNG",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 2,
+    "chi": "Chi Bá Hệ",
+    "cha_id": "P1",
+    "me_id": "P1-v1",
+    "nguyen_van": "Con trai cả của cụ Pháp Tân. Về quê cũ xã Nghĩa Phú để thờ cúng tổ tiên. Tên chữ Trọng Lương. Không biên chép ngày sinh, ngày mất.",
+    "su_kien": [],
+    "hon_nhan": [
+      { "vo_id": "P2-1-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Nguyễn, tên hiệu TỪ TẤM" }
+    ],
+    "con_ids": ["P3-1-1", "P3-1-2", "P3-1-3"],
+    "ghi_chu": "Về Nghĩa Phú thờ phụng tổ tiên"
+  },
+  {
+    "id": "P2-1-v1",
+    "ho_ten": "Bà họ Nguyễn",
+    "ten_chu": null,
+    "ten_hieu": "TỪ TẤM",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 2,
+    "chi": "Chi Bá Hệ",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất của cụ Trọng Lương. Quê quán: người cùng làng. Ngày giỗ: 29 tháng 3. An táng: xứ Cây hoa, để hướng Đông nhìn về hướng Tây.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "29 tháng 3", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Cây hoa", "mo_ta": "Để hướng Đông nhìn về hướng Tây", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P3-1-1", "P3-1-2", "P3-1-3"],
+    "ghi_chu": "Chính thất cụ Trọng Lương"
+  },
+  {
+    "id": "P2-2",
+    "ho_ten": "Phạm Trọng Quát",
+    "ten_chu": "TRỌNG QUÁT",
+    "ten_hieu": "PHÚC TƯỜNG",
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 2,
+    "chi": "Chi Trọng Quát",
+    "cha_id": "P1",
+    "me_id": "P1-v1",
+    "nguyen_van": "Con trai thứ 2 của cụ Pháp Tân. Ở lại quê mẹ Đà Xuyên. Tên chữ Trọng Quát, tên hiệu Phúc Tường.",
+    "su_kien": [],
+    "hon_nhan": [
+      { "vo_id": "P2-2-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Nguyễn, tên hiệu TỪ KHÁNH" }
+    ],
+    "con_ids": ["P3-2-1", "P3-2-2", "P3-2-3", "P3-2-4"],
+    "ghi_chu": "Ở lại quê mẹ Đà Xuyên"
+  },
+  {
+    "id": "P2-2-v1",
+    "ho_ten": "Bà họ Nguyễn",
+    "ten_chu": null,
+    "ten_hieu": "TỪ KHÁNH",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 2,
+    "chi": "Chi Trọng Quát",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất của cụ Trọng Quát. Ngày giỗ: 18 tháng 12. An táng: xứ Hậu lang, hình con thổ.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "18 tháng 12", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": "Hình con thổ", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P3-2-1", "P3-2-2", "P3-2-3", "P3-2-4"],
+    "ghi_chu": "Chính thất cụ Trọng Quát"
+  },
+  {
+    "id": "P2-3",
+    "ho_ten": "Phạm Trọng Xuyên",
+    "ten_chu": "TRỌNG XUYÊN",
+    "ten_hieu": "ĐỨC THUẬN",
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 2,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P1",
+    "me_id": "P1-v1",
+    "nguyen_van": "Con trai thứ 3 của cụ Pháp Tân. Tên chữ Trọng Xuyên, tên hiệu Đức Thuận. Năm sinh: 1756 giờ Sửu ngày 22 tháng 7 năm Bính Tý. Nơi sinh: thôn Nội, xã Đà Xuyên. Thọ: 73 tuổi. Mất vào giờ Dần ngày 18 tháng 3 năm Canh Thìn (1828). Ngày giỗ: 5 tháng 10 (ngày mất gia phả ghi 18-3 nhưng ngày giỗ lại ghi 5-10, có sự chưa thống nhất). An táng: xứ Đầu lang, đường Mỹ nữ. Để hướng bắc nhìn về hướng nam. Hiện còn bia chép rõ.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "22 tháng 7 năm Bính Tý", "ngay_duong": 1756, "gio": "Sửu", "ghi_chu": "Nơi sinh: thôn Nội, xã Đà Xuyên" },
+      { "loai": "mat", "ngay_am": "18 tháng 3 năm Canh Thìn", "ngay_duong": 1828, "gio": "Dần", "ghi_chu": "Thọ 73 tuổi" },
+      { "loai": "ngay_gio", "ngay_am": "5 tháng 10", "ngay_duong": null, "ghi_chu": "Ngày giỗ khác ngày mất, giữ nguyên theo phả gốc" },
+      { "loai": "an_tang", "dia_diem": "xứ Đầu lang, đường Mỹ nữ", "mo_ta": "Để hướng bắc nhìn về hướng nam. Hiện còn bia chép rõ.", "ghi_chu": "Có bia" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P2-3-v1", "loai": "chinh_that", "ghi_chu": "Bà Lê Thị Thiện (1755-1830), tên hiệu Từ Hậu" },
+      { "vo_id": "P2-3-v2", "loai": "thu_that", "ghi_chu": "Bà Lê Thị Túc (1769-1839), tên hiệu Từ Mẫn" }
+    ],
+    "con_ids": ["P3-3-1", "P3-3-2", "P3-3-3", "P3-3-4", "P3-3-5", "P3-3-6"],
+    "ghi_chu": "Thủy tổ chi Trọng Xuyên"
+  },
+  {
+    "id": "P2-3-v1",
+    "ho_ten": "Lê Thị Thiện",
+    "ten_chu": null,
+    "ten_hieu": "TỪ HẬU",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 2,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Xuyên. Quê quán: Thôn Nội, xã Đà Xuyên. Năm sinh: 1755 giờ Sửu ngày 12 tháng 10 năm Ất Hợi. Thọ: 76 tuổi. An táng: xứ Đầu lang để phía Tây quay về hướng Đông.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "12 tháng 10 năm Ất Hợi", "ngay_duong": 1755, "gio": "Sửu", "ghi_chu": null },
+      { "loai": "mat", "ngay_am": null, "ngay_duong": 1830, "ghi_chu": "Thọ 76 tuổi" },
+      { "loai": "an_tang", "dia_diem": "xứ Đầu lang", "mo_ta": "Để phía Tây quay về hướng Đông", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P3-3-1", "P3-3-2", "P3-3-3", "P3-3-4", "P3-3-5", "P3-3-6"],
+    "ghi_chu": "Chính thất cụ Trọng Xuyên, sinh 5 trai 1 gái"
+  },
+  {
+    "id": "P2-3-v2",
+    "ho_ten": "Lê Thị Túc",
+    "ten_chu": null,
+    "ten_hieu": "TỪ MÂN",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 2,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Thứ thất cụ Trọng Xuyên. Quê quán: xã Từ Vinh, huyện Đại An, phủ Nghĩa Hưng, tỉnh Nam Định. Năm sinh: Kỷ Mão, mất năm Quý Tỵ. Thọ 71 tuổi. Bà là con cụ Pháp Điện họ Lê, giỗ 19 ngày 4. Thời Lê cụ làm đến Nam vệ phân dực tráng tiết tướng quân, lĩnh Hoài viễn tướng quân, Thủ ngự tổng tri ty Nhiêu kỷ ủy, đồng tổng tri kiêm bản xã tiên chỉ hội tư vấn. Mẹ bà là Phạm thị Lệnh, giỗ 16-3. An táng: mộ chôn ở đường con Thỏ xứ Hậu lang, huyệt như hình vô con mộc, để hướng Đông nhìn về hướng Tây, có 3 mũi nhọn tựa như.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "năm Kỷ Mão", "ngay_duong": 1819, "ghi_chu": "Năm Kỷ Mão gần nhất trước 1839" },
+      { "loai": "mat", "ngay_am": "năm Quý Tỵ", "ngay_duong": 1833, "ghi_chu": "Ghi chú trong phả gốc có chữ (sic)" },
+      { "loai": "an_tang", "dia_diem": "đường con Thỏ, xứ Hậu lang", "mo_ta": "Huyệt như hình vô con mộc, để hướng Đông nhìn về hướng Tây", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P3-3-6"],
+    "ghi_chu": "Thứ thất cụ Trọng Xuyên, mẹ của cụ Đằng Đệ"
+  },

@@ -1,0 +1,238 @@
+  {
+    "id": "P3-1-1",
+    "ho_ten": "Phạm Trọng Yêm",
+    "ten_chu": "TRỌNG YÊM",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Bá Hệ",
+    "cha_id": "P2-1",
+    "me_id": "P2-1-v1",
+    "nguyen_van": "Con cụ Trọng Lương. Không rõ vì đã về Nghĩa Phú.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": "Về Nghĩa Phú"
+  },
+  {
+    "id": "P3-1-2",
+    "ho_ten": "Phạm Trọng Viên",
+    "ten_chu": "TRỌNG VIÊN",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Bá Hệ",
+    "cha_id": "P2-1",
+    "me_id": "P2-1-v1",
+    "nguyen_van": "Con cụ Trọng Lương. Không người nối dõi.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": "Không người nối dõi"
+  },
+  {
+    "id": "P3-1-3",
+    "ho_ten": "Phạm Trọng Dung",
+    "ten_chu": "TRỌNG DUNG",
+    "ten_hieu": "PHÚC LỘC",
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Bá Hệ",
+    "cha_id": "P2-1",
+    "me_id": "P2-1-v1",
+    "nguyen_van": "Con cụ Trọng Lương. Tên chữ Trọng Dung, tên hiệu Phúc Lộc. Ngày giỗ: 16 tháng 5. An táng: xứ Hậu lang, hình con mộc.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "16 tháng 5", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": "Hình con mộc", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-1-3-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Nguyễn, tên hiệu Từ Khánh" }
+    ],
+    "con_ids": ["P4-1-1", "P4-1-2", "P4-1-3", "P4-1-4", "P4-1-5"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-1-3-v1",
+    "ho_ten": "Bà họ Nguyễn",
+    "ten_chu": null,
+    "ten_hieu": "TỪ KHÁNH",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Bá Hệ",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Dung. Ngày giỗ: 18 tháng 12. An táng: xứ Hậu lang, hình con thổ.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "18 tháng 12", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": "Hình con thổ", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-1-1", "P4-1-2", "P4-1-3", "P4-1-4", "P4-1-5"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-1",
+    "ho_ten": "Phạm Trọng Thư",
+    "ten_chu": "TRỌNG THƯ",
+    "ten_hieu": "THUẬN TRUNG",
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": "P2-2",
+    "me_id": "P2-2-v1",
+    "nguyen_van": "Con cụ Trọng Quát. Tên chữ Trọng Thư, tên hiệu Thuận Trung. Ngày giỗ: 11 tháng 5. An táng: xứ Hậu lang, hình thổ, ngồi Bắc, hướng Nam.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "11 tháng 5", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": "Hình thổ, ngồi Bắc, hướng Nam", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-2-1-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Nguyễn, tên hiệu Từ Tấm" }
+    ],
+    "con_ids": ["P4-2-1", "P4-2-2"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-1-v1",
+    "ho_ten": "Bà họ Nguyễn",
+    "ten_chu": null,
+    "ten_hieu": "TỪ TẤM",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Thư. Quê quán: người cùng làng. Ngày giỗ: 29 tháng 3. An táng: xứ Cây hoa, để hướng Đông nhìn về hướng Tây.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "29 tháng 3", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Cây hoa", "mo_ta": "Để hướng Đông nhìn về hướng Tây", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-2-1", "P4-2-2"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-2",
+    "ho_ten": "Phạm Trọng Đình",
+    "ten_chu": "TRỌNG ĐÌNH",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": "P2-2",
+    "me_id": "P2-2-v1",
+    "nguyen_van": "Con cụ Trọng Quát. Ngày giỗ: tháng 3. Chính thất Vũ Thị Thìn người cùng thôn, ra Đông Triều làm mướn chết, mồ mả bị thất lạc.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "tháng 3", "ngay_duong": null, "ghi_chu": "Ngày giỗ" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-2-2-v1", "loai": "chinh_that", "ghi_chu": "Bà Vũ Thị Thìn" }
+    ],
+    "con_ids": ["P4-2-3", "P4-2-4"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-2-v1",
+    "ho_ten": "Vũ Thị Thìn",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Đình. Quê quán: người cùng thôn. Ra Đông Triều làm mướn chết, mồ mả bị thất lạc.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P4-2-3", "P4-2-4"],
+    "ghi_chu": "Mồ mả thất lạc"
+  },
+  {
+    "id": "P3-2-3",
+    "ho_ten": "Phạm Trọng Lĩnh",
+    "ten_chu": "TRỌNG LĨNH",
+    "ten_hieu": null,
+    "ten_huy": "VĂN TRỌNG",
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": "P2-2",
+    "me_id": "P2-2-v1",
+    "nguyen_van": "Con cụ Trọng Quát. Tên hủy Văn Trọng, tên chữ Trọng Lĩnh. Ngày giỗ: 20 tháng 7. Chính thất Trần Thị Ơn người cùng thôn, ngày giỗ 30 tháng 1, an táng xứ Hậu lang.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "20 tháng 7", "ngay_duong": null, "ghi_chu": "Ngày giỗ" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-2-3-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Ơn" }
+    ],
+    "con_ids": ["P4-2-5", "P4-2-6"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-3-v1",
+    "ho_ten": "Trần Thị Ơn",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Lĩnh. Quê quán: người cùng thôn. Ngày giỗ: 30 tháng 1. An táng: xứ Hậu lang.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "30 tháng 1", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-2-5", "P4-2-6"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-4",
+    "ho_ten": "Phạm Trọng Tư",
+    "ten_chu": "TRỌNG TƯ",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": "P2-2",
+    "me_id": "P2-2-v1",
+    "nguyen_van": "Con cụ Trọng Quát. Ngày giỗ: 14 tháng 7. An táng: xứ Cây hoa. Chính thất Trần Thị Tám người xã Cao Đà, ngày giỗ tháng 11, an táng chôn chung với chồng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "14 tháng 7", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Cây hoa", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-2-4-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Tám" }
+    ],
+    "con_ids": ["P4-2-7", "P4-2-8", "P4-2-9"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-2-4-v1",
+    "ho_ten": "Trần Thị Tám",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Quát",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Tư. Quê quán: người xã Cao Đà. Ngày giỗ: tháng 11. An táng: chôn chung với chồng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "tháng 11", "ngay_duong": null, "ghi_chu": "Ngày giỗ" }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-2-7", "P4-2-8", "P4-2-9"],
+    "ghi_chu": null
+  },

@@ -1,0 +1,236 @@
+  {
+    "id": "P6-1",
+    "ho_ten": "Phạm Ngọc Thiện",
+    "ten_chu": "NGỌC THIỆN",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P5-3-13",
+    "me_id": "P5-3-13-v1",
+    "nguyen_van": "Con cụ Văn Thuần. Sinh giờ Mão 17 tháng 7 năm Nhâm Thìn (1892). Làng bầu làm lý trường. Ngày giỗ 28 tháng 4. An táng nghĩa trang làng Hậu Nội, xã Nhân Mỹ, huyện Lý Nhân, tỉnh Hà Nam.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "17 tháng 7 năm Nhâm Thìn", "ngay_duong": 1892, "gio": "Mão", "ghi_chu": null },
+      { "loai": "ngay_gio", "ngay_am": "28 tháng 4", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "nghĩa trang làng Hậu Nội, xã Nhân Mỹ, huyện Lý Nhân, tỉnh Hà Nam", "mo_ta": null, "ghi_chu": null },
+      { "loai": "chuc_tuoc", "ghi_chu": "Lý trường" }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P6-2",
+    "ho_ten": "Phạm Ngọc Hoàn",
+    "ten_chu": "NGỌC HOÀN",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P5-3-13",
+    "me_id": "P5-3-13-v1",
+    "nguyen_van": "Con cụ Văn Thuần. Sinh giờ Dần 28 tháng 9 năm Kỷ Hợi (1889).",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "28 tháng 9 năm Kỷ Hợi", "ngay_duong": 1889, "gio": "Dần", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": "Nghi vấn: năm sinh các con ghi sai trong phả gốc (cha con cùng Kỷ Hợi, không thể cách 60 tuổi)"
+  },
+  {
+    "id": "P6-3",
+    "ho_ten": "Phạm Ngọc Anh",
+    "ten_chu": "NGỌC ANH",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P5-3-13",
+    "me_id": "P5-3-13-v1",
+    "nguyen_van": "Tên khác là Yêng. Sinh giờ Mùi 6 tháng 4 nhuận năm Bính Ngọ. Đi làm Cách mạng, theo Việt Minh kháng chiến chống Pháp. Ông hy sinh cùng nhà văn Nam Cao ở Nho Quan, Ninh Bình trong lần đi công tác vào vùng địch tạm chiếm.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "6 tháng 4 nhuận năm Bính Ngọ", "ngay_duong": 1906, "gio": "Mùi", "ghi_chu": null },
+      { "loai": "hy_sinh", "ghi_chu": "Hy sinh cùng nhà văn Nam Cao ở Nho Quan, Ninh Bình" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P6-3-v1", "loai": "chinh_that", "ghi_chu": "Bà Lê Thị Cô (Khúc Thị Côi)" }
+    ],
+    "con_ids": ["P7-1", "P7-2", "P7-3"],
+    "ghi_chu": "Liệt sĩ chống Pháp. Hy sinh cùng nhà văn Nam Cao."
+  },
+  {
+    "id": "P6-3-v1",
+    "ho_ten": "Lê Thị Cô",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": "KHÚC THỊ CÔI",
+    "gioi_tinh": "nu",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Ngọc Anh. Con gái ông Lê Nho công người xã La Khê cùng huyện. Ngày giỗ 19 tháng 5.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "19 tháng 5", "ngay_duong": null, "ghi_chu": "Ngày giỗ" }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P7-1", "P7-2", "P7-3"],
+    "ghi_chu": "Chú Hưng (Văn Lương) xác nhận tên bà là Khúc Thị Côi"
+  },
+  {
+    "id": "P6-4",
+    "ho_ten": "Phạm Ngọc Tân",
+    "ten_chu": "NGỌC TÂN",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P5-3-13",
+    "me_id": "P5-3-13-v1",
+    "nguyen_van": "Con cụ Văn Thuần. Sinh giờ Dần 23 tháng 3 năm Đinh Mùi. Chính thất Nguyễn Thị Tính.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "23 tháng 3 năm Đinh Mùi", "ngay_duong": 1907, "gio": "Dần", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P6-4-v1", "loai": "chinh_that", "ghi_chu": "Bà Nguyễn Thị Tính" }
+    ],
+    "con_ids": ["P7-4", "P7-5"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P6-4-v1",
+    "ho_ten": "Nguyễn Thị Tính",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Ngọc Tân.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P7-4", "P7-5"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P6-5",
+    "ho_ten": "Phạm Ngọc Tâng",
+    "ten_chu": "NGỌC TÂNG",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 6,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P5-3-13",
+    "me_id": "P5-3-13-v1",
+    "nguyen_van": "Con cụ Văn Thuần. Sinh giờ Hợi 29 tháng 7 năm Nhâm Tý.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "29 tháng 7 năm Nhâm Tý", "ngay_duong": 1912, "gio": "Hợi", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P7-1",
+    "ho_ten": "Phạm Văn Lương",
+    "ten_chu": "VĂN LƯƠNG",
+    "ten_hieu": null,
+    "ten_huy": "HƯNG",
+    "gioi_tinh": "nam",
+    "doi": 7,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P6-3",
+    "me_id": "P6-3-v1",
+    "nguyen_van": "Con cụ Ngọc Anh. Tên thường gọi là Hưng. Sinh giờ Tuất 23-3 năm Đinh Mão.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "23 tháng 3 năm Đinh Mão", "ngay_duong": 1927, "gio": "Tuất", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": "Tên thường gọi: Hưng"
+  },
+  {
+    "id": "P7-2",
+    "ho_ten": "Phạm Văn Hương",
+    "ten_chu": "VĂN HƯƠNG",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 7,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P6-3",
+    "me_id": "P6-3-v1",
+    "nguyen_van": "Con cụ Ngọc Anh. Sinh 5 giờ ngày 2-4 năm Kỷ Tỵ.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "2 tháng 4 năm Kỷ Tỵ", "ngay_duong": 1929, "gio": "5 giờ", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P7-3",
+    "ho_ten": "Phạm Thị Nhu",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 7,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P6-3",
+    "me_id": "P6-3-v1",
+    "nguyen_van": "Con cụ Ngọc Anh. Sinh 8 giờ ngày 30-6 năm Tân Mùi.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "30 tháng 6 năm Tân Mùi", "ngay_duong": 1931, "gio": "8 giờ", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P7-4",
+    "ho_ten": "Phạm Văn Minh",
+    "ten_chu": "VĂN MINH",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 7,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P6-4",
+    "me_id": "P6-4-v1",
+    "nguyen_van": "Con cụ Ngọc Tân. Sinh 11-2 năm Ất Hợi.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "11 tháng 2 năm Ất Hợi", "ngay_duong": 1935, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P7-5",
+    "ho_ten": "Phạm Thị Hương",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 7,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P6-4",
+    "me_id": "P6-4-v1",
+    "nguyen_van": "Con cụ Ngọc Tân. Sinh 8 giờ ngày 29-8 năm Nhâm Tý.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "29 tháng 8 năm Nhâm Tý", "ngay_duong": 1972, "gio": "8 giờ", "ghi_chu": "Năm Nhâm Tý gần nhất" }
+    ],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  }
+]
+}

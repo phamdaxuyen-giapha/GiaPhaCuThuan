@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "ten": "Ghi chú bổ sung — Gia phả họ Phạm Đà Xuyên",
+    "ngay_xuat": "18:24:49 18/9/2026",
+    "tong_so": 1
+  },
+  "ghi_chu": [
+    {
+      "id": "gc-1789781062374",
+      "nguoi_id": "P5-3-13",
+      "nguoi_ten": "Phạm Văn Thuần",
+      "doi": 5,
+      "loai": "Khác",
+      "loai_code": "khac",
+      "noidung": "Cuốn gia phả gốc do cụ Phạm Văn Thuần viết bằng chữ nho, bằng mực tím trên một quyển sổ to bằng bàn tay.",
+      "nguoi_de_xuat": "Phạm VănNam",
+      "ngay": "18/9/2026"
+    }
+  ]
+}

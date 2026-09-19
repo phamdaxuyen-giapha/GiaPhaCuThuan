@@ -1,0 +1,365 @@
+  {
+    "id": "P4-3-1",
+    "ho_ten": "Phạm Văn Triết",
+    "ten_chu": "VĂN TRIẾT",
+    "ten_hieu": "HUYỀN HỘI",
+    "ten_huy": "PHẠM VĂN TRIẾT",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-3",
+    "me_id": "P3-3-3-v1",
+    "nguyen_van": "Con cụ Hữu Thức. Tên hủy Phạm Văn Triết, tên chữ Huyền Hội. Ngày giỗ: 25 tháng 5. An táng: ở làng. Chính thất họ Trần, tên hiệu Từ Thuận, người cùng làng, ngày giỗ 12 tháng 5, an táng ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "25 tháng 5", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "ở làng", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-1-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Trần, tên hiệu Từ Thuận" }
+    ],
+    "con_ids": ["P5-3-1"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-1-v1",
+    "ho_ten": "Bà họ Trần",
+    "ten_chu": null,
+    "ten_hieu": "TỪ THUẬN",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Triết. Quê quán: cùng làng. Ngày giỗ: 12 tháng 5. An táng ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "12 tháng 5", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "ở làng", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-1"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-2",
+    "ho_ten": "Phạm Văn Học",
+    "ten_chu": "VĂN HỌC",
+    "ten_hieu": "THUẬN HUỆ",
+    "ten_huy": "PHẠM VĂN HỌC",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-3",
+    "me_id": "P3-3-3-v1",
+    "nguyen_van": "Con cụ Hữu Thức. Tên hủy Phạm Văn Học, tên chữ Thuận Huệ. Trở về quê cũ thờ cúng tổ tiên. Ngày giỗ: 16 tháng 6. Mất và an táng ở quê nhà Nghĩa Phú. Chính thất Nguyễn Thị Nhỏ, tên hiệu Thuận Nhu, ngày giỗ 20 tháng 4, mất và an táng ở quê nhà Nghĩa Phú.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "16 tháng 6", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "quê nhà Nghĩa Phú", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-2-v1", "loai": "chinh_that", "ghi_chu": "Bà Nguyễn Thị Nhỏ, hiệu Thuận Nhu" }
+    ],
+    "con_ids": ["P5-3-2", "P5-3-3"],
+    "ghi_chu": "Về quê cũ Nghĩa Phú thờ cúng tổ tiên"
+  },
+  {
+    "id": "P4-3-2-v1",
+    "ho_ten": "Nguyễn Thị Nhỏ",
+    "ten_chu": null,
+    "ten_hieu": "THUẬN NHU",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Học. Ngày giỗ: 20 tháng 4. Mất và an táng ở quê nhà Nghĩa Phú.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "20 tháng 4", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "quê nhà Nghĩa Phú", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-2", "P5-3-3"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-3",
+    "ho_ten": "Phạm Văn Tự",
+    "ten_chu": "VĂN TỰ",
+    "ten_hieu": "TĂNG HUY",
+    "ten_huy": "PHẠM VĂN TỰ",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-3",
+    "me_id": "P3-3-3-v1",
+    "nguyen_van": "Con cụ Hữu Thức. Tên hủy Phạm Văn Tự, tên chữ Tăng Huy. Về quê cũ Nghĩa Phú thờ cúng tổ tiên. Mất và an táng ở đó. Ngày giỗ: 10 tháng 8. Chính thất Trần Thị Lai, hiệu Thuận Lương, người cùng làng, ngày giỗ 9 tháng 2, an táng ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "10 tháng 8", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "quê cũ Nghĩa Phú", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-3-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Lai, hiệu Thuận Lương" }
+    ],
+    "con_ids": ["P5-3-4", "P5-3-5", "P5-3-6"],
+    "ghi_chu": "Về quê cũ Nghĩa Phú thờ cúng tổ tiên"
+  },
+  {
+    "id": "P4-3-3-v1",
+    "ho_ten": "Trần Thị Lai",
+    "ten_chu": null,
+    "ten_hieu": "THUẬN LƯƠNG",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Tự. Quê quán: cùng làng. Ngày giỗ: 9 tháng 2. An táng: ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "9 tháng 2", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "ở làng", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-4", "P5-3-5", "P5-3-6"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-4",
+    "ho_ten": "Phạm Văn Quý",
+    "ten_chu": "VĂN QUÝ",
+    "ten_hieu": "THUẬN KHẢI",
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-3",
+    "me_id": "P3-3-3-v1",
+    "nguyen_van": "Con cụ Hữu Thức. Tên hủy Phạm Văn Quý, tên chữ Thuận Khải. Ngày giỗ: 17 tháng 4. Chính thất Đào Thị Á, tên hiệu Diệu Cơ, người cùng làng, ngày giỗ 9 tháng 11, an táng ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "17 tháng 4", "ngay_duong": null, "ghi_chu": "Ngày giỗ" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-4-v1", "loai": "chinh_that", "ghi_chu": "Bà Đào Thị Á, hiệu Diệu Cơ" }
+    ],
+    "con_ids": ["P5-3-7"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-4-v1",
+    "ho_ten": "Đào Thị Á",
+    "ten_chu": null,
+    "ten_hieu": "DIỆU CƠ",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Quý. Quê quán: cùng làng. Ngày giỗ: 9 tháng 11. An táng ở làng.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "9 tháng 11", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "ở làng", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-7"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-5",
+    "ho_ten": "Phạm Văn Lê",
+    "ten_chu": "VĂN LÊ",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-3",
+    "me_id": "P3-3-3-v1",
+    "nguyen_van": "Con cụ Hữu Thức. Sinh giờ Thân, 8 tháng 2 năm Canh Thìn (1820). Bản tính đôn hậu, dạy học và làm thuốc. Làng xóm khen là hiền hậu, được bầu làm Hương thôn. Ngày giỗ không rõ. An táng xứ Hậu lang. Chính thất Đào Thị Ý người thôn Chanh, ngày giỗ và nơi an táng không thấy biên chép. Thứ thất Nguyễn Thị Nghìn, hiệu Diêu Thê, người xã Nhĩ Độ, ngày giỗ 7 tháng 2, an táng xứ Hậu lang.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "8 tháng 2 năm Canh Thìn", "ngay_duong": 1820, "gio": "Thân", "ghi_chu": null },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": null, "ghi_chu": null },
+      { "loai": "chuc_tuoc", "ghi_chu": "Hương thôn" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-5-v1", "loai": "chinh_that", "ghi_chu": "Bà Đào Thị Ý" },
+      { "vo_id": "P4-3-5-v2", "loai": "thu_that", "ghi_chu": "Bà Nguyễn Thị Nghìn, hiệu Diêu Thê" }
+    ],
+    "con_ids": ["P5-3-8", "P5-3-9", "P5-3-10", "P5-3-11"],
+    "ghi_chu": "Hương thôn, dạy học và làm thuốc"
+  },
+  {
+    "id": "P4-3-5-v1",
+    "ho_ten": "Đào Thị Ý",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Lê. Quê quán: người thôn Chanh. Ngày giỗ và nơi an táng không thấy biên chép.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-8", "P5-3-9", "P5-3-10", "P5-3-11"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-5-v2",
+    "ho_ten": "Nguyễn Thị Nghìn",
+    "ten_chu": null,
+    "ten_hieu": "DIÊU THÊ",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Thứ thất cụ Văn Lê. Quê quán: người xã Nhĩ Độ. Ngày giỗ: 7 tháng 2. An táng xứ Hậu lang.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "7 tháng 2", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-8", "P5-3-9", "P5-3-10", "P5-3-11"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-6",
+    "ho_ten": "Phạm Văn Chính",
+    "ten_chu": "VĂN CHÍNH",
+    "ten_hieu": "TRUNG MẮN",
+    "ten_huy": "PHẠM VĂN CHÍNH",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-6",
+    "me_id": "P3-3-6-v2",
+    "nguyen_van": "Con thứ của Đằng Đệ công, sinh giờ Tuất, 25 tháng 11 năm Bính Thân (1836). Nổi tiếng là nhà Văn học, năm Mậu Thìn có ăn khoa thì đỗ Cử nhân. Từng qua hai kỳ thi hội. Năm Tân Mùi lĩnh chức Giáo thụ phủ Bình Giang. Năm Quý Mùi làm thêm việc huyện Bình Giang. Năm Quý Dậu xứ Bắc Kỳ có việc nhiều nhương lại vấp phải tên Trinh là bang biện hai lòng nên bị mất phủ thành. Sau đó ông lại mộ quân anh dũng lấy lại phủ thành Bình Giang. Lần này nhờ có quan đại thần Phạm Phú Thứ là người yêu văn tài của ông, làm sở thực tấu nên được vô can tiếp tục lĩnh chức Giáo thụ phủ Bình Giang. Đến năm Canh Thìn tình nguyện làm Tùy phái Tam tuyên. Năm Tân Tỵ sức yếu ông xin về quê và mất ở quê nhà. Chính thất Phạm Thị Nhiên, hiệu Từ An, người thôn Chanh, con của Đào... Hình công (giỗ 21-10) và bà Truyền hiệu Từ Nhu (vợ thứ, giỗ 19-5). Bà sinh giờ Tuất ngày 10 tháng 3 nhuận năm Tân Sửu (1841), mất giờ Dậu ngày 29 tháng 6 năm Quý Dậu, hưởng thọ 33 năm. Năm mất: 1873. Ngày giỗ: 29 tháng 6. An táng: mới đầu đặt ở xứ Chùa Am, xã Đà Tiềm, sau lại đưa về xứ Hậu lang, đường con thổ, để ở giữa nhìn ra đằng sừng.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "25 tháng 11 năm Bính Thân", "ngay_duong": 1836, "gio": "Tuất", "ghi_chu": null },
+      { "loai": "chuc_tuoc", "ghi_chu": "Cử nhân khoa Mậu Thìn; Giáo thụ phủ Bình Giang; Tùy phái Tam tuyên" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-6-v1", "loai": "chinh_that", "ghi_chu": "Bà Phạm Thị Nhiên, hiệu Từ An (1841-1873)" }
+    ],
+    "con_ids": ["P5-3-12"],
+    "ghi_chu": "Cử nhân, Giáo thụ phủ Bình Giang. Có công mộ quân lấy lại phủ thành Bình Giang."
+  },
+  {
+    "id": "P4-3-6-v1",
+    "ho_ten": "Phạm Thị Nhiên",
+    "ten_chu": null,
+    "ten_hieu": "TỪ AN",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Chính. Người thôn Chanh, con của Đào... Hình công (giỗ 21-10) và bà Truyền hiệu Từ Nhu (vợ thứ, giỗ 19-5). Bà sinh giờ Tuất ngày 10 tháng 3 nhuận năm Tân Sửu (1841), mất giờ Dậu ngày 29 tháng 6 năm Quý Dậu, hưởng thọ 33 năm. Năm mất: 1873. Ngày giỗ: 29 tháng 6. An táng: mới đầu đặt ở xứ Chùa Am, xã Đà Tiềm, sau lại đưa về xứ Hậu lang, đường con thổ, để ở giữa nhìn ra đằng sừng.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "10 tháng 3 nhuận năm Tân Sửu", "ngay_duong": 1841, "gio": "Tuất", "ghi_chu": null },
+      { "loai": "mat", "ngay_am": "29 tháng 6 năm Quý Dậu", "ngay_duong": 1873, "gio": "Dậu", "ghi_chu": "Hưởng thọ 33 năm" },
+      { "loai": "ngay_gio", "ngay_am": "29 tháng 6", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang, đường con thổ", "mo_ta": "Để ở giữa nhìn ra đằng sừng", "ghi_chu": "Sau khi di từ xứ Chùa Am" }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-12"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-7",
+    "ho_ten": "Phạm Văn Tiến",
+    "ten_chu": "VĂN TIẾN",
+    "ten_hieu": null,
+    "ten_huy": "PHẠM VĂN TIẾN",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-4",
+    "me_id": "P3-3-4-v1",
+    "nguyen_van": "Con cụ Trọng Thông. Tên hủy Phạm Văn Tiến. Mất không rõ ngày nào. An táng xứ Mỹ nữ. Chính thất Trần Thị Lâm người cùng làng, mất và an táng không thấy ghi chép.",
+    "su_kien": [
+      { "loai": "an_tang", "dia_diem": "xứ Mỹ nữ", "mo_ta": null, "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-7-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Lâm" }
+    ],
+    "con_ids": ["P5-3-13"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-7-v1",
+    "ho_ten": "Trần Thị Lâm",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Văn Tiến. Người cùng làng. Mất và an táng không thấy ghi chép.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P5-3-13"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-8",
+    "ho_ten": "Phạm Văn Đăng",
+    "ten_chu": "VĂN ĐĂNG",
+    "ten_hieu": null,
+    "ten_huy": "PHẠM VĂN ĐĂNG",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-4",
+    "me_id": "P3-3-4-v1",
+    "nguyen_van": "Con cụ Trọng Thông. Tên hủy Phạm Văn Đăng. Vợ chồng ly quê không rõ nơi cư ngụ.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": "Ly quê, không rõ nơi cư ngụ"
+  },
+  {
+    "id": "P4-3-9",
+    "ho_ten": "Phạm Trọng Đầu",
+    "ten_chu": "TRỌNG ĐẦU",
+    "ten_hieu": null,
+    "ten_huy": "PHẠM TRỌNG ĐẦU",
+    "gioi_tinh": "nam",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P3-3-4",
+    "me_id": "P3-3-4-v1",
+    "nguyen_van": "Con cụ Trọng Thông. Tên hủy Phạm Trọng Đầu. Mất, an táng ở làng (không biên chép). Chính thất bà họ Trần người thôn Hà.",
+    "su_kien": [
+      { "loai": "an_tang", "dia_diem": "ở làng", "mo_ta": null, "ghi_chu": "Không biên chép" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P4-3-9-v1", "loai": "chinh_that", "ghi_chu": "Bà họ Trần, người thôn Hà" }
+    ],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P4-3-9-v1",
+    "ho_ten": "Bà họ Trần",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 4,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Đầu. Người thôn Hà.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },

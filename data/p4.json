@@ -1,0 +1,223 @@
+  {
+    "id": "P3-3-1",
+    "ho_ten": "Phạm Trọng Lân",
+    "ten_chu": "TRỌNG LÂN",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v1",
+    "nguyen_van": "Con trai cả của cụ Trọng Xuyên và bà Lê Thị Thiện. Không có biên chép chi tiết.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-2",
+    "ho_ten": "Phạm Trọng Phượng",
+    "ten_chu": "TRỌNG PHƯỢNG",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v1",
+    "nguyen_van": "Con cụ Trọng Xuyên và bà Lê Thị Thiện. Không có biên chép chi tiết.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": [],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-3",
+    "ho_ten": "Phạm Hữu Thức",
+    "ten_chu": "HỮU THỨC",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v1",
+    "nguyen_van": "Con cụ Trọng Xuyên và bà Lê Thị Thiện. Tên chữ Hữu Thức. Năm sinh: giờ Mão ngày 27 tháng 4 năm Nhâm Dần. Ngày giỗ: 17 tháng 4. An táng: xứ Khuyến thủ, thôn Chanh (mồ chôn cùng chính thất).",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "27 tháng 4 năm Nhâm Dần", "ngay_duong": 1782, "gio": "Mão", "ghi_chu": "Năm Nhâm Dần gần nhất" },
+      { "loai": "ngay_gio", "ngay_am": "17 tháng 4", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Khuyến thủ, thôn Chanh", "mo_ta": "Mồ chôn cùng chính thất", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-3-3-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Bảy" }
+    ],
+    "con_ids": ["P4-3-1", "P4-3-2", "P4-3-3", "P4-3-4", "P4-3-5", "P4-3-6"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-3-v1",
+    "ho_ten": "Trần Thị Bảy",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Hữu Thức. Quê quán: Đồng Bàn, Mai Hoằng. Ngày giỗ: 28 tháng 10. An táng: chôn cùng với chồng ở xứ Khuyến thư, thôn Chanh.",
+    "su_kien": [
+      { "loai": "ngay_gio", "ngay_am": "28 tháng 10", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Khuyến thư, thôn Chanh", "mo_ta": "Chôn cùng chồng", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-3-1", "P4-3-2", "P4-3-3", "P4-3-4", "P4-3-5", "P4-3-6"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-4",
+    "ho_ten": "Phạm Trọng Thông",
+    "ten_chu": "TRỌNG THÔNG",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v1",
+    "nguyen_van": "Con cụ Trọng Xuyên và bà Lê Thị Thiện. Tên chữ Trọng Thông. Năm sinh: giờ Thân ngày 11 tháng 10 năm Giáp Thìn. Ngày mất và nơi an táng không rõ. Chính thất Nguyễn Thị Thành người làng Thọ Mai.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "11 tháng 10 năm Giáp Thìn", "ngay_duong": 1784, "gio": "Thân", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-3-4-v1", "loai": "chinh_that", "ghi_chu": "Bà Nguyễn Thị Thành" }
+    ],
+    "con_ids": ["P4-3-7", "P4-3-8", "P4-3-9"],
+    "ghi_chu": "Ngày mất và nơi an táng không rõ"
+  },
+  {
+    "id": "P3-3-4-v1",
+    "ho_ten": "Nguyễn Thị Thành",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Thông. Quê quán: người làng Thọ Mai. Không biên chép ngày giỗ.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P4-3-7", "P4-3-8", "P4-3-9"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-5",
+    "ho_ten": "Phạm Trọng Giao",
+    "ten_chu": "TRỌNG GIAO",
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v1",
+    "nguyen_van": "Con cụ Trọng Xuyên và bà Lê Thị Thiện. Tên chữ Trọng Giao. Năm sinh: giờ Tỵ ngày 30 tháng 7 năm Đinh Mùi. Ngày mất và nơi an táng không thấy biên chép. Chính thất Nguyễn Thị Mùi người làng Xuân Khê.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "30 tháng 7 năm Đinh Mùi", "ngay_duong": 1787, "gio": "Tỵ", "ghi_chu": null }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-3-5-v1", "loai": "chinh_that", "ghi_chu": "Bà Nguyễn Thị Mùi" }
+    ],
+    "con_ids": ["P4-3-10", "P4-3-11", "P4-3-12", "P4-3-13", "P4-3-14", "P4-3-15"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-5-v1",
+    "ho_ten": "Nguyễn Thị Mùi",
+    "ten_chu": null,
+    "ten_hieu": null,
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Trọng Giao. Quê quán: người làng Xuân Khê. Không biên chép ngày giỗ.",
+    "su_kien": [],
+    "hon_nhan": [],
+    "con_ids": ["P4-3-10", "P4-3-11", "P4-3-12", "P4-3-13", "P4-3-14", "P4-3-15"],
+    "ghi_chu": null
+  },
+  {
+    "id": "P3-3-6",
+    "ho_ten": "Phạm Đằng Đệ",
+    "ten_chu": "ĐẰNG KHOA",
+    "ten_hieu": null,
+    "ten_huy": "PHẠM ĐẮNG ĐỆ",
+    "gioi_tinh": "nam",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": "P2-3",
+    "me_id": "P2-3-v2",
+    "nguyen_van": "Con thứ bảy của Đức Thuận công (Trọng Xuyên) và bà thứ thất Từ Mẫn. Tên hủy Phạm Đằng Đệ, tên chữ Đằng Khoa. Sinh giờ Dần ngày 25 tháng 11 năm Quý Hợi (1803). Bình sinh công là người nhân hậu, sửa sang cây đức, chuyên trị nghiệp nhà. Vào thời Minh Mạng chiếu chỉ sức ra: 'phận dân không phải quê cha đất tổ mà đến cư ngụ thì đều phải trở về quê cũ làm ăn'. Do đấy có kẻ tố cáo đến cửa quan, công phải vào sổ chính là người xã Đà Xuyên. Công là người học rộng biết nhiều nhưng thi không đỗ, mở nghề làm thuốc. Công nghiên cứu kỹ, nghiền ngắm nhiều đến chỗ tinh thông, cả chỗ sâu kín, ngóc ngách của bệnh. Được ai mời xa cũng đi, nghèo cũng chữa. Ngoài ra công còn chăm nom con cháu học hành. Do được có âm đức, âm công, ông được hai người con nổi tiếng về văn học. Khóa ăn khoa năm Mậu Thìn thì đỗ Cử nhân.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "25 tháng 11 năm Quý Hợi", "ngay_duong": 1803, "gio": "Dần", "ghi_chu": null },
+      { "loai": "mat", "ngay_am": null, "ngay_duong": 1887, "ghi_chu": "Hưởng thọ 85 tuổi" },
+      { "loai": "ngay_gio", "ngay_am": "11 tháng 11", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang, mộ để phía tay ao Nam Trì", "mo_ta": null, "ghi_chu": null },
+      { "loai": "chuc_tuoc", "ngay_am": null, "ngay_duong": null, "ghi_chu": "Vào sổ chính người xã Đà Xuyên thời Minh Mạng" }
+    ],
+    "hon_nhan": [
+      { "vo_id": "P3-3-6-v1", "loai": "chinh_that", "ghi_chu": "Bà Trần Thị Bản, hiệu Từ Hiền (1802-1832)" },
+      { "vo_id": "P3-3-6-v2", "loai": "thu_that", "ghi_chu": "Bà Đào Thị Yến, hiệu Xương Hậu (1814-1887)" }
+    ],
+    "con_ids": ["P4-3-16", "P4-3-17", "P4-3-18"],
+    "ghi_chu": "Con thứ 7 của cụ Trọng Xuyên và bà thứ thất Từ Mẫn. Có 2 người con nổi tiếng văn học, một đỗ Cử nhân khoa Mậu Thìn."
+  },
+  {
+    "id": "P3-3-6-v1",
+    "ho_ten": "Trần Thị Bản",
+    "ten_chu": null,
+    "ten_hieu": "TỪ HIỀN",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Chính thất cụ Đằng Đệ. Bà là người cùng thôn. Sinh giờ Dậu ngày 16 tháng 2 nhuận năm Nhâm Tuất (1802). Thân phụ bà là cụ Phúc Nghiêm, giỗ ngày 1 tháng 1. Thân mẫu bà là cụ Từ Khiết, giỗ ngày 5 tháng 4. Bà mất năm 31 tuổi (1832), hạ sinh 1 trai 2 gái. Ngày giỗ: 20 tháng 11. An táng: chôn xứ Hậu lang đường con thỏ, chỗ để mộ trong ngoài như có gò treo trước mặt, lại có gò ễnh ương làm án, để về hướng Nam quay về hướng Bắc.",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "16 tháng 2 nhuận năm Nhâm Tuất", "ngay_duong": 1802, "gio": "Dậu", "ghi_chu": null },
+      { "loai": "mat", "ngay_am": null, "ngay_duong": 1832, "ghi_chu": "Mất năm 31 tuổi" },
+      { "loai": "ngay_gio", "ngay_am": "20 tháng 11", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang đường con thỏ", "mo_ta": "Chỗ để mộ trong ngoài như có gò treo trước mặt, lại có gò ễnh ương làm án, để về hướng Nam quay về hướng Bắc", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-3-16", "P4-3-17", "P4-3-18"],
+    "ghi_chu": "Chính thất cụ Đằng Đệ, sinh 1 trai 2 gái"
+  },
+  {
+    "id": "P3-3-6-v2",
+    "ho_ten": "Đào Thị Yến",
+    "ten_chu": null,
+    "ten_hieu": "XƯƠNG HẬU",
+    "ten_huy": null,
+    "gioi_tinh": "nu",
+    "doi": 3,
+    "chi": "Chi Trọng Xuyên",
+    "cha_id": null,
+    "me_id": null,
+    "nguyen_van": "Thứ thất cụ Đằng Đệ. Bà sinh giờ Dần ngày 5 tháng 2 năm Giáp Tuất (1814). Con cụ Pháp Tự, giỗ ngày 7 tháng 2, và mẹ là Nguyễn Từ Nhân, giỗ ngày 13 tháng 7. Bà là con thứ tư của cụ Cử nhân Pháp Tự lĩnh chức Giáo thụ. Bà sinh 3 con trai và 3 con gái. Năm mất: 1887, hưởng thọ 74 tuổi. Ngày giỗ: 27 tháng 4. An táng: xứ Hậu lang, đường con thổ, mộ cùng hướng với mộ ông (sau lại di ra xứ Mỹ từ, để hướng Bắc quay về Nam).",
+    "su_kien": [
+      { "loai": "sinh", "ngay_am": "5 tháng 2 năm Giáp Tuất", "ngay_duong": 1814, "gio": "Dần", "ghi_chu": null },
+      { "loai": "mat", "ngay_am": null, "ngay_duong": 1887, "ghi_chu": "Hưởng thọ 74 tuổi" },
+      { "loai": "ngay_gio", "ngay_am": "27 tháng 4", "ngay_duong": null, "ghi_chu": "Ngày giỗ" },
+      { "loai": "an_tang", "dia_diem": "xứ Hậu lang, đường con thổ (sau di ra xứ Mỹ từ)", "mo_ta": "Để hướng Bắc quay về Nam", "ghi_chu": null }
+    ],
+    "hon_nhan": [],
+    "con_ids": ["P4-3-16", "P4-3-17", "P4-3-18"],
+    "ghi_chu": "Thứ thất cụ Đằng Đệ, sinh 3 trai 3 gái"
+  },
