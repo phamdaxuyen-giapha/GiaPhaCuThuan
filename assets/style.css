@@ -17,6 +17,8 @@ body {
   background-attachment: fixed;
   line-height: 1.65;
 }
+
+/* ============ HEADER ============ */
 .main-header {
   background: var(--xam-nau);
   position: sticky;
@@ -24,25 +26,51 @@ body {
   z-index: 100;
   box-shadow: 0 2px 12px rgba(0,0,0,0.25);
 }
-.tabs {
+.menu-chu {
   display: flex;
   flex-wrap: wrap;
   max-width: 1400px;
   margin: 0 auto;
+  background: var(--xam-nau);
 }
-.tab-btn {
+.menu-btn {
   flex: 1;
-  min-width: 200px;
+  min-width: 100px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 6px 4px;
-  opacity: 0.55;
-  transition: opacity 0.25s;
+  padding: 14px 10px;
+  font-family: inherit;
+  font-size: 12pt;
+  font-weight: 600;
+  color: #DDD;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
 }
-.tab-btn:hover { opacity: 0.85; }
-.tab-btn.active { opacity: 1; }
-.tab-btn img { width: 100%; height: auto; display: block; border-radius: 4px; }
+.menu-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+.menu-btn.active {
+  color: #fff;
+  background: var(--do-tram);
+  border-bottom-color: #C9A227;
+}
+.banner-dong {
+  background: var(--xam-nau);
+  padding: 0;
+  max-height: 180px;
+  overflow: hidden;
+}
+.banner-dong img {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============ NỘI DUNG ============ */
 .tab-content { display: none; padding: 32px 0; }
 .tab-content.active { display: block; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -105,7 +133,7 @@ body {
   border: 1px solid var(--vien-nhe);
   height: fit-content;
   position: sticky;
-  top: 120px;
+  top: 220px;
 }
 .danh-sach-doi button, .danh-sach-chi button {
   display: block;
@@ -223,6 +251,8 @@ body {
   min-height: 500px;
   overflow: auto;
 }
+
+/* ============ FORM GHI CHÚ ============ */
 .form-them-ghichu {
   background: #FAF6EC;
   border-radius: 8px;
@@ -359,27 +389,6 @@ body {
 }
 .the-ghi-chu .tgc-xoa:hover { color: var(--do-tram); }
 .ds-nghi-van, .ds-ngoai-pha { margin-top: 16px; }
-.main-footer {
-  background: var(--xam-nau);
-  color: #DDD;
-  text-align: center;
-  padding: 24px 20px;
-  margin-top: 48px;
-  font-size: 10.5pt;
-  line-height: 1.9;
-}
-.main-footer a { color: var(--vang-dong); text-decoration: none; }
-.main-footer a:hover { text-decoration: underline; }
-.phien-ban { font-size: 9.5pt; opacity: 0.7; margin-top: 8px; }
-@media (max-width: 900px) {
-  .layout-2cot { grid-template-columns: 1fr; }
-  .cot-trai { position: static; }
-  .panel-chi-tiet { width: 100%; }
-  .tieu-de-lon { font-size: 15pt; }
-  .form-row { flex-direction: column; gap: 6px; }
-  .form-row label { min-width: auto; padding-top: 0; }
-}
-
 
 /* ============ PHẢ ĐỒ ĐỘNG ============ */
 .pha-do-doc, .pha-do-ngang {
@@ -447,13 +456,8 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   border-left-color: var(--do-tram);
 }
-.node-nguoi.nam {
-  border-left-color: var(--vang-dong);
-}
-.node-nguoi.nu {
-  border-left-color: #C9A227;
-  background: #FFFBF0;
-}
+.node-nguoi.nam { border-left-color: var(--vang-dong); }
+.node-nguoi.nu { border-left-color: #C9A227; background: #FFFBF0; }
 .node-nguoi.dang-chon {
   border: 2px solid var(--do-tram);
   border-left: 5px solid var(--do-tram);
@@ -476,17 +480,55 @@ body {
   color: var(--xam-nau);
   margin-bottom: 4px;
 }
-.node-ten.chua-ro {
-  color: #999;
-  font-style: italic;
+.node-ten.chua-ro { color: #999; font-style: italic; }
+.node-phu { font-size: 9.5pt; color: #888; margin-bottom: 2px; }
+.node-ten-chu { font-size: 10pt; color: var(--vang-dong); font-style: italic; }
+
+/* ============ FOOTER ============ */
+.main-footer {
+  background: var(--xam-nau);
+  color: #DDD;
+  text-align: center;
+  padding: 24px 20px;
+  margin-top: 48px;
+  font-size: 10.5pt;
+  line-height: 1.9;
 }
-.node-phu {
-  font-size: 9.5pt;
-  color: #888;
-  margin-bottom: 2px;
+.main-footer a { color: var(--vang-dong); text-decoration: none; }
+.main-footer a:hover { text-decoration: underline; }
+.phien-ban { font-size: 9.5pt; opacity: 0.7; margin-top: 8px; }
+
+/* ============ RESPONSIVE — ĐIỆN THOẠI ============ */
+@media (max-width: 900px) {
+  .layout-2cot { grid-template-columns: 1fr; }
+  .cot-trai { position: static; }
+  .panel-chi-tiet { width: 100%; }
+  .tieu-de-lon { font-size: 15pt; }
+  .form-row { flex-direction: column; gap: 6px; }
+  .form-row label { min-width: auto; padding-top: 0; }
 }
-.node-ten-chu {
-  font-size: 10pt;
-  color: var(--vang-dong);
-  font-style: italic;
+
+@media (max-width: 600px) {
+  .menu-btn {
+    font-size: 11pt;
+    padding: 12px 6px;
+    min-width: 80px;
+  }
+  .banner-dong {
+    max-height: 120px;
+  }
+  .banner-dong img {
+    max-height: 120px;
+  }
+  .card {
+    padding: 20px 16px;
+  }
+  .tieu-de-lon { font-size: 14pt; }
+  .de-muc { font-size: 12pt; }
+  .node-nguoi {
+    min-width: 130px;
+    max-width: 180px;
+    padding: 8px 10px;
+  }
+  .node-ten { font-size: 10.5pt; }
 }
