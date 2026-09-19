@@ -1,5 +1,5 @@
 // Gia phả họ Phạm Đà Xuyên — Module chính
-let giaphaData = null;
+window.giaphaData = null;
 let danhSachGhiChu = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
