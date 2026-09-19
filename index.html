@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gia phả họ Phạm Đà Xuyên — Tiền phả</title>
 <link rel="stylesheet" href="assets/style.css">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <header class="main-header">
-  <nav class="tabs">
-    <button class="tab-btn active" data-tab="trangchu"><img src="assets/banner-trangchu.png" alt="Trang chủ"></button>
-    <button class="tab-btn" data-tab="danhtinh"><img src="assets/banner-danhtinh.png" alt="Danh tính"></button>
-    <button class="tab-btn" data-tab="phahe"><img src="assets/banner-phahe.png" alt="Phả hệ"></button>
-    <button class="tab-btn" data-tab="ngoipha"><img src="assets/banner-ngoipha.png" alt="Ngoại phả"></button>
+  <nav class="menu-chu">
+    <button class="menu-btn active" data-tab="trangchu">Trang chủ</button>
+    <button class="menu-btn" data-tab="danhtinh">Danh tính</button>
+    <button class="menu-btn" data-tab="phahe">Phả hệ</button>
+    <button class="menu-btn" data-tab="ngoipha">Ngoại phả</button>
   </nav>
+  <div class="banner-dong" id="banner-dong">
+    <img src="assets/banner-trangchu.png" alt="Trang chủ" id="banner-img">
+  </div>
 </header>
 
 <main>
@@ -26,11 +29,15 @@
         <h1 class="tieu-de-lon">LỜI NÓI ĐẦU</h1>
         <div class="loi-noi-dau">
           <h2 class="de-muc">Lời thứ nhất — Nguyên văn gia phả gốc</h2>
-          <div class="noi-dung-loi"><p class="ghi-chu-nhap">[Vui lòng nhập nguyên văn lời cụ Tổ vào file data/noipha.json]</p></div>
+          <div class="noi-dung-loi" id="loi-co-to">
+            <p class="ghi-chu-nhap">[Vui lòng nhập nguyên văn lời cụ Tổ vào file data/noipha.json]</p>
+          </div>
         </div>
         <div class="loi-noi-dau">
           <h2 class="de-muc">Lời thứ hai — Lý do và lời ngỏ</h2>
-          <div class="noi-dung-loi"><p class="ghi-chu-nhap">[Vui lòng nhập lời ngỏ của bạn vào file data/noipha.json]</p></div>
+          <div class="noi-dung-loi" id="loi-hau-the">
+            <p class="ghi-chu-nhap">[Vui lòng nhập lời ngỏ của bạn vào file data/noipha.json]</p>
+          </div>
         </div>
       </div>
       <div class="card thong-tin-tong-quan">
@@ -60,6 +67,7 @@
       <div id="panel-chi-tiet" class="panel-chi-tiet an"></div>
     </div>
   </section>
+
   <section id="tab-phahe" class="tab-content">
     <div class="container">
       <div class="thanh-cong-cu">
@@ -129,7 +137,7 @@
 <footer class="main-footer">
   <p>Gia phả họ Phạm Đà Xuyên — Tiền phả</p>
   <p>Người quản trị: <span id="ten-quan-tri">[Tên bạn]</span> — Góp ý xin gửi về: <a id="email-lien-he" href="mailto:hsnampham@gmail.com">hsnampham@gmail.com</a></p>
-  <p class="phien-ban">Phiên bản 1.0 — Xây dựng trên nền tảng miễn phí GitHub Pages</p>
+  <p class="phien-ban">Phiên bản 1.1 — Xây dựng trên nền tảng miễn phí GitHub Pages</p>
 </footer>
 
 <script src="js/app.js"></script>
