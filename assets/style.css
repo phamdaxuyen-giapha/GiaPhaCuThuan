@@ -379,3 +379,114 @@ body {
   .form-row { flex-direction: column; gap: 6px; }
   .form-row label { min-width: auto; padding-top: 0; }
 }
+
+
+/* ============ PHẢ ĐỒ ĐỘNG ============ */
+.pha-do-doc, .pha-do-ngang {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 20px 0;
+}
+.pha-do-ngang {
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+}
+.hang-doi {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  border-left: 4px solid var(--vang-dong);
+  padding-left: 16px;
+}
+.pha-do-ngang .hang-doi {
+  flex-direction: column;
+  border-left: none;
+  border-top: 4px solid var(--vang-dong);
+  padding-left: 0;
+  padding-top: 16px;
+}
+.nhan-doi {
+  font-weight: 700;
+  color: var(--do-tram);
+  font-size: 13pt;
+  min-width: 70px;
+  font-style: italic;
+  padding-top: 8px;
+}
+.pha-do-ngang .nhan-doi {
+  min-width: auto;
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+.hang-nguoi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+}
+.pha-do-ngang .hang-nguoi {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.node-nguoi {
+  background: #fff;
+  border: 2px solid var(--vien-nhe);
+  border-radius: 6px;
+  padding: 10px 14px;
+  min-width: 160px;
+  max-width: 220px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 5px solid var(--vang-dong);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.node-nguoi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-left-color: var(--do-tram);
+}
+.node-nguoi.nam {
+  border-left-color: var(--vang-dong);
+}
+.node-nguoi.nu {
+  border-left-color: #C9A227;
+  background: #FFFBF0;
+}
+.node-nguoi.dang-chon {
+  border: 2px solid var(--do-tram);
+  border-left: 5px solid var(--do-tram);
+  background: #FDF0EF;
+  box-shadow: 0 4px 16px rgba(226, 59, 58, 0.3);
+}
+.node-nguoi.truc-he {
+  border: 2px solid #C9A227;
+  border-left: 5px solid #C9A227;
+  background: #FFFBEA;
+  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.35);
+}
+.node-nguoi.bang-he {
+  opacity: 0.3;
+  filter: grayscale(0.5);
+}
+.node-ten {
+  font-weight: 700;
+  font-size: 11.5pt;
+  color: var(--xam-nau);
+  margin-bottom: 4px;
+}
+.node-ten.chua-ro {
+  color: #999;
+  font-style: italic;
+}
+.node-phu {
+  font-size: 9.5pt;
+  color: #888;
+  margin-bottom: 2px;
+}
+.node-ten-chu {
+  font-size: 10pt;
+  color: var(--vang-dong);
+  font-style: italic;
+}
