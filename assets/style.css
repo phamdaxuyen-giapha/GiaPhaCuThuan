@@ -5,6 +5,8 @@
   --nen-kem: #FDF8F0;
   --nen-khoi: #FFFFFF;
   --vien-nhe: #E5DDD0;
+  --vang-menu: #B39264;
+  --nau-tram: #7D5F34;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -31,7 +33,7 @@ body {
   flex-wrap: wrap;
   max-width: 1400px;
   margin: 0 auto;
-  background: var(--xam-nau);
+  background: var(--vang-menu);
 }
 .menu-btn {
   flex: 1;
@@ -39,21 +41,21 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 14px 10px;
+  padding: 8px 6px;
   font-family: inherit;
-  font-size: 12pt;
+  font-size: 11pt;
   font-weight: 600;
-  color: #DDD;
+  color: #FFFFFF;
   transition: all 0.2s;
   border-bottom: 3px solid transparent;
 }
 .menu-btn:hover {
   color: #fff;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.15);
 }
 .menu-btn.active {
   color: #fff;
-  background: var(--do-tram);
+  background: var(--nau-tram);
   border-bottom-color: #C9A227;
 }
 .banner-dong {
@@ -133,7 +135,7 @@ body {
   border: 1px solid var(--vien-nhe);
   height: fit-content;
   position: sticky;
-  top: 220px;
+  top: 200px;
 }
 .danh-sach-doi button, .danh-sach-chi button {
   display: block;
@@ -251,7 +253,6 @@ body {
   min-height: 500px;
   overflow: auto;
 }
-
 /* ============ FORM GHI CHÚ ============ */
 .form-them-ghichu {
   background: #FAF6EC;
@@ -510,9 +511,9 @@ body {
 
 @media (max-width: 600px) {
   .menu-btn {
-    font-size: 11pt;
-    padding: 12px 6px;
-    min-width: 80px;
+    font-size: 10pt;
+    padding: 6px 4px;
+    min-width: 70px;
   }
   .banner-dong {
     max-height: 80px;
