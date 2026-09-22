@@ -3,7 +3,6 @@ window.giaphaData = null;
 let danhSachGhiChu = [];
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // ============ CHUYỂN TAB + ĐỔI BANNER ============
   const menuButtons = document.querySelectorAll('.menu-btn');
   const tabContents = document.querySelectorAll('.tab-content');
   const bannerImg = document.getElementById('banner-img');
@@ -18,21 +17,17 @@ document.addEventListener('DOMContentLoaded', async function() {
   menuButtons.forEach(btn => {
     btn.addEventListener('click', function() {
       const tabId = this.dataset.tab;
-
       menuButtons.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-
       tabContents.forEach(c => c.classList.remove('active'));
       const tab = document.getElementById('tab-' + tabId);
       if (tab) tab.classList.add('active');
-
       if (bannerImg && bannerMap[tabId]) {
         bannerImg.src = bannerMap[tabId];
       }
     });
   });
 
-  // ============ TẢI DỮ LIỆU GIA PHẢ ============
   try {
     const response = await fetch('data/giapha.json');
     window.giaphaData = await response.json();
@@ -45,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.error('Lỗi tải gia phả:', err);
   }
 
-  // ============ TÌM KIẾM ============
   const oTimKiem = document.getElementById('o-tim-kiem');
   if (oTimKiem) {
     oTimKiem.addEventListener('input', function() {
@@ -64,39 +58,25 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // ============ KHỞI TẢI GHI CHÚ ============
   taiGhiChuTuLocal();
   hienThiDanhSachGhiChu();
   ganSuKienFormGhiChu();
-
-  // ============ TẢI LỜI NÓI ĐẦU TỪ noipha.json ============
   taiLoiNoiDau();
 });
 
-// ============ TẢI LỜI NÓI ĐẦU TỪ noipha.json ============
+// ============ TẢI LỜI NÓI ĐẦU ============
 async function taiLoiNoiDau() {
   try {
     const response = await fetch('data/noipha.json');
     const data = await response.json();
-
     const loiTua = document.getElementById('loi-tua');
     const phaKy = document.getElementById('pha-ky');
     const loiNgo = document.getElementById('loi-ngo');
     const ghiChu1 = document.getElementById('ghi-chu-1');
-
-    if (loiTua && data.loi_tua) {
-      loiTua.innerHTML = data.loi_tua;
-    }
-    if (phaKy && data.pha_ky) {
-      phaKy.innerHTML = data.pha_ky;
-    }
-    if (loiNgo && data.loi_ngo) {
-      loiNgo.innerHTML = data.loi_ngo;
-    }
-    if (ghiChu1 && data.ghi_chu_1) {
-      ghiChu1.innerHTML = data.ghi_chu_1;
-    }
-
+    if (loiTua && data.loi_tua) loiTua.innerHTML = data.loi_tua;
+    if (phaKy && data.pha_ky) phaKy.innerHTML = data.pha_ky;
+    if (loiNgo && data.loi_ngo) loiNgo.innerHTML = data.loi_ngo;
+    if (ghiChu1 && data.ghi_chu_1) ghiChu1.innerHTML = data.ghi_chu_1;
     console.log('Đã tải: Lời tựa, Phả ký, Lời ngỏ, Ghi chú thứ nhất');
   } catch (err) {
     console.log('Lỗi tải noipha.json:', err);
@@ -140,27 +120,118 @@ function hienThiDanhSachChi() {
   });
 }
 
-// ============ HIỂN THỊ KẾT QUẢ ============
+// ============ KIỂM TRA NGƯỜI HỌ PHẠM ============
+function laNguoiHoPham(nguoi) {
+  const ten = (nguoi.ho_ten || '').trim();
+  return ten.startsWith('Phạm');
+}
+
+// ============ LẤY DANH SÁCH VỢ/CHỒNG ============
+function layDanhSachPhoiNgau(nguoi) {
+  if (!nguoi.hon_nhan || nguoi.hon_nhan.length === 0) return [];
+  const ds = [];
+  nguoi.hon_nhan.forEach(hn => {
+    const voChong = window.giaphaData.nguoi.find(n => n.id === hn.vo_id);
+    if (voChong) {
+      ds.push({
+        nguoi: voChong,
+        loai: hn.loai,
+        ghi_chu: hn.ghi_chu
+      });
+    }
+  });
+  return ds;
+}
+
+// ============ LẤY TÊN VAI VẾ PHỐI NGẪU ============
+function layVaiVePhoiNgau(loai) {
+  const map = {
+    'chinh_that': 'Chính thất',
+    'thu_that': 'Thứ thất',
+    'vo': 'Vợ',
+    'chong': 'Chồng'
+  };
+  return map[loai] || 'Vợ/Chồng';
+}
+// ============ HIỂN THỊ KẾT QUẢ — BẢNG 2 CỘT ============
 function hienThiKetQua(dsNguoi) {
   const container = document.getElementById('ds-nguoi');
   if (!container) return;
   container.innerHTML = '';
+  container.className = 'ds-nguoi-2cot';
+
   if (dsNguoi.length === 0) {
-    container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-style:italic;">Không tìm thấy ai</p>';
+    container.innerHTML = '<p style="text-align:center;color:#888;font-style:italic;">Không tìm thấy ai</p>';
     return;
   }
-  dsNguoi.forEach(nguoi => {
-    const the = document.createElement('div');
-    the.className = 'the-nguoi';
-    const tenHienThi = nguoi.ho_ten || '(Không rõ tên)';
-    const laChuaRo = (nguoi.ten_chu || '').includes('?') || (nguoi.ho_ten || '').includes('?');
-    the.innerHTML = `
-      <div class="ten ${laChuaRo ? 'chua-ro' : ''}">${tenHienThi}${laChuaRo ? ' <span style="font-size:9pt;">(?)</span>' : ''}</div>
-      <div class="phu"><span class="doi">Đời ${nguoi.doi}</span>${nguoi.chi || ''}</div>
-    `;
-    the.addEventListener('click', () => hienThiChiTiet(nguoi));
-    container.appendChild(the);
+
+  const nguoiHuyetThong = dsNguoi.filter(n => laNguoiHoPham(n));
+  const dsDoi = [...new Set(nguoiHuyetThong.map(n => n.doi))].sort((a, b) => a - b);
+
+  dsDoi.forEach(doi => {
+    const nguoiDoi = nguoiHuyetThong.filter(n => n.doi === doi);
+    if (nguoiDoi.length === 0) return;
+
+    const nhanDoi = document.createElement('div');
+    nhanDoi.className = 'nhan-doi-cot';
+    nhanDoi.textContent = 'Đời ' + doi;
+    container.appendChild(nhanDoi);
+
+    nguoiDoi.forEach(nguoi => {
+      const dsPhoiNgau = layDanhSachPhoiNgau(nguoi);
+
+      const cap = document.createElement('div');
+      cap.className = 'cap-vo-chong';
+
+      const theTrai = taoTheNguoi(nguoi, false);
+      cap.appendChild(theTrai);
+
+      const cotPhai = document.createElement('div');
+      cotPhai.className = 'cot-phai-trong-cap';
+
+      if (dsPhoiNgau.length > 0) {
+        dsPhoiNgau.forEach(pn => {
+          const thePhai = taoTheNguoi(pn.nguoi, true, nguoi, pn.loai);
+          cotPhai.appendChild(thePhai);
+        });
+      } else {
+        const theTrong = document.createElement('div');
+        theTrong.className = 'the-nguoi trong';
+        theTrong.innerHTML = '&nbsp;';
+        cotPhai.appendChild(theTrong);
+      }
+
+      cap.appendChild(cotPhai);
+      container.appendChild(cap);
+    });
+
+    const khoangTrong = document.createElement('div');
+    khoangTrong.className = 'khoang-trong-doi';
+    container.appendChild(khoangTrong);
   });
+}
+
+// ============ TẠO THẺ NGƯỜI ============
+function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
+  const the = document.createElement('div');
+  the.className = 'the-nguoi';
+  if (laPhoiNgau) the.classList.add('phoi-ngau');
+
+  const tenHienThi = nguoi.ho_ten || '(Không rõ tên)';
+  const laChuaRo = (nguoi.ten_chu || '').includes('?') || (nguoi.ho_ten || '').includes('?');
+
+  let html = `<div class="ten ${laChuaRo ? 'chua-ro' : ''}">${tenHienThi}${laChuaRo ? ' <span style="font-size:9pt;">(?)</span>' : ''}</div>`;
+
+  if (laPhoiNgau && nguoiChongVo) {
+    const vaiVe = layVaiVePhoiNgau(loaiHonNhan);
+    html += `<div class="phu">${vaiVe} của ${nguoiChongVo.ho_ten}</div>`;
+  } else {
+    html += `<div class="phu"><span class="doi">Đời ${nguoi.doi}</span>${nguoi.chi || ''}</div>`;
+  }
+
+  the.innerHTML = html;
+  the.addEventListener('click', () => hienThiChiTiet(nguoi));
+  return the;
 }
 
 // ============ HIỂN THỊ CHI TIẾT NGƯỜI ============
@@ -249,7 +320,6 @@ function ganSuKienFormGhiChu() {
   const nutLuu = document.getElementById('nut-luu-ghichu');
   const nutXuat = document.getElementById('nut-xuat-ghichu');
   const nutXoaHet = document.getElementById('nut-xoa-het-ghichu');
-
   if (nutLuu) nutLuu.addEventListener('click', luuGhiChu);
   if (nutXuat) nutXuat.addEventListener('click', xuatFileGhiChu);
   if (nutXoaHet) nutXoaHet.addEventListener('click', xoaHetGhiChu);
@@ -275,17 +345,9 @@ function luuGhiChu() {
   const nguoiId = document.getElementById('gc-nguoi').value;
   const loai = document.getElementById('gc-loai').value;
   const noidung = document.getElementById('gc-noidung').value.trim();
-  const nguoiDeXuat = document.getElementById('gc-nguoidexuat').value.trim();
-
-  if (!nguoiId) {
-    alert('Vui lòng chọn người liên quan!');
-    return;
-  }
-  if (!noidung) {
-    alert('Vui lòng nhập nội dung ghi chú!');
-    return;
-  }
-
+  const nguoiDeXuat = document.getElementById('gc-nguoi_de_xuat').value.trim();
+  if (!nguoiId) { alert('Vui lòng chọn người liên quan!'); return; }
+  if (!noidung) { alert('Vui lòng nhập nội dung ghi chú!'); return; }
   const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
   const ghiChuMoi = {
     id: 'gc-' + Date.now(),
@@ -298,15 +360,12 @@ function luuGhiChu() {
     nguoi_de_xuat: nguoiDeXuat || '(Không ghi tên)',
     ngay: new Date().toLocaleDateString('vi-VN')
   };
-
   danhSachGhiChu.push(ghiChuMoi);
   luuGhiChuVaoLocal();
   hienThiDanhSachGhiChu();
-
   document.getElementById('gc-nguoi').value = '';
   document.getElementById('gc-noidung').value = '';
   document.getElementById('gc-nguoidexuat').value = '';
-
   alert('Đã lưu ghi chú!');
 }
 
