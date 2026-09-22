@@ -238,7 +238,10 @@ function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
 function hienThiChiTiet(nguoi) {
   const panel = document.getElementById('panel-chi-tiet');
   if (!panel) return;
-  let html = '<button onclick="dongPanel()" style="float:right;border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
+    let html = '<div style="float:right;display:flex;gap:8px;align-items:center;">';
+  html += '<button onclick="chuyenSangPhaDo(\'' + nguoi.id + '\')" title="Xem trong phả đồ" class="nut-pha-do">📊 Phả đồ</button>';
+  html += '<button onclick="dongPanel()" style="border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
+  html += '</div>';
   html += '<h2 style="color:#E23B3A;margin-bottom:16px;">' + (nguoi.ho_ten || '(Không rõ tên)') + '</h2>';
   html += '<table style="width:100%;border-collapse:collapse;">';
   const themDong = (nhan, gt) => {
@@ -468,4 +471,52 @@ function xuatFileGhiChu() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   alert('Đã xuất file chuthich.json!');
+}
+// ============ CHUYỂN SANG TAB PHẢ HỆ ============
+function chuyenSangPhaDo(nguoiId) {
+  if (!nguoiId || !window.giaphaData) return;
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  if (!nguoi) {
+    console.warn('Không tìm thấy người có id:', nguoiId);
+    return;
+  }
+
+  // Chuyển tab sang "Phả hệ"
+  const menuButtons = document.querySelectorAll('.menu-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const bannerImg = document.getElementById('banner-img');
+
+  menuButtons.forEach(b => b.classList.remove('active'));
+  const nutPhaHe = document.querySelector('.menu-btn[data-tab="phahe"]');
+  if (nutPhaHe) nutPhaHe.classList.add('active');
+
+  tabContents.forEach(c => c.classList.remove('active'));
+  const tabPhaHe = document.getElementById('tab-phahe');
+  if (tabPhaHe) tabPhaHe.classList.add('active');
+
+  if (bannerImg) bannerImg.src = 'assets/banner-phahe.png';
+
+  // Đóng panel chi tiết
+  const panel = document.getElementById('panel-chi-tiet');
+  if (panel) panel.classList.add('an');
+
+  // Cuộn lên đầu
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Đợi 1 chút cho phả đồ load xong — rồi tô sáng
+  setTimeout(() => {
+    // Tìm node người trong phả đồ
+    const node = document.querySelector('.node-nguoi[data-id="' + nguoiId + '"]');
+    if (node) {
+      // Xóa tô sáng cũ
+      document.querySelectorAll('.node-nguoi').forEach(el => {
+        el.classList.remove('dang-chon');
+      });
+      // Thêm tô sáng
+      node.classList.add('dang-chon');
+      // Cuộn đến node
+      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 300);
 }
