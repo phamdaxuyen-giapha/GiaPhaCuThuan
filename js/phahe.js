@@ -1,12 +1,10 @@
 // Module Phả hệ — vẽ cây gia phả động
 console.log('Module Phả hệ đang khởi động...');
 
-// Biến giaphaData đã khai báo trong app.js — KHÔNG khai báo lại
 let dangOcheDoDoc = true;
 let nguoiDangChon = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // Đợi app.js tải xong gia phả
   let demCho = 0;
   while (!window.giaphaData && demCho < 50) {
     await new Promise(r => setTimeout(r, 100));
@@ -14,14 +12,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   if (!window.giaphaData) {
-    console.error('Phả hệ: Không tìm thấy dữ liệu gia phả từ app.js');
+    console.error('Phả hệ: Không tìm thấy dữ liệu gia phả');
     return;
   }
 
   console.log('Phả hệ: Đã nhận dữ liệu', window.giaphaData.nguoi.length, 'người');
   vePhaDo();
 
-  // Nút Cây dọc
   const nutDoc = document.getElementById('nut-doc');
   if (nutDoc) {
     nutDoc.addEventListener('click', function() {
@@ -33,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // Nút Cây ngang
   const nutNgang = document.getElementById('nut-ngang');
   if (nutNgang) {
     nutNgang.addEventListener('click', function() {
@@ -45,7 +41,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // Nút Tô sáng trực hệ
   const nutTrucHe = document.getElementById('nut-truc-he');
   if (nutTrucHe) {
     nutTrucHe.addEventListener('click', function() {
@@ -57,7 +52,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // Nút Bỏ tô sáng
   const nutBoTrucHe = document.getElementById('nut-bo-truc-he');
   if (nutBoTrucHe) {
     nutBoTrucHe.addEventListener('click', function() {
@@ -67,7 +61,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  // Dropdown lọc chi
   const locChi = document.getElementById('loc-chi');
   if (locChi && window.giaphaData) {
     window.giaphaData.chi.forEach(chi => {
@@ -138,13 +131,50 @@ function taoNodeNguoi(nguoi) {
     ${nguoi.ten_chu ? '<div class="node-ten-chu">' + nguoi.ten_chu + '</div>' : ''}
   `;
 
+  // Click 1 lần — chọn
   node.addEventListener('click', function() {
     nguoiDangChon = nguoi;
     document.querySelectorAll('.node-nguoi').forEach(el => el.classList.remove('dang-chon'));
     node.classList.add('dang-chon');
   });
 
+  // Double-click — mở Danh tính
+  node.addEventListener('dblclick', function() {
+    chuyenSangDanhTinh(nguoi.id);
+  });
+
   return node;
+}
+
+// ============ CHUYỂN SANG TAB DANH TÍNH ============
+function chuyenSangDanhTinh(nguoiId) {
+  if (!nguoiId || !window.giaphaData) return;
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  if (!nguoi) {
+    console.warn('Không tìm thấy người có id:', nguoiId);
+    return;
+  }
+
+  const menuButtons = document.querySelectorAll('.menu-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const bannerImg = document.getElementById('banner-img');
+
+  menuButtons.forEach(b => b.classList.remove('active'));
+  const nutDanhTinh = document.querySelector('.menu-btn[data-tab="danhtinh"]');
+  if (nutDanhTinh) nutDanhTinh.classList.add('active');
+
+  tabContents.forEach(c => c.classList.remove('active'));
+  const tabDanhTinh = document.getElementById('tab-danhtinh');
+  if (tabDanhTinh) tabDanhTinh.classList.add('active');
+
+  if (bannerImg) bannerImg.src = 'assets/banner-danhtinh.png';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (typeof hienThiChiTiet === 'function') {
+    hienThiChiTiet(nguoi);
+  }
 }
 
 function toSangTrucHe(nguoi) {
@@ -154,7 +184,6 @@ function toSangTrucHe(nguoi) {
 
   const trucHe = new Set();
 
-  // Tìm tổ tiên
   let hienTai = nguoi;
   while (hienTai) {
     trucHe.add(hienTai.id);
@@ -165,7 +194,6 @@ function toSangTrucHe(nguoi) {
     }
   }
 
-  // Tìm hậu duệ
   function timHauDue(id) {
     const conCai = window.giaphaData.nguoi.filter(n => n.cha_id === id || n.me_id === id);
     conCai.forEach(con => {
