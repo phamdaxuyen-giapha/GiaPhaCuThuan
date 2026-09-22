@@ -370,3 +370,19 @@ body {
   .node-nguoi { min-width: 130px; max-width: 180px; padding: 8px 10px; }
   .node-ten { font-size: 10.5pt; }
 }
+/* ============ NÚT PHẢ ĐỒ TRONG PANEL ============ */
+.nut-pha-do {
+  border: 1px solid var(--vang-dong);
+  background: #FAF6EC;
+  color: var(--vang-dong);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: 11pt;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.nut-pha-do:hover {
+  background: var(--vang-dong);
+  color: #fff;
+}
