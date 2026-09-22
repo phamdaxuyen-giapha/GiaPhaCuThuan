@@ -19,16 +19,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     btn.addEventListener('click', function() {
       const tabId = this.dataset.tab;
 
-      // Đổi trạng thái nút menu
       menuButtons.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
 
-      // Đổi nội dung tab
       tabContents.forEach(c => c.classList.remove('active'));
       const tab = document.getElementById('tab-' + tabId);
       if (tab) tab.classList.add('active');
 
-      // Đổi banner
       if (bannerImg && bannerMap[tabId]) {
         bannerImg.src = bannerMap[tabId];
       }
@@ -72,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   hienThiDanhSachGhiChu();
   ganSuKienFormGhiChu();
 
-  // ============ TẢI LỜI NÓI ĐẦU ============
+  // ============ TẢI LỜI NÓI ĐẦU TỪ noipha.json ============
   taiLoiNoiDau();
 });
 
@@ -82,18 +79,27 @@ async function taiLoiNoiDau() {
     const response = await fetch('data/noipha.json');
     const data = await response.json();
 
-    const loiCoTo = document.getElementById('loi-co-to');
-    const loiHauThe = document.getElementById('loi-hau-the');
+    const loiTua = document.getElementById('loi-tua');
+    const phaKy = document.getElementById('pha-ky');
+    const loiNgo = document.getElementById('loi-ngo');
+    const ghiChu1 = document.getElementById('ghi-chu-1');
 
-    if (loiCoTo && data.loi_co_to) {
-      loiCoTo.innerHTML = data.loi_co_to;
+    if (loiTua && data.loi_tua) {
+      loiTua.innerHTML = data.loi_tua;
     }
-    if (loiHauThe && data.loi_hau_the) {
-      loiHauThe.innerHTML = data.loi_hau_the;
+    if (phaKy && data.pha_ky) {
+      phaKy.innerHTML = data.pha_ky;
     }
-    console.log('Đã tải lời nói đầu từ noipha.json');
+    if (loiNgo && data.loi_ngo) {
+      loiNgo.innerHTML = data.loi_ngo;
+    }
+    if (ghiChu1 && data.ghi_chu_1) {
+      ghiChu1.innerHTML = data.ghi_chu_1;
+    }
+
+    console.log('Đã tải: Lời tựa, Phả ký, Lời ngỏ, Ghi chú thứ nhất');
   } catch (err) {
-    console.log('Chưa có file noipha.json — hiển thị mặc định');
+    console.log('Lỗi tải noipha.json:', err);
   }
 }
 
@@ -151,8 +157,6 @@ function hienThiKetQua(dsNguoi) {
     the.innerHTML = `
       <div class="ten ${laChuaRo ? 'chua-ro' : ''}">${tenHienThi}${laChuaRo ? ' <span style="font-size:9pt;">(?)</span>' : ''}</div>
       <div class="phu"><span class="doi">Đời ${nguoi.doi}</span>${nguoi.chi || ''}</div>
-      ${nguoi.ten_chu ? '<div class="phu">Tên chữ: ' + nguoi.ten_chu + '</div>' : ''}
-      ${nguoi.ten_hieu ? '<div class="phu">Tên hiệu: ' + nguoi.ten_hieu + '</div>' : ''}
     `;
     the.addEventListener('click', () => hienThiChiTiet(nguoi));
     container.appendChild(the);
