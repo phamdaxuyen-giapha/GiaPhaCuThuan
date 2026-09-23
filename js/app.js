@@ -87,7 +87,7 @@ async function taiLoiNoiDau() {
 function hienThiDanhSachDoi() {
   const container = document.getElementById('danh-sach-doi');
   if (!container) return;
-  const dsDoi = [...new Set(window.giaphaData.nguoi.map(n => n.doi))].sort((a,b) => a-b);
+    const dsDoi = [...new Set(window.giaphaData.nguoi.filter(n => n.doi <= 6).map(n => n.doi))].sort((a,b) => a-b);
   dsDoi.forEach(doi => {
     const btn = document.createElement('button');
     btn.textContent = 'Đời thứ ' + doi;
@@ -165,7 +165,7 @@ function hienThiKetQua(dsNguoi) {
     return;
   }
 
-  const nguoiHuyetThong = dsNguoi.filter(n => laNguoiHoPham(n));
+  const nguoiHuyetThong = dsNguoi.filter(n => laNguoiHoPham(n) && n.doi <= 6);
   const dsDoi = [...new Set(nguoiHuyetThong.map(n => n.doi))].sort((a, b) => a - b);
 
   dsDoi.forEach(doi => {
