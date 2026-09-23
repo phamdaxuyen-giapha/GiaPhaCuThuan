@@ -88,7 +88,7 @@ function vePhaDo() {
   const wrapper = document.createElement('div');
   wrapper.className = dangOcheDoDoc ? 'pha-do-doc' : 'pha-do-ngang';
 
-  const dsDoi = [...new Set(window.giaphaData.nguoi.map(n => n.doi))].sort((a,b) => a-b);
+  const dsDoi = [...new Set(window.giaphaData.nguoi.filter(n => n.doi <= 6).map(n => n.doi))].sort((a,b) => a-b);
   dsDoi.forEach(doi => {
     const dsNguoiDoi = window.giaphaData.nguoi.filter(n => n.doi === doi);
     if (dsNguoiDoi.length === 0) return;
