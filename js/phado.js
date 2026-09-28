@@ -129,9 +129,162 @@ function locChiPhado(chi, nutDuocChon) {
 function veCayPhado() {
   console.log('Phả đồ: veCayPhado() sẽ được định nghĩa ở Phần 2b');
   // TODO: Phần 2b sẽ thay thế hàm này
+// ============ HÀM VẼ CÂY CHÍNH ============
+function veCayPhado() {
+  // Xóa cây cũ
+  phadoG.selectAll('*').remove();
+
+  // Lấy danh sách người
+  let dsNguoi = phadoData.nguoi.filter(n => n.ho_ten && n.ho_ten.startsWith('Phạm'));
+
+  // Lọc theo chi nếu có
+  if (phadoFilterChi) {
+    dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
+  }
+
+  // Sắp xếp theo đời
+  dsNguoi.sort((a, b) => a.doi - b.doi);
+
+  if (dsNguoi.length === 0) {
+    console.warn('Phả đồ: Không có người nào để vẽ');
+    return;
+  }
+
+  // Nhóm theo đời
+  const theoDoi = {};
+  dsNguoi.forEach(n => {
+    if (!theoDoi[n.doi]) theoDoi[n.doi] = [];
+    theoDoi[n.doi].push(n);
+  });
+
+  // Tính vị trí từng node
+  const dsDoi = Object.keys(theoDoi).map(Number).sort((a, b) => a - b);
+  let y = 50;
+  const viTriNode = {};
+
+  dsDoi.forEach(doi => {
+    const dsNguoiDoi = theoDoi[doi];
+    const tongWidth = dsNguoiDoi.length * (NODE_WIDTH + NODE_SPACING_X);
+    let x = -tongWidth / 2;
+
+    dsNguoiDoi.forEach(nguoi => {
+      viTriNode[nguoi.id] = { x: x, y: y, nguoi: nguoi };
+      x += NODE_WIDTH + NODE_SPACING_X;
+    });
+    y += NODE_HEIGHT + NODE_SPACING_Y;
+  });
+
+  // Vẽ đường nối cha-con
+  const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
+
+  dsNguoi.forEach(nguoi => {
+    if (nguoi.cha_id && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
+      const cha = viTriNode[nguoi.cha_id];
+      const con = viTriNode[nguoi.id];
+
+      // Đường từ đáy cha xuống đỉnh con
+      const x1 = cha.x + NODE_WIDTH / 2;
+      const y1 = cha.y + NODE_HEIGHT;
+      const x2 = con.x + NODE_WIDTH / 2;
+      const y2 = con.y;
+
+      // Vẽ đường gấp khúc (đi xuống, sang ngang, xuống tiếp)
+      const duongPath = `M ${x1} ${y1} L ${x1} ${y1 + 30} L ${x2} ${y1 + 30} L ${x2} ${y2}`;
+
+      duongNoi.append('path')
+        .attr('d', duongPath)
+        .attr('stroke', '#C9A961')
+        .attr('stroke-width', 1.5)
+        .attr('fill', 'none')
+        .attr('opacity', 0.5);
+    }
+  });
+
+  // Vẽ các node
+  const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
+
+  dsNguoi.forEach(nguoi => {
+    const viTri = viTriNode[nguoi.id];
+    if (viTri) {
+      taoNodePhado(nguoi, viTri.x, viTri.y, nhomNode);
+    }
+  });
+
+  console.log('Phả đồ: Đã vẽ', dsNguoi.length, 'node');
 }
 
-// ============ HÀM TẠO NODE (định nghĩa ở Phần 2b) ============
-function taoNodePhado(nguoi) {
-  // TODO: Phần 2b sẽ định nghĩa
+// ============ HÀM TẠO NODE ============
+function taoNodePhado(nguoi, x, y, nhomCha) {
+  const nodeGroup = nhomCha.append('g')
+    .attr('class', 'phado-node')
+    .attr('transform', `translate(${x}, ${y})`)
+    .attr('data-id', nguoi.id);
+
+  // Hình chữ nhật nền
+  nodeGroup.append('rect')
+    .attr('width', NODE_WIDTH)
+    .attr('height', NODE_HEIGHT)
+    .attr('rx', 8)
+    .attr('ry', 8)
+    .attr('fill', '#FFF8F0')
+    .attr('stroke', '#C9A961')
+    .attr('stroke-width', 1.5)
+    .attr('cursor', 'pointer');
+
+  // Tên
+  nodeGroup.append('text')
+    .attr('x', NODE_WIDTH / 2)
+    .attr('y', 25)
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'Noto Serif, serif')
+    .attr('font-size', '13px')
+    .attr('font-weight', 'bold')
+    .attr('fill', '#7A6320')
+    .attr('cursor', 'pointer')
+    .text(nguoi.ho_ten.length > 22 ? nguoi.ho_ten.substring(0, 20) + '...' : nguoi.ho_ten);
+
+  // Tên chữ
+  if (nguoi.ten_chu) {
+    nodeGroup.append('text')
+      .attr('x', NODE_WIDTH / 2)
+      .attr('y', 45)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'Noto Serif, serif')
+      .attr('font-size', '11px')
+      .attr('font-style', 'italic')
+      .attr('fill', '#999')
+      .text(nguoi.ten_chu.length > 24 ? nguoi.ten_chu.substring(0, 22) + '...' : nguoi.ten_chu);
+  }
+
+  // Đời
+  nodeGroup.append('text')
+    .attr('x', NODE_WIDTH / 2)
+    .attr('y', 62)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '10px')
+    .attr('fill', '#C9A961')
+    .text(`Đời ${nguoi.doi}`);
+
+  // Sự kiện click
+  nodeGroup.on('click', function(event) {
+    event.stopPropagation();
+    chonNodePhado(nguoi.id);
+  });
+
+  // Sự kiện hover
+  nodeGroup.on('mouseover', function() {
+    d3.select(this).select('rect')
+      .attr('fill', '#FFE8B0')
+      .attr('stroke-width', 2.5);
+  });
+
+  nodeGroup.on('mouseout', function() {
+    if (phadoSelectedId !== nguoi.id) {
+      d3.select(this).select('rect')
+        .attr('fill', '#FFF8F0')
+        .attr('stroke-width', 1.5);
+    }
+  });
+
+  return nodeGroup;
 }
