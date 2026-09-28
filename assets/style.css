@@ -386,8 +386,9 @@ body {
   background: var(--vang-dong);
   color: #fff;
 }
+
 /* ============================================================
-   PHẢ ĐỒ — CSS cho cây gia phả D3.js
+   PHẢ ĐỒ D3.JS — CSS cho cây gia phả (ĐÃ SỬA LỖI CHỚP CHỚP)
    ============================================================ */
 
 .phado-wrapper {
@@ -412,12 +413,9 @@ body {
   cursor: grabbing;
 }
 
+/* ĐÃ XÓA transform + hover gây chớp chớp — chỉ giữ transition fill */
 .phado-node {
-  transition: transform 0.15s ease;
-}
-
-.phado-node:hover {
-  transform: translateY(-2px);
+  transition: fill 0.2s ease;
 }
 
 .phado-node rect {
@@ -490,10 +488,4 @@ body {
     right: 5%;
     top: 5%;
   }
-}
-
-
-.khoang-trong-doi {
-  height: 20px;
-}
 }
