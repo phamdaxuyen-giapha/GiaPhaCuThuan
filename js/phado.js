@@ -194,7 +194,9 @@ function veCayPhado() {
         .attr('opacity', 0.5);
     }
   });
-
+  // Căn giữa cây theo chiều ngang
+  const tongChieuRong = Object.values(viTriNode).reduce((max, v) => Math.max(max, Math.abs(v.x) + NODE_WIDTH), 0);
+  phadoG.attr('transform', `translate(${tongChieuRong + 50}, 30)`);
   // Vẽ các node
   const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
 
