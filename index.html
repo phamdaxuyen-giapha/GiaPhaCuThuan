@@ -6,6 +6,7 @@
 <title>Gia phả họ Phạm Đà Xuyên — Tiền phả</title>
 <link rel="stylesheet" href="assets/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+ <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
 
@@ -14,6 +15,7 @@
     <button class="menu-btn active" data-tab="trangchu">Trang chủ</button>
     <button class="menu-btn" data-tab="danhtinh">Danh tính</button>
     <button class="menu-btn" data-tab="phahe">Phả hệ</button>
+    <button class="menu-btn" data-tab="phado">Phả đồ</button>
     <button class="menu-btn" data-tab="ngoipha">Ngoại phả</button>
   </nav>
   <div class="banner-dong" id="banner-dong">
@@ -65,14 +67,42 @@
           <div id="danh-sach-doi" class="danh-sach-doi"></div>
           <h2 class="de-muc">Tra cứu theo chi</h2>
           <div id="danh-sach-chi" class="danh-sach-chi"></div>
-          <div class="o-tim-kiem"><input type="text" id="o-tim-kiem" placeholder="Tìm tên..."></div>
+          <div class="o-tim-kiem o-tim-kiem-nang-cao">
+            <input type="text" id="o-tim-kiem" placeholder="Tìm tên (không cần dấu)..." autocomplete="off">
+            <ul id="goi-y-tim-kiem" class="goi-y-tim-kiem"></ul>
+          </div>
         </aside>
         <div class="cot-phai"><div id="ds-nguoi" class="ds-nguoi"></div></div>
       </div>
       <div id="panel-chi-tiet" class="panel-chi-tiet an"></div>
     </div>
   </section>
-
+  <section id="tab-phado" class="tab-content">
+    <div class="container">
+      <div class="thanh-cong-cu">
+        <button id="phado-loc-tatca" class="nut-tool active">Tất cả các chi</button>
+        <button id="phado-loc-bahe" class="nut-tool">Chi Bá Hệ</button>
+        <button id="phado-loc-quat" class="nut-tool">Chi Trọng Quát</button>
+        <button id="phado-loc-xuyen" class="nut-tool">Chi Trọng Xuyên</button>
+        <button id="phado-zoom-in" class="nut-tool">➕ Phóng to</button>
+        <button id="phado-zoom-out" class="nut-tool">➖ Thu nhỏ</button>
+        <button id="phado-zoom-reset" class="nut-tool">↺ Về gốc</button>
+      </div>
+      <div class="phado-wrapper">
+        <svg id="phado-svg" class="phado-svg"></svg>
+        <div id="phado-panel" class="phado-panel an"></div>
+      </div>
+      <div class="ghi-chu-phado">
+        <p><strong>Hướng dẫn:</strong></p>
+        <ul>
+          <li>🖱️ <strong>Lăn chuột</strong> để phóng to / thu nhỏ</li>
+          <li>🖱️ <strong>Giữ chuột và kéo</strong> để di chuyển cây</li>
+          <li>👆 <strong>Click vào ô tên</strong> để xem chi tiết + tô sáng trực hệ</li>
+          <li>👆 <strong>Click vào nút 📊</strong> để chuyển sang tab Danh tính</li>
+        </ul>
+      </div>
+    </div>
+  </section>
   <section id="tab-phahe" class="tab-content">
     <div class="container">
       <div class="thanh-cong-cu">
@@ -154,6 +184,7 @@
 
 <script src="js/app.js"></script>
 <script src="js/phahe.js"></script>
+  <script src="js/phado.js"></script>
 <script src="js/anhtool.js"></script>
 </body>
 </html>
