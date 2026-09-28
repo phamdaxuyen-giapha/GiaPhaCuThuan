@@ -125,11 +125,6 @@ function locChiPhado(chi, nutDuocChon) {
   console.log('Phả đồ: Đã lọc theo chi:', chi || 'Tất cả');
 }
 
-// ============ HÀM VẼ CÂY (định nghĩa ở Phần 2b) ============
-function veCayPhado() {
-  console.log('Phả đồ: veCayPhado() sẽ được định nghĩa ở Phần 2b');
-  // TODO: Phần 2b sẽ thay thế hàm này
-// ============ HÀM VẼ CÂY CHÍNH ============
 function veCayPhado() {
   // Xóa cây cũ
   phadoG.selectAll('*').remove();
