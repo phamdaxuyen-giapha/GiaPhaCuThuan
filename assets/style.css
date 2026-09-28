@@ -489,3 +489,101 @@ body {
     top: 5%;
   }
 }
+
+
+
+/* ============================================================
+   TÌM KIẾM NÂNG CAO — DROPDOWN GỢI Ý
+   ============================================================ */
+
+.o-tim-kiem {
+  position: relative;
+}
+
+.goi-y-tim-kiem {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid var(--vang-dong);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 350px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.goi-y-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #F0E8D8;
+  transition: background 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.goi-y-item:last-child {
+  border-bottom: none;
+}
+
+.goi-y-item:hover {
+  background: #FFF8E8;
+  border-left: 3px solid var(--do-tram);
+  padding-left: 11px;
+}
+
+.goi-y-ten {
+  font-weight: 700;
+  color: var(--xam-nau);
+  font-size: 11pt;
+  flex: 1;
+}
+
+.goi-y-phu {
+  font-size: 9.5pt;
+  color: var(--vang-dong);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.goi-y-tim-kiem::-webkit-scrollbar {
+  width: 8px;
+}
+
+.goi-y-tim-kiem::-webkit-scrollbar-track {
+  background: #FAF6EC;
+  border-radius: 4px;
+}
+
+.goi-y-tim-kiem::-webkit-scrollbar-thumb {
+  background: var(--vang-dong);
+  border-radius: 4px;
+}
+
+.goi-y-tim-kiem::-webkit-scrollbar-thumb:hover {
+  background: var(--nau-tram);
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .goi-y-tim-kiem {
+    max-height: 250px;
+  }
+  .goi-y-item {
+    padding: 8px 12px;
+  }
+  .goi-y-ten {
+    font-size: 10.5pt;
+  }
+  .goi-y-phu {
+    font-size: 9pt;
+  }
+}
