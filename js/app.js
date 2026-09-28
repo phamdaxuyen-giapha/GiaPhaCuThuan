@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.error('Lỗi tải gia phả:', err);
   }
 
-  // ============ TÌM KIẾM NÂNG CAO ============
   const oTimKiem = document.getElementById('o-tim-kiem');
   if (oTimKiem) {
     oTimKiem.addEventListener('input', function() {
@@ -342,10 +341,13 @@ function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
 function hienThiChiTiet(nguoi) {
   const panel = document.getElementById('panel-chi-tiet');
   if (!panel) return;
+
   let html = '<div style="float:right;display:flex;gap:8px;align-items:center;">';
   html += '<button onclick="chuyenSangPhaDo(\'' + nguoi.id + '\')" title="Xem trong phả đồ" class="nut-pha-do">📊 Phả đồ</button>';
+  html += '<button onclick="moFormDinhChinh(\'' + nguoi.id + '\')" title="Thêm đính chính" class="nut-dinh-chinh">📝 Đính chính</button>';
   html += '<button onclick="dongPanel()" style="border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
   html += '</div>';
+
   html += '<h2 style="color:#E23B3A;margin-bottom:16px;">' + (nguoi.ho_ten || '(Không rõ tên)') + '</h2>';
   html += '<table style="width:100%;border-collapse:collapse;">';
   const themDong = (nhan, gt) => {
@@ -398,6 +400,78 @@ function hienThiChiTiet(nguoi) {
 
   panel.innerHTML = html;
   panel.classList.remove('an');
+}
+
+// ============ FORM ĐÍNH CHÍNH ============
+function moFormDinhChinh(nguoiId) {
+  const panel = document.getElementById('panel-chi-tiet');
+  if (!panel) return;
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  if (!nguoi) return;
+
+  let html = '<div style="float:right;">';
+  html += '<button onclick="dongPanel()" style="border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
+  html += '</div>';
+
+  html += '<h3 style="color:#E23B3A;margin-bottom:16px;">📝 Thêm đính chính</h3>';
+  html += '<p style="font-style:italic;color:#7A6320;">Cho: <strong>' + (nguoi.ho_ten || '(Không rõ)') + '</strong> (Đời ' + nguoi.doi + ')</p>';
+
+  html += '<div style="margin-top:16px;">';
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Loại đính chính:</label>';
+  html += '<select id="dc-loai" style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:14px;">';
+  html += '<option value="sua-chinh-ta">Sửa chính tả</option>';
+  html += '<option value="nghi-van">Nghi vấn cần kiểm chứng</option>';
+  html += '<option value="bo-sung">Bổ sung thông tin</option>';
+  html += '<option value="khac">Khác</option>';
+  html += '</select>';
+
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Nội dung đính chính:</label>';
+  html += '<textarea id="dc-noidung" rows="4" placeholder="Nhập nội dung cần đính chính..." style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:14px;"></textarea>';
+
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Người đề xuất:</label>';
+  html += '<input type="text" id="dc-nguoi-de-xuat" placeholder="Tên bạn..." style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:16px;">';
+
+  html += '<div style="display:flex;gap:8px;">';
+  html += '<button onclick="luuDinhChinh(\'' + nguoiId + '\')" class="nut-chinh">💾 Lưu đính chính</button>';
+  html += '<button onclick="hienThiChiTiet(window.giaphaData.nguoi.find(n => n.id === \'' + nguoiId + '\'))" style="padding:10px 22px;background:#fff;color:#7A6320;border:1px solid #7A6320;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11pt;">↺ Quay lại</button>';
+  html += '</div>';
+  html += '</div>';
+
+  panel.innerHTML = html;
+  panel.classList.remove('an');
+}
+
+function luuDinhChinh(nguoiId) {
+  const loai = document.getElementById('dc-loai').value;
+  const noidung = document.getElementById('dc-noidung').value.trim();
+  const nguoiDeXuat = document.getElementById('dc-nguoi-de-xuat').value.trim();
+
+  if (!noidung) {
+    alert('Vui lòng nhập nội dung đính chính!');
+    return;
+  }
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  const dinhChinhMoi = {
+    id: 'dc-' + Date.now(),
+    nguoi_id: nguoiId,
+    nguoi_ten: nguoi ? nguoi.ho_ten : '(Không rõ)',
+    doi: nguoi ? nguoi.doi : null,
+    loai: tenLoaiGhiChu(loai),
+    loai_code: loai,
+    noidung: noidung,
+    nguoi_de_xuat: nguoiDeXuat || '(Không ghi tên)',
+    ngay: new Date().toLocaleDateString('vi-VN')
+  };
+
+  danhSachGhiChu.push(dinhChinhMoi);
+  luuGhiChuVaoLocal();
+  hienThiDanhSachGhiChu();
+
+  alert('Đã lưu đính chính! Ghi chú hiện trên panel chi tiết.');
+
+  if (nguoi) hienThiChiTiet(nguoi);
 }
 
 function dongPanel() {
