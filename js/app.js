@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     'trangchu': 'assets/banner-trangchu.png',
     'danhtinh': 'assets/banner-danhtinh.png',
     'phahe': 'assets/banner-phahe.png',
+    'phado': 'assets/banner-phahe.png',
     'ngoipha': 'assets/banner-ngoipha.png'
   };
 
@@ -40,21 +41,47 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.error('Lỗi tải gia phả:', err);
   }
 
+  // ============ TÌM KIẾM NÂNG CAO ============
   const oTimKiem = document.getElementById('o-tim-kiem');
   if (oTimKiem) {
     oTimKiem.addEventListener('input', function() {
-      const tuKhoa = this.value.toLowerCase().trim();
+      const tuKhoa = this.value.trim();
+      const ulGoiY = document.getElementById('goi-y-tim-kiem');
+
       if (!tuKhoa) {
         document.getElementById('ds-nguoi').innerHTML = '';
+        if (ulGoiY) {
+          ulGoiY.innerHTML = '';
+          ulGoiY.style.display = 'none';
+        }
         return;
       }
+
+      // Hiển thị gợi ý
+      const dsGoiY = timKiemNangCao(tuKhoa);
+      hienThiGoiY(dsGoiY, tuKhoa);
+
+      // Hiển thị kết quả đầy đủ bên phải
       const ketQua = window.giaphaData.nguoi.filter(n => {
-        const ten = (n.ho_ten || '').toLowerCase();
-        const chu = (n.ten_chu || '').toLowerCase();
-        const hieu = (n.ten_hieu || '').toLowerCase();
-        return ten.includes(tuKhoa) || chu.includes(tuKhoa) || hieu.includes(tuKhoa);
+        if (n.doi > 6) return false;
+        const tenKD = boDauTiengViet(n.ho_ten || '');
+        const chuKD = boDauTiengViet(n.ten_chu || '');
+        const hieuKD = boDauTiengViet(n.ten_hieu || '');
+        const huyKD = boDauTiengViet(n.ten_huy || '');
+        const tuKhoaKD = boDauTiengViet(tuKhoa);
+        return tenKD.includes(tuKhoaKD) || chuKD.includes(tuKhoaKD) ||
+               hieuKD.includes(tuKhoaKD) || huyKD.includes(tuKhoaKD);
       });
       hienThiKetQua(ketQua);
+    });
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', function(e) {
+      const ulGoiY = document.getElementById('goi-y-tim-kiem');
+      if (ulGoiY && !oTimKiem.contains(e.target) && !ulGoiY.contains(e.target)) {
+        ulGoiY.innerHTML = '';
+        ulGoiY.style.display = 'none';
+      }
     });
   }
 
@@ -87,7 +114,7 @@ async function taiLoiNoiDau() {
 function hienThiDanhSachDoi() {
   const container = document.getElementById('danh-sach-doi');
   if (!container) return;
-    const dsDoi = [...new Set(window.giaphaData.nguoi.filter(n => n.doi <= 6).map(n => n.doi))].sort((a,b) => a-b);
+  const dsDoi = [...new Set(window.giaphaData.nguoi.filter(n => n.doi <= 6).map(n => n.doi))].sort((a,b) => a-b);
   dsDoi.forEach(doi => {
     const btn = document.createElement('button');
     btn.textContent = 'Đời thứ ' + doi;
@@ -117,6 +144,83 @@ function hienThiDanhSachChi() {
       hienThiKetQua(dsChi);
     });
     container.appendChild(btn);
+  });
+}
+
+// ============ TÌM KIẾM NÂNG CAO — BỎ DẤU TIẾNG VIỆT ============
+function boDauTiengViet(str) {
+  if (!str) return '';
+  return str.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+    .trim();
+}
+
+// ============ TÌM KIẾM NÂNG CAO — TRẢ VỀ GỢI Ý ============
+function timKiemNangCao(tuKhoa) {
+  if (!window.giaphaData || !tuKhoa) return [];
+
+  const tuKhoaKhongDau = boDauTiengViet(tuKhoa);
+
+  const ketQua = window.giaphaData.nguoi
+    .filter(n => n.doi <= 6 && laNguoiHoPham(n))
+    .map(n => {
+      const tenKhongDau = boDauTiengViet(n.ho_ten || '');
+      const chuKhongDau = boDauTiengViet(n.ten_chu || '');
+      const hieuKhongDau = boDauTiengViet(n.ten_hieu || '');
+      const huyKhongDau = boDauTiengViet(n.ten_huy || '');
+
+      let diem = 0;
+      if (tenKhongDau.startsWith(tuKhoaKhongDau)) diem = 100;
+      else if (tenKhongDau.includes(tuKhoaKhongDau)) diem = 80;
+      else if (chuKhongDau.includes(tuKhoaKhongDau)) diem = 60;
+      else if (hieuKhongDau.includes(tuKhoaKhongDau)) diem = 40;
+      else if (huyKhongDau.includes(tuKhoaKhongDau)) diem = 20;
+
+      return { nguoi: n, diem: diem };
+    })
+    .filter(item => item.diem > 0)
+    .sort((a, b) => b.diem - a.diem)
+    .slice(0, 8)
+    .map(item => item.nguoi);
+
+  return ketQua;
+}
+
+// ============ HIỂN THỊ GỢI Ý ============
+function hienThiGoiY(dsGoiY, tuKhoa) {
+  const ul = document.getElementById('goi-y-tim-kiem');
+  if (!ul) return;
+
+  ul.innerHTML = '';
+
+  if (dsGoiY.length === 0) {
+    ul.style.display = 'none';
+    return;
+  }
+
+  ul.style.display = 'block';
+
+  dsGoiY.forEach(nguoi => {
+    const li = document.createElement('li');
+    li.className = 'goi-y-item';
+
+    const tenHienThi = nguoi.ho_ten || '(Không rõ)';
+    li.innerHTML = `
+      <span class="goi-y-ten">${tenHienThi}</span>
+      <span class="goi-y-phu">Đời ${nguoi.doi} — ${nguoi.chi || ''}</span>
+    `;
+
+    li.addEventListener('click', function() {
+      document.getElementById('o-tim-kiem').value = tenHienThi;
+      ul.innerHTML = '';
+      ul.style.display = 'none';
+      hienThiChiTiet(nguoi);
+    });
+
+    ul.appendChild(li);
   });
 }
 
@@ -153,6 +257,7 @@ function layVaiVePhoiNgau(loai) {
   };
   return map[loai] || 'Vợ/Chồng';
 }
+
 // ============ HIỂN THỊ KẾT QUẢ — BẢNG 2 CỘT ============
 function hienThiKetQua(dsNguoi) {
   const container = document.getElementById('ds-nguoi');
@@ -238,7 +343,7 @@ function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
 function hienThiChiTiet(nguoi) {
   const panel = document.getElementById('panel-chi-tiet');
   if (!panel) return;
-    let html = '<div style="float:right;display:flex;gap:8px;align-items:center;">';
+  let html = '<div style="float:right;display:flex;gap:8px;align-items:center;">';
   html += '<button onclick="chuyenSangPhaDo(\'' + nguoi.id + '\')" title="Xem trong phả đồ" class="nut-pha-do">📊 Phả đồ</button>';
   html += '<button onclick="dongPanel()" style="border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
   html += '</div>';
@@ -472,7 +577,8 @@ function xuatFileGhiChu() {
   URL.revokeObjectURL(url);
   alert('Đã xuất file chuthich.json!');
 }
-// ============ CHUYỂN SANG TAB PHẢ HỆ ============
+
+// ============ CHUYỂN SANG TAB PHẢ ĐỒ ============
 function chuyenSangPhaDo(nguoiId) {
   if (!nguoiId || !window.giaphaData) return;
 
@@ -482,41 +588,28 @@ function chuyenSangPhaDo(nguoiId) {
     return;
   }
 
-  // Chuyển tab sang "Phả hệ"
   const menuButtons = document.querySelectorAll('.menu-btn');
   const tabContents = document.querySelectorAll('.tab-content');
   const bannerImg = document.getElementById('banner-img');
 
   menuButtons.forEach(b => b.classList.remove('active'));
-  const nutPhaHe = document.querySelector('.menu-btn[data-tab="phahe"]');
-  if (nutPhaHe) nutPhaHe.classList.add('active');
+  const nutPhaDo = document.querySelector('.menu-btn[data-tab="phado"]');
+  if (nutPhaDo) nutPhaDo.classList.add('active');
 
   tabContents.forEach(c => c.classList.remove('active'));
-  const tabPhaHe = document.getElementById('tab-phahe');
-  if (tabPhaHe) tabPhaHe.classList.add('active');
+  const tabPhaDo = document.getElementById('tab-phado');
+  if (tabPhaDo) tabPhaDo.classList.add('active');
 
   if (bannerImg) bannerImg.src = 'assets/banner-phahe.png';
 
-  // Đóng panel chi tiết
   const panel = document.getElementById('panel-chi-tiet');
   if (panel) panel.classList.add('an');
 
-  // Cuộn lên đầu
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Đợi 1 chút cho phả đồ load xong — rồi tô sáng
   setTimeout(() => {
-    // Tìm node người trong phả đồ
-    const node = document.querySelector('.node-nguoi[data-id="' + nguoiId + '"]');
-    if (node) {
-      // Xóa tô sáng cũ
-      document.querySelectorAll('.node-nguoi').forEach(el => {
-        el.classList.remove('dang-chon');
-      });
-      // Thêm tô sáng
-      node.classList.add('dang-chon');
-      // Cuộn đến node
-      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (typeof chonNodePhado === 'function') {
+      chonNodePhado(nguoiId);
     }
-  }, 300);
+  }, 400);
 }
