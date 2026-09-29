@@ -1,26 +1,22 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 2.0 (đầy đủ: vẽ cây + click + highlight trực hệ)
-// Tác giả: Gia phả họ Phạm Đà Xuyên
+// Phiên bản: 3.0 (đầy đủ: vẽ cây + click + highlight + ẩn Đời 7)
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
 
-// ============ BIẾN TOÀN CỤC ============
-let phadoData = null;      // Dữ liệu gia phả
-let phadoSvg = null;       // Thẻ SVG
-let phadoG = null;         // Nhóm chính chứa cây
-let phadoZoom = null;      // Hành vi zoom/pan
-let phadoSelectedId = null; // ID người đang được chọn
-let phadoFilterChi = '';    // Lọc theo chi (rỗng = tất cả)
+let phadoData = null;
+let phadoSvg = null;
+let phadoG = null;
+let phadoZoom = null;
+let phadoSelectedId = null;
+let phadoFilterChi = '';
 
-// Kích thước node
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 70;
 const NODE_SPACING_X = 30;
 const NODE_SPACING_Y = 100;
 
-// ============ KHỞI TẠO KHI DOM SẴN SÀNG ============
 document.addEventListener('DOMContentLoaded', async function() {
   await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -32,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 });
 
-// ============ HÀM KHỞI TẠO CHÍNH ============
 async function khoiTaoPhado() {
   console.log('Phả đồ: Bắt đầu khởi tạo...');
 
@@ -71,7 +66,6 @@ async function khoiTaoPhado() {
   console.log('Phả đồ: Khởi tạo xong!');
 }
 
-// ============ GẮN SỰ KIỆN CHO NÚT CÔNG CỤ ============
 function ganSuKienPhado() {
   const nutTatCa = document.getElementById('phado-loc-tatca');
   const nutBaHe = document.getElementById('phado-loc-bahe');
@@ -98,7 +92,6 @@ function ganSuKienPhado() {
   });
 }
 
-// ============ LỌC THEO CHI ============
 function locChiPhado(chi, nutDuocChon) {
   phadoFilterChi = chi;
   phadoSelectedId = null;
@@ -106,7 +99,6 @@ function locChiPhado(chi, nutDuocChon) {
   document.querySelectorAll('.thanh-cong-cu .nut-tool').forEach(b => b.classList.remove('active'));
   if (nutDuocChon) nutDuocChon.classList.add('active');
 
-  // Đóng panel chi tiết
   const panel = document.getElementById('phado-panel');
   if (panel) panel.classList.add('an');
 
@@ -119,7 +111,6 @@ function locChiPhado(chi, nutDuocChon) {
 // PHẦN 3A: TÌM TRỰC HỆ + BÀNG HỆ
 // ============================================================
 
-// Tìm tất cả TỔ TIÊN (đi ngược lên theo cha_id)
 function timToTien(nguoiId) {
   const dsToTien = new Set();
   let currentId = nguoiId;
@@ -134,7 +125,6 @@ function timToTien(nguoiId) {
   return dsToTien;
 }
 
-// Tìm tất cả CON CHÁU (đi xuôi xuống theo con_ids)
 function timConChau(nguoiId) {
   const dsConChau = new Set();
   const hangDoi = [nguoiId];
@@ -156,7 +146,6 @@ function timConChau(nguoiId) {
   return dsConChau;
 }
 
-// Tìm TRỰC HỆ (tổ tiên + con cháu + chính mình)
 function timTrucHe(nguoiId) {
   const toTien = timToTien(nguoiId);
   const conChau = timConChau(nguoiId);
@@ -168,7 +157,6 @@ function timTrucHe(nguoiId) {
 // PHẦN 3B: CHỌN NODE + HIỂN THỊ PANEL
 // ============================================================
 
-// Chọn node — highlight trực hệ, mờ bàng hệ
 function chonNodePhado(nguoiId) {
   phadoSelectedId = nguoiId;
 
@@ -177,7 +165,6 @@ function chonNodePhado(nguoiId) {
 
   const trucHe = timTrucHe(nguoiId);
 
-  // Cập nhật class cho tất cả node
   d3.selectAll('.phado-node').each(function() {
     const nodeId = d3.select(this).attr('data-id');
     const node = d3.select(this);
@@ -187,13 +174,11 @@ function chonNodePhado(nguoiId) {
     node.classed('bang-he', !trucHe.has(nodeId));
   });
 
-  // Hiển thị panel chi tiết
   hienThiPanelPhado(nguoi);
 
   console.log('Phả đồ: Đã chọn', nguoi.ho_ten, '— Trực hệ:', trucHe.size, 'người');
 }
 
-// Hiển thị panel chi tiết
 function hienThiPanelPhado(nguoi) {
   const panel = document.getElementById('phado-panel');
   if (!panel) return;
@@ -230,13 +215,11 @@ function hienThiPanelPhado(nguoi) {
   panel.classList.remove('an');
 }
 
-// Đóng panel
 function dongPanelPhado() {
   const panel = document.getElementById('phado-panel');
   if (panel) panel.classList.add('an');
 }
 
-// Chuyển sang tab Danh tính
 function chuyenSangDanhTinh(nguoiId) {
   const menuButtons = document.querySelectorAll('.menu-btn');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -252,7 +235,6 @@ function chuyenSangDanhTinh(nguoiId) {
 
   if (bannerImg) bannerImg.src = 'assets/banner-danhtinh.png';
 
-  // Gọi hàm hiển thị chi tiết từ app.js
   if (typeof hienThiChiTiet === 'function') {
     const nguoi = phadoData.nguoi.find(n => n.id === nguoiId);
     if (nguoi) hienThiChiTiet(nguoi);
@@ -265,11 +247,13 @@ function chuyenSangDanhTinh(nguoiId) {
 // PHẦN 3C: VẼ CÂY + TẠO NODE
 // ============================================================
 
-// Vẽ cây chính
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
-  let dsNguoi = phadoData.nguoi.filter(n => n.ho_ten && n.ho_ten.startsWith('Phạm'));
+  // Lọc người họ Phạm + ẩn Đời 7
+  let dsNguoi = phadoData.nguoi.filter(n =>
+    n.ho_ten && n.ho_ten.startsWith('Phạm') && n.doi <= 6
+  );
 
   if (phadoFilterChi) {
     dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
@@ -282,6 +266,7 @@ function veCayPhado() {
     return;
   }
 
+  // Nhóm theo đời
   const theoDoi = {};
   dsNguoi.forEach(n => {
     if (!theoDoi[n.doi]) theoDoi[n.doi] = [];
@@ -292,8 +277,18 @@ function veCayPhado() {
   let y = 50;
   const viTriNode = {};
 
+  // Sắp xếp người trong mỗi đời theo cha (để con gần cha)
   dsDoi.forEach(doi => {
     const dsNguoiDoi = theoDoi[doi];
+
+    // Sắp xếp: con cùng cha đứng cạnh nhau
+    dsNguoiDoi.sort((a, b) => {
+      const chaA = a.cha_id || '';
+      const chaB = b.cha_id || '';
+      if (chaA !== chaB) return chaA.localeCompare(chaB);
+      return (a.ho_ten || '').localeCompare(b.ho_ten || '');
+    });
+
     const tongWidth = dsNguoiDoi.length * (NODE_WIDTH + NODE_SPACING_X);
     let x = -tongWidth / 2;
 
@@ -304,7 +299,7 @@ function veCayPhado() {
     y += NODE_HEIGHT + NODE_SPACING_Y;
   });
 
-  // Vẽ đường nối cha-con
+  // ============ VẼ ĐƯỜNG NỐI CHA-CON (CHÍNH XÁC) ============
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
   dsNguoi.forEach(nguoi => {
@@ -312,24 +307,32 @@ function veCayPhado() {
       const cha = viTriNode[nguoi.cha_id];
       const con = viTriNode[nguoi.id];
 
+      // Điểm giữa đáy cha
       const x1 = cha.x + NODE_WIDTH / 2;
       const y1 = cha.y + NODE_HEIGHT;
+
+      // Điểm giữa đỉnh con
       const x2 = con.x + NODE_WIDTH / 2;
       const y2 = con.y;
 
-      const duongPath = `M ${x1} ${y1} L ${x1} ${y1 + 30} L ${x2} ${y1 + 30} L ${x2} ${y2}`;
+      // Điểm trung gian (giữa khoảng cách)
+      const yMid = y1 + (NODE_SPACING_Y / 2);
+
+      // Vẽ đường gấp khúc: Xuống → Ngang → Xuống
+      const duongPath = `M ${x1} ${y1} L ${x1} ${yMid} L ${x2} ${yMid} L ${x2} ${y2}`;
 
       duongNoi.append('path')
         .attr('d', duongPath)
         .attr('stroke', '#C9A961')
         .attr('stroke-width', 1.5)
         .attr('fill', 'none')
-        .attr('opacity', 0.5);
+        .attr('opacity', 0.6);
     }
   });
 
   // Căn giữa cây
-  const tongChieuRong = Object.values(viTriNode).reduce((max, v) => Math.max(max, Math.abs(v.x) + NODE_WIDTH), 0);
+  const tongChieuRong = Object.values(viTriNode).reduce((max, v) =>
+    Math.max(max, Math.abs(v.x) + NODE_WIDTH), 0);
   phadoG.attr('transform', `translate(${tongChieuRong + 50}, 30)`);
 
   // Vẽ các node
@@ -342,10 +345,9 @@ function veCayPhado() {
     }
   });
 
-  console.log('Phả đồ: Đã vẽ', dsNguoi.length, 'node');
+  console.log('Phả đồ: Đã vẽ', dsNguoi.length, 'node (Đời 1-6)');
 }
 
-// Tạo node
 function taoNodePhado(nguoi, x, y, nhomCha) {
   const nodeGroup = nhomCha.append('g')
     .attr('class', 'phado-node')
@@ -393,13 +395,11 @@ function taoNodePhado(nguoi, x, y, nhomCha) {
     .attr('fill', '#C9A961')
     .text(`Đời ${nguoi.doi}`);
 
-  // Click node
   nodeGroup.on('click', function(event) {
     event.stopPropagation();
     chonNodePhado(nguoi.id);
   });
 
-  // Hover node (chỉ đổi màu, không di chuyển)
   nodeGroup.on('mouseover', function() {
     if (phadoSelectedId !== nguoi.id) {
       d3.select(this).select('rect')
