@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 6.0 (vẽ đường nối kiểu cây chuẩn)
+// Phiên bản: 7.0 — Tree Layout đệ quy (Reingold–Tilford rút gọn)
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -12,10 +12,17 @@ let phadoZoom = null;
 let phadoSelectedId = null;
 let phadoFilterChi = '';
 
+// ===== HẰNG SỐ BỐ CỤC =====
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 70;
-const NODE_SPACING_X = 30;
-const NODE_SPACING_Y = 100;
+const SPOUSE_WIDTH = 160;
+const SPOUSE_HEIGHT = 60;
+const COUPLE_GAP = 20;
+const SPOUSE_STACK_GAP = 10;
+const SIBLING_GAP = 30;
+const LEVEL_GAP = 90;
+const PADDING_X = 200;
+const PADDING_Y = 60;
 
 document.addEventListener('DOMContentLoaded', async function() {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -88,7 +95,7 @@ function ganSuKienPhado() {
     phadoSvg.transition().duration(300).call(phadoZoom.scaleBy, 0.7);
   });
   if (nutZoomReset) nutZoomReset.addEventListener('click', () => {
-    phadoSvg.transition().duration(500).call(phadoZoom.transform, d3.zoomIdentity);
+    fitCayVaoKhung();
   });
 }
 
@@ -101,6 +108,10 @@ function locChiPhado(chi, nutDuocChon) {
 
   const panel = document.getElementById('phado-panel');
   if (panel) panel.classList.add('an');
+
+  if (phadoSvg && phadoZoom) {
+    phadoSvg.call(phadoZoom.transform, d3.zoomIdentity);
+  }
 
   veCayPhado();
 
@@ -146,8 +157,7 @@ function timConChau(nguoiId) {
 function timTrucHe(nguoiId) {
   const toTien = timToTien(nguoiId);
   const conChau = timConChau(nguoiId);
-  const trucHe = new Set([...toTien, ...conChau]);
-  return trucHe;
+  return new Set([...toTien, ...conChau]);
 }
 
 // ============ CHỌN NODE + PANEL ============
@@ -200,6 +210,7 @@ function hienThiPanelPhado(nguoi) {
       if (sk.ngay_duong) moTa += ' (' + sk.ngay_duong + ')';
       if (sk.gio) moTa += ' giờ ' + sk.gio;
       if (sk.dia_diem) moTa += ' — ' + sk.dia_diem;
+      if (sk.ghi_chu) moTa += ' [' + sk.ghi_chu + ']';
       if (moTa) html += '<li>' + moTa + '</li>';
     });
     html += '</ul>';
@@ -237,234 +248,395 @@ function chuyenSangDanhTinh(nguoiId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============ VẼ CÂY CHÍNH — SẮP XẾP THEO CÂY NHỊ PHÂN ============
+
+// ============================================================
+// TREE LAYOUT ĐỆ QUY (Reingold–Tilford rút gọn)
+// ============================================================
+
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
-  // Lọc: người họ Phạm + ẩn Đời 7
-  let dsNguoi = phadoData.nguoi.filter(n =>
-    n.ho_ten && n.ho_ten.startsWith('Phạm') && n.doi <= 6
-  );
-
-  if (phadoFilterChi) {
-    dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
-  }
-
-  if (dsNguoi.length === 0) {
+  // 1. Lọc + tạo map
+  const mapNguoi = locVaTaoMap();
+  if (Object.keys(mapNguoi).length === 0) {
     console.warn('Phả đồ: Không có người nào để vẽ');
     return;
   }
 
-  // Tạo map tra cứu nhanh
-  const mapNguoi = {};
-  dsNguoi.forEach(n => { mapNguoi[n.id] = n; });
+  // 2. Xác định root
+  const rootId = xacDinhRootId(mapNguoi);
+  if (!rootId) {
+    console.warn('Phả đồ: Không xác định được root');
+    return;
+  }
 
-  // Nhóm theo đời
-  const theoDoi = {};
+  // 3. Xây tree đệ quy
+  const visited = new Set();
+  const tree = buildTree(rootId, mapNguoi, visited);
+  if (!tree) return;
+
+  // 4. Tính subtreeWidth (post-order)
+  tinhSubtreeWidth(tree);
+
+  // 5. Gán vị trí (pre-order), bắt đầu x=0
+  ganViTri(tree, 0, PADDING_Y);
+
+  // 6. Dịch để căn giữa khung
+  dichCanGiua(tree);
+
+  // 7. Vẽ đường nối
+  veDuongNoi(tree);
+
+  // 8. Vẽ node
+  veNode(tree);
+
+  // 9. Auto zoom-fit
+  setTimeout(fitCayVaoKhung, 30);
+
+  console.log('Phả đồ: Đã vẽ', demSoNode(tree), 'node — root:', tree.nguoi.ho_ten);
+}
+
+// --- Lọc người + tạo map id → người ---
+function locVaTaoMap() {
+  const mapNguoi = {};
+
+  // Bước 1: lọc theo đời ≤ 6 và theo chi (nếu có)
+  let dsNguoi = phadoData.nguoi.filter(n => n.doi <= 6);
+  if (phadoFilterChi) {
+    dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
+  }
+
+  // Bước 2: tập người họ Phạm
+  const idHoPham = new Set();
   dsNguoi.forEach(n => {
-    if (!theoDoi[n.doi]) theoDoi[n.doi] = [];
-    theoDoi[n.doi].push(n);
+    if (n.ho_ten && n.ho_ten.trim().startsWith('Phạm')) {
+      idHoPham.add(n.id);
+    }
   });
 
-  const dsDoi = Object.keys(theoDoi).map(Number).sort((a, b) => a - b);
-
-  // ============ THUẬT TOÁN: SẮP XẾP THEO CÂY ============
-  // Bước 1: Sắp xếp từng đời theo thứ tự cha_id
-  const viTriNode = {};
-  let y = 50;
-
-  dsDoi.forEach((doi, idxDoi) => {
-    const dsNguoiDoi = theoDoi[doi];
-
-    // Nếu là đời 1 → sắp xếp theo tên
-    if (idxDoi === 0) {
-      dsNguoiDoi.sort((a, b) => (a.ho_ten || '').localeCompare(b.ho_ten || ''));
-    } else {
-      // Sắp xếp theo thứ tự cha trong đời trên
-      dsNguoiDoi.sort((a, b) => {
-        const chaA = viTriNode[a.cha_id];
-        const chaB = viTriNode[b.cha_id];
-
-        // Nếu cha chưa có vị trí → xếp cuối
-        if (!chaA && !chaB) return 0;
-        if (!chaA) return 1;
-        if (!chaB) return -1;
-
-        // Ưu tiên cha có vị trí x nhỏ hơn
-        if (chaA.x !== chaB.x) return chaA.x - chaB.x;
-
-        // Cùng cha → xếp theo thứ tự trong con_ids của cha
-        const chaNguoi = mapNguoi[a.cha_id];
-        if (chaNguoi && chaNguoi.con_ids) {
-          const idxA = chaNguoi.con_ids.indexOf(a.id);
-          const idxB = chaNguoi.con_ids.indexOf(b.id);
-          return idxA - idxB;
+  // Bước 3: tập vợ/chồng của người họ Phạm
+  const idTrongDs = new Set(dsNguoi.map(n => n.id));
+  const idVoChong = new Set();
+  dsNguoi.forEach(n => {
+    if (idHoPham.has(n.id) && Array.isArray(n.hon_nhan)) {
+      n.hon_nhan.forEach(h => {
+        if (h.vo_id && idTrongDs.has(h.vo_id)) {
+          idVoChong.add(h.vo_id);
         }
-        return 0;
       });
     }
-
-    const tongWidth = dsNguoiDoi.length * (NODE_WIDTH + NODE_SPACING_X);
-    let x = -tongWidth / 2;
-
-    dsNguoiDoi.forEach(nguoi => {
-      viTriNode[nguoi.id] = { x: x, y: y, nguoi: nguoi };
-      x += NODE_WIDTH + NODE_SPACING_X;
-    });
-
-    y += NODE_HEIGHT + NODE_SPACING_Y;
   });
 
-  // ============ BƯỚC 2: TINH CHỈNH VỊ TRÍ X THEO CHA ============
-  // Duyệt lại từng đời, kéo con về gần cha
-  dsDoi.forEach((doi, idxDoi) => {
-    if (idxDoi === 0) return;
-
-    const dsNguoiDoi = theoDoi[doi];
-    const dsNguoiDoiSorted = dsNguoiDoi.map(n => viTriNode[n.id]).sort((a, b) => a.x - b.x);
-
-    // Nhóm con theo cha
-    const nhomTheoCha = {};
-    dsNguoiDoiSorted.forEach(viTri => {
-      const chaId = viTri.nguoi.cha_id || 'khong_co_cha';
-      if (!nhomTheoCha[chaId]) nhomTheoCha[chaId] = [];
-      nhomTheoCha[chaId].push(viTri);
-    });
-
-    // Với mỗi nhóm con → căn giữa dưới cha
-    Object.keys(nhomTheoCha).forEach(chaId => {
-      const nhomCon = nhomTheoCha[chaId];
-      const chaViTri = viTriNode[chaId];
-
-      if (chaViTri) {
-        // Tính tâm của nhóm con
-        const tamNhomCon = (nhomCon[0].x + nhomCon[nhomCon.length - 1].x + NODE_WIDTH) / 2;
-        const tamCha = chaViTri.x + NODE_WIDTH / 2;
-
-        // Dịch chuyển nhóm con để căn giữa dưới cha
-        const dichChuyen = tamCha - tamNhomCon;
-
-        if (Math.abs(dichChuyen) < NODE_WIDTH * 2) {
-          nhomCon.forEach(viTri => {
-            viTri.x += dichChuyen;
-            viTriNode[viTri.nguoi.id].x = viTri.x;
-          });
-        }
-      }
-    });
+  // Bước 4: tạo map
+  dsNguoi.forEach(n => {
+    if (idHoPham.has(n.id) || idVoChong.has(n.id)) {
+      mapNguoi[n.id] = n;
+    }
   });
 
-  // ============ BƯỚC 3: VẼ ĐƯỜNG NỐI ============
+  return mapNguoi;
+}
+
+// --- Xác định root ---
+function xacDinhRootId(mapNguoi) {
+  if (!phadoFilterChi) {
+    return mapNguoi['P1'] ? 'P1' : null;
+  }
+
+  const dsChi = Object.values(mapNguoi).filter(n => n.chi === phadoFilterChi);
+  if (dsChi.length === 0) return null;
+
+  const dsNamHoPham = dsChi.filter(n =>
+    n.gioi_tinh === 'nam' && n.ho_ten && n.ho_ten.trim().startsWith('Phạm')
+  );
+
+  const dsUuTien = dsNamHoPham.length > 0 ? dsNamHoPham : dsChi;
+  dsUuTien.sort((a, b) => (a.doi - b.doi) || a.id.localeCompare(b.id));
+  return dsUuTien[0].id;
+}
+
+// --- Xây tree đệ quy ---
+function buildTree(id, mapNguoi, visited) {
+  if (visited.has(id) || !mapNguoi[id]) return null;
+  visited.add(id);
+
+  const nguoi = mapNguoi[id];
+
+  // Vợ/chồng
+  const voChong = (nguoi.hon_nhan || [])
+    .map(h => mapNguoi[h.vo_id])
+    .filter(Boolean);
+  voChong.forEach(vc => visited.add(vc.id));
+
+  // Con: hợp nhất con_ids + các node có cha_id trỏ đến id
+  const conIdsSet = new Set();
+  (nguoi.con_ids || []).forEach(cid => {
+    if (mapNguoi[cid] && !visited.has(cid)) conIdsSet.add(cid);
+  });
+  Object.keys(mapNguoi).forEach(k => {
+    const n = mapNguoi[k];
+    if (n.cha_id === id && !visited.has(n.id)) conIdsSet.add(n.id);
+  });
+
+  const con = [...conIdsSet]
+    .map(cid => buildTree(cid, mapNguoi, visited))
+    .filter(Boolean);
+
+  return {
+    nguoi: nguoi,
+    voChong: voChong,
+    con: con,
+    x: 0,
+    y: 0,
+    width: 0
+  };
+}
+
+// --- Bề rộng / cao của unit (node chính + vợ/chồng xếp dọc) ---
+function tinhUnitWidth(node) {
+  if (node.voChong.length === 0) return NODE_WIDTH;
+  return NODE_WIDTH + COUPLE_GAP + SPOUSE_WIDTH;
+}
+
+function tinhUnitHeight(node) {
+  const nVo = node.voChong.length;
+  if (nVo === 0) return NODE_HEIGHT;
+  const stackH = nVo * SPOUSE_HEIGHT + (nVo - 1) * SPOUSE_STACK_GAP;
+  return Math.max(NODE_HEIGHT, stackH);
+}
+
+// --- Post-order: tính width subtree ---
+function tinhSubtreeWidth(node) {
+  const unitW = tinhUnitWidth(node);
+
+  if (node.con.length === 0) {
+    node.width = unitW;
+    return unitW;
+  }
+
+  let totalCon = 0;
+  node.con.forEach((c, i) => {
+    totalCon += tinhSubtreeWidth(c);
+    if (i > 0) totalCon += SIBLING_GAP;
+  });
+
+  node.width = Math.max(unitW, totalCon);
+  return node.width;
+}
+
+// --- Pre-order: gán vị trí ---
+function ganViTri(node, centerX, y) {
+  node.x = centerX;
+  node.y = y;
+
+  if (node.con.length === 0) return;
+
+  let totalCon = 0;
+  node.con.forEach((c, i) => {
+    totalCon += c.width;
+    if (i > 0) totalCon += SIBLING_GAP;
+  });
+
+  const yCon = y + tinhUnitHeight(node) + LEVEL_GAP;
+  let curX = centerX - totalCon / 2;
+
+  node.con.forEach(c => {
+    const conCenter = curX + c.width / 2;
+    ganViTri(c, conCenter, yCon);
+    curX += c.width + SIBLING_GAP;
+  });
+}
+
+// --- Dịch chuyển toàn cây để căn giữa ---
+function dichCanGiua(tree) {
+  let minX = Infinity;
+  function duyetMin(node) {
+    const unitW = tinhUnitWidth(node);
+    minX = Math.min(minX, node.x - unitW / 2);
+    node.con.forEach(duyetMin);
+  }
+  duyetMin(tree);
+
+  if (!isFinite(minX)) return;
+
+  const offsetX = PADDING_X - minX;
+  function duyetDich(node) {
+    node.x += offsetX;
+    node.con.forEach(duyetDich);
+  }
+  duyetDich(tree);
+}
+
+// --- Vẽ đường nối kiểu elbow ---
+function veDuongNoi(tree) {
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
-  dsNguoi.forEach(nguoi => {
-    if (nguoi.cha_id && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
-      const cha = viTriNode[nguoi.cha_id];
-      const con = viTriNode[nguoi.id];
+  function veChoNode(node) {
+    const yStart = node.y + tinhUnitHeight(node);
 
-      const x1 = cha.x + NODE_WIDTH / 2;
-      const y1 = cha.y + NODE_HEIGHT;
-      const x2 = con.x + NODE_WIDTH / 2;
-      const y2 = con.y;
+    node.con.forEach(con => {
+      const yEnd = con.y;
+      const midY = yStart + (yEnd - yStart) / 2;
 
-      // Đường gấp khúc: Xuống → Ngang → Xuống
-      const yMid = y1 + (NODE_SPACING_Y / 2);
-      const duongPath = `M ${x1} ${y1} L ${x1} ${yMid} L ${x2} ${yMid} L ${x2} ${y2}`;
+      const duongPath = `M ${node.x} ${yStart} L ${node.x} ${midY} L ${con.x} ${midY} L ${con.x} ${yEnd}`;
 
       duongNoi.append('path')
         .attr('d', duongPath)
         .attr('stroke', '#C9A961')
         .attr('stroke-width', 1.5)
         .attr('fill', 'none')
-        .attr('opacity', 0.6);
-    }
-  });
+        .attr('opacity', 0.65);
+    });
 
-  // Căn giữa cây
-  const tongChieuRong = Object.values(viTriNode).reduce((max, v) =>
-    Math.max(max, Math.abs(v.x) + NODE_WIDTH), 0);
-  phadoG.attr('transform', `translate(${tongChieuRong + 50}, 30)`);
+    node.con.forEach(veChoNode);
+  }
 
-  // Vẽ node
-  const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
-
-  dsNguoi.forEach(nguoi => {
-    const viTri = viTriNode[nguoi.id];
-    if (viTri) {
-      taoNodePhado(nguoi, viTri.x, viTri.y, nhomNode);
-    }
-  });
-
-  console.log('Phả đồ: Đã vẽ', dsNguoi.length, 'node (Đời 1-6)');
+  veChoNode(tree);
 }
 
-function taoNodePhado(nguoi, x, y, nhomCha) {
+// --- Vẽ toàn bộ node ---
+function veNode(tree) {
+  const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
+
+  function veMotNode(node) {
+    const unitW = tinhUnitWidth(node);
+    const leftX = node.x - unitW / 2;
+
+    // Node chính (họ Phạm)
+    taoNodePhado(node.nguoi, leftX, node.y, nhomNode, 'chinh');
+
+    // Vợ/chồng xếp dọc bên phải
+    if (node.voChong.length > 0) {
+      const spouseX = leftX + NODE_WIDTH + COUPLE_GAP;
+      node.voChong.forEach((vc, i) => {
+        const vcY = node.y + i * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
+        taoNodePhado(vc, spouseX, vcY, nhomNode, 'vo-chong');
+      });
+    }
+
+    node.con.forEach(veMotNode);
+  }
+
+  veMotNode(tree);
+}
+
+// --- Tạo 1 node SVG ---
+function taoNodePhado(nguoi, x, y, nhomCha, loai) {
+  const isChinh = loai === 'chinh';
+  const w = isChinh ? NODE_WIDTH : SPOUSE_WIDTH;
+  const h = isChinh ? NODE_HEIGHT : SPOUSE_HEIGHT;
+  const gioiTinh = nguoi.gioi_tinh === 'nu' ? 'nu' : 'nam';
+
   const nodeGroup = nhomCha.append('g')
-    .attr('class', 'phado-node')
+    .attr('class', `phado-node phado-node-${loai} phado-node-${gioiTinh}`)
     .attr('transform', `translate(${x}, ${y})`)
     .attr('data-id', nguoi.id);
 
+  // Nền
   nodeGroup.append('rect')
-    .attr('width', NODE_WIDTH)
-    .attr('height', NODE_HEIGHT)
+    .attr('width', w)
+    .attr('height', h)
     .attr('rx', 8)
     .attr('ry', 8)
-    .attr('fill', '#FFF8F0')
-    .attr('stroke', '#C9A961')
-    .attr('stroke-width', 1.5)
     .attr('cursor', 'pointer');
 
+  // Tên
+  const maxNameLen = isChinh ? 22 : 18;
+  const displayName = (nguoi.ho_ten || '(Không rõ)');
+  const nameText = displayName.length > maxNameLen
+    ? displayName.substring(0, maxNameLen - 2) + '...'
+    : displayName;
+
   nodeGroup.append('text')
-    .attr('x', NODE_WIDTH / 2)
-    .attr('y', 25)
+    .attr('x', w / 2)
+    .attr('y', isChinh ? 25 : 22)
     .attr('text-anchor', 'middle')
     .attr('font-family', 'Noto Serif, serif')
-    .attr('font-size', '13px')
+    .attr('font-size', isChinh ? '12px' : '11px')
     .attr('font-weight', 'bold')
-    .attr('fill', '#7A6320')
+    .attr('font-style', isChinh ? 'normal' : 'italic')
     .attr('cursor', 'pointer')
-    .text(nguoi.ho_ten.length > 22 ? nguoi.ho_ten.substring(0, 20) + '...' : nguoi.ho_ten);
+    .text(nameText);
 
-  if (nguoi.ten_chu) {
+  // Tên chữ (chỉ node chính)
+  if (isChinh && nguoi.ten_chu) {
+    const tenChu = nguoi.ten_chu.length > 24
+      ? nguoi.ten_chu.substring(0, 22) + '...'
+      : nguoi.ten_chu;
     nodeGroup.append('text')
-      .attr('x', NODE_WIDTH / 2)
+      .attr('x', w / 2)
       .attr('y', 45)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'Noto Serif, serif')
-      .attr('font-size', '11px')
+      .attr('font-size', '10px')
       .attr('font-style', 'italic')
       .attr('fill', '#999')
-      .text(nguoi.ten_chu.length > 24 ? nguoi.ten_chu.substring(0, 22) + '...' : nguoi.ten_chu);
+      .text(tenChu);
   }
 
+  // Đời
   nodeGroup.append('text')
-    .attr('x', NODE_WIDTH / 2)
-    .attr('y', 62)
+    .attr('x', w / 2)
+    .attr('y', isChinh ? 62 : 50)
     .attr('text-anchor', 'middle')
-    .attr('font-size', '10px')
+    .attr('font-size', '9.5px')
     .attr('fill', '#C9A961')
     .text(`Đời ${nguoi.doi}`);
 
+  // Sự kiện
   nodeGroup.on('click', function(event) {
     event.stopPropagation();
     chonNodePhado(nguoi.id);
   });
 
   nodeGroup.on('mouseover', function() {
-    if (phadoSelectedId !== nguoi.id) {
-      d3.select(this).select('rect')
-        .attr('fill', '#FFE8B0')
-        .attr('stroke-width', 2.5);
+    if (phadoSelectedId !== nguoi.id && !d3.select(this).classed('truc-he')) {
+      d3.select(this).select('rect').style('filter', 'brightness(0.95)');
     }
   });
 
   nodeGroup.on('mouseout', function() {
-    if (phadoSelectedId !== nguoi.id && !d3.select(this).classed('truc-he')) {
-      d3.select(this).select('rect')
-        .attr('fill', '#FFF8F0')
-        .attr('stroke-width', 1.5);
-    }
+    d3.select(this).select('rect').style('filter', null);
   });
 
   return nodeGroup;
+}
+
+// --- Đếm tổng số node đã vẽ ---
+function demSoNode(node) {
+  let count = 1 + node.voChong.length;
+  node.con.forEach(c => count += demSoNode(c));
+  return count;
+}
+
+// --- Zoom-fit toàn cây vào khung ---
+function fitCayVaoKhung() {
+  if (!phadoSvg || !phadoG || !phadoZoom) return;
+  const svgNode = phadoSvg.node();
+  if (!svgNode) return;
+
+  const svgW = svgNode.clientWidth;
+  const svgH = svgNode.clientHeight;
+  if (svgW === 0 || svgH === 0) return;
+
+  let bbox;
+  try {
+    bbox = phadoG.node().getBBox();
+  } catch (e) {
+    return;
+  }
+  if (!bbox || bbox.width === 0 || bbox.height === 0) return;
+
+  const pad = 40;
+  const scaleX = (svgW - pad * 2) / bbox.width;
+  const scaleY = (svgH - pad * 2) / bbox.height;
+  const scale = Math.min(scaleX, scaleY, 1);
+
+  const tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
+  const ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
+
+  phadoSvg.transition().duration(500).call(
+    phadoZoom.transform,
+    d3.zoomIdentity.translate(tx, ty).scale(scale)
+  );
 }
