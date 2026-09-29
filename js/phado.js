@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 3.0 (đầy đủ: vẽ cây + click + highlight + ẩn Đời 7)
+// Phiên bản: 4.0 (đầy đủ: vẽ cây + ẩn Đời 7 + đường nối chính xác)
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -107,10 +107,7 @@ function locChiPhado(chi, nutDuocChon) {
   console.log('Phả đồ: Đã lọc theo chi:', chi || 'Tất cả');
 }
 
-// ============================================================
-// PHẦN 3A: TÌM TRỰC HỆ + BÀNG HỆ
-// ============================================================
-
+// ============ TÌM TRỰC HỆ + BÀNG HỆ ============
 function timToTien(nguoiId) {
   const dsToTien = new Set();
   let currentId = nguoiId;
@@ -153,10 +150,7 @@ function timTrucHe(nguoiId) {
   return trucHe;
 }
 
-// ============================================================
-// PHẦN 3B: CHỌN NODE + HIỂN THỊ PANEL
-// ============================================================
-
+// ============ CHỌN NODE + PANEL ============
 function chonNodePhado(nguoiId) {
   phadoSelectedId = nguoiId;
 
@@ -243,14 +237,11 @@ function chuyenSangDanhTinh(nguoiId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============================================================
-// PHẦN 3C: VẼ CÂY + TẠO NODE
-// ============================================================
-
+// ============ VẼ CÂY CHÍNH ============
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
-  // Lọc người họ Phạm + ẩn Đời 7
+  // Lọc: người họ Phạm + ẩn Đời 7
   let dsNguoi = phadoData.nguoi.filter(n =>
     n.ho_ten && n.ho_ten.startsWith('Phạm') && n.doi <= 6
   );
@@ -266,7 +257,10 @@ function veCayPhado() {
     return;
   }
 
-  // Nhóm theo đời
+  // Lấy danh sách ID có trong cây
+  const dsIdTrongCay = new Set(dsNguoi.map(n => n.id));
+
+  // Nhóm theo đời + sắp xếp con cùng cha đứng cạnh nhau
   const theoDoi = {};
   dsNguoi.forEach(n => {
     if (!theoDoi[n.doi]) theoDoi[n.doi] = [];
@@ -277,7 +271,6 @@ function veCayPhado() {
   let y = 50;
   const viTriNode = {};
 
-  // Sắp xếp người trong mỗi đời theo cha (để con gần cha)
   dsDoi.forEach(doi => {
     const dsNguoiDoi = theoDoi[doi];
 
@@ -299,26 +292,23 @@ function veCayPhado() {
     y += NODE_HEIGHT + NODE_SPACING_Y;
   });
 
-  // ============ VẼ ĐƯỜNG NỐI CHA-CON (CHÍNH XÁC) ============
+  // VẼ ĐƯỜNG NỐI CHA-CON (chỉ khi cha có trong cây)
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
   dsNguoi.forEach(nguoi => {
-    if (nguoi.cha_id && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
+    const chaCoTrongCay = nguoi.cha_id && dsIdTrongCay.has(nguoi.cha_id);
+
+    if (chaCoTrongCay && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
       const cha = viTriNode[nguoi.cha_id];
       const con = viTriNode[nguoi.id];
 
-      // Điểm giữa đáy cha
       const x1 = cha.x + NODE_WIDTH / 2;
       const y1 = cha.y + NODE_HEIGHT;
-
-      // Điểm giữa đỉnh con
       const x2 = con.x + NODE_WIDTH / 2;
       const y2 = con.y;
 
-      // Điểm trung gian (giữa khoảng cách)
+      // Đường gấp khúc: Xuống → Ngang → Xuống
       const yMid = y1 + (NODE_SPACING_Y / 2);
-
-      // Vẽ đường gấp khúc: Xuống → Ngang → Xuống
       const duongPath = `M ${x1} ${y1} L ${x1} ${yMid} L ${x2} ${yMid} L ${x2} ${y2}`;
 
       duongNoi.append('path')
@@ -335,7 +325,7 @@ function veCayPhado() {
     Math.max(max, Math.abs(v.x) + NODE_WIDTH), 0);
   phadoG.attr('transform', `translate(${tongChieuRong + 50}, 30)`);
 
-  // Vẽ các node
+  // Vẽ node
   const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
 
   dsNguoi.forEach(nguoi => {
