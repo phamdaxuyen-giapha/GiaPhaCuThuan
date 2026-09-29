@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 4.0 (đầy đủ: vẽ cây + ẩn Đời 7 + đường nối chính xác)
+// Phiên bản: 5.0 (sắp xếp con theo cha + ẩn Đời 7)
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -237,7 +237,7 @@ function chuyenSangDanhTinh(nguoiId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============ VẼ CÂY CHÍNH ============
+// ============ VẼ CÂY CHÍNH — SẮP XẾP CON THEO CHA ============
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
@@ -250,8 +250,6 @@ function veCayPhado() {
     dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
   }
 
-  dsNguoi.sort((a, b) => a.doi - b.doi);
-
   if (dsNguoi.length === 0) {
     console.warn('Phả đồ: Không có người nào để vẽ');
     return;
@@ -260,7 +258,7 @@ function veCayPhado() {
   // Lấy danh sách ID có trong cây
   const dsIdTrongCay = new Set(dsNguoi.map(n => n.id));
 
-  // Nhóm theo đời + sắp xếp con cùng cha đứng cạnh nhau
+  // Nhóm theo đời
   const theoDoi = {};
   dsNguoi.forEach(n => {
     if (!theoDoi[n.doi]) theoDoi[n.doi] = [];
@@ -268,17 +266,19 @@ function veCayPhado() {
   });
 
   const dsDoi = Object.keys(theoDoi).map(Number).sort((a, b) => a - b);
-  let y = 50;
+
+  // SẮP XẾP: Duyệt từ đời 1 → đời 6, con đặt theo vị trí CHA
   const viTriNode = {};
+  let y = 50;
 
   dsDoi.forEach(doi => {
     const dsNguoiDoi = theoDoi[doi];
 
-    // Sắp xếp: con cùng cha đứng cạnh nhau
+    // Sắp xếp theo vị trí cha (nếu cha có trong cây)
     dsNguoiDoi.sort((a, b) => {
-      const chaA = a.cha_id || '';
-      const chaB = b.cha_id || '';
-      if (chaA !== chaB) return chaA.localeCompare(chaB);
+      const chaA = viTriNode[a.cha_id] ? viTriNode[a.cha_id].x : 999999;
+      const chaB = viTriNode[b.cha_id] ? viTriNode[b.cha_id].x : 999999;
+      if (chaA !== chaB) return chaA - chaB;
       return (a.ho_ten || '').localeCompare(b.ho_ten || '');
     });
 
@@ -289,6 +289,7 @@ function veCayPhado() {
       viTriNode[nguoi.id] = { x: x, y: y, nguoi: nguoi };
       x += NODE_WIDTH + NODE_SPACING_X;
     });
+
     y += NODE_HEIGHT + NODE_SPACING_Y;
   });
 
@@ -307,7 +308,6 @@ function veCayPhado() {
       const x2 = con.x + NODE_WIDTH / 2;
       const y2 = con.y;
 
-      // Đường gấp khúc: Xuống → Ngang → Xuống
       const yMid = y1 + (NODE_SPACING_Y / 2);
       const duongPath = `M ${x1} ${y1} L ${x1} ${yMid} L ${x2} ${yMid} L ${x2} ${y2}`;
 
