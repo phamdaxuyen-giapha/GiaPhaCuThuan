@@ -609,15 +609,26 @@ function demSoNode(node) {
   return count;
 }
 
+
 // --- Zoom-fit toàn cây vào khung ---
 function fitCayVaoKhung() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   const svgNode = phadoSvg.node();
   if (!svgNode) return;
 
-  const svgW = svgNode.clientWidth;
-  const svgH = svgNode.clientHeight;
-  if (svgW === 0 || svgH === 0) return;
+  let svgW = svgNode.clientWidth;
+  let svgH = svgNode.clientHeight;
+
+  if ((!svgW || !svgH) && svgNode.parentElement) {
+    svgW = svgNode.parentElement.clientWidth;
+    svgH = svgNode.parentElement.clientHeight;
+  }
+
+  if (!svgW || !svgH) {
+    console.log('Phả đồ: SVG chưa có kích thước, thử lại sau 200ms...');
+    setTimeout(fitCayVaoKhung, 200);
+    return;
+  }
 
   let bbox;
   try {
@@ -625,7 +636,10 @@ function fitCayVaoKhung() {
   } catch (e) {
     return;
   }
-  if (!bbox || bbox.width === 0 || bbox.height === 0) return;
+  if (!bbox || bbox.width === 0 || bbox.height === 0) {
+    setTimeout(fitCayVaoKhung, 200);
+    return;
+  }
 
   const pad = 40;
   const scaleX = (svgW - pad * 2) / bbox.width;
@@ -634,6 +648,13 @@ function fitCayVaoKhung() {
 
   const tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
   const ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
+
+  console.log('Phả đồ: Zoom-fit →', {
+    svgW, svgH,
+    bboxW: Math.round(bbox.width),
+    bboxH: Math.round(bbox.height),
+    scale: scale.toFixed(3)
+  });
 
   phadoSvg.transition().duration(500).call(
     phadoZoom.transform,
