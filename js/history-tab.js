@@ -1,7 +1,6 @@
 // ============================================================
-// HISTORY TAB — Đồng bộ tab với URL hash
-// Cho phép nút back/forward của trình duyệt chuyển tab
-// Không cần sửa app.js
+// HISTORY TAB v2.0 — Đồng bộ tab + ID người với URL hash
+// Hỗ trợ URL: #phado, #phado/P6-1, #danhtinh/P6-1...
 // ============================================================
 
 (function() {
@@ -9,50 +8,151 @@
 
   const HASH_HOP_LE = ['trangchu', 'danhtinh', 'phahe', 'phado', 'ngoipha'];
   const TAB_MAC_DINH = 'trangchu';
+  const TAB_CO_NGUOI = ['danhtinh', 'phahe', 'phado'];
 
   let dangDoiTab = false;
-  let observer = null;
+  let observerTab = null;
+  let observerPanel = null;
+  let lanCuoiHash = '';
 
-  // Đọc hash hiện tại → trả về tabId hợp lệ
-  function layTabTuHash() {
-    const hash = (location.hash || '').replace('#', '').trim();
-    return HASH_HOP_LE.includes(hash) ? hash : TAB_MAC_DINH;
+  // --- Parse hash → { tabId, nguoiId } ---
+  function parseHash() {
+    const raw = (location.hash || '').replace('#', '').trim();
+    if (!raw) return { tabId: TAB_MAC_DINH, nguoiId: null };
+
+    const parts = raw.split('/');
+    const tabId = HASH_HOP_LE.includes(parts[0]) ? parts[0] : TAB_MAC_DINH;
+    const nguoiId = parts[1] ? decodeURIComponent(parts[1]) : null;
+    return { tabId: tabId, nguoiId: nguoiId };
   }
 
-  // Chuyển tab bằng cách click nút menu (để app.js xử lý)
-  function chuyenTab(tabId, capNhatHash) {
-    if (!HASH_HOP_LE.includes(tabId)) return;
+  // --- Tạo hash string ---
+  function taoHash(tabId, nguoiId) {
+    if (nguoiId && TAB_CO_NGUOI.includes(tabId)) {
+      return '#' + tabId + '/' + encodeURIComponent(nguoiId);
+    }
+    return '#' + tabId;
+  }
 
+  // --- Click nút menu tab ---
+  function chuyenTab(tabId) {
+    if (!HASH_HOP_LE.includes(tabId)) return;
     const nut = document.querySelector('.menu-btn[data-tab="' + tabId + '"]');
     if (!nut) return;
-
-    // Nếu tab này đã active rồi → chỉ đồng bộ hash nếu cần
-    if (nut.classList.contains('active')) {
-      if (capNhatHash && location.hash !== '#' + tabId) {
-        history.replaceState({ tab: tabId }, '', '#' + tabId);
-      }
-      return;
-    }
+    if (nut.classList.contains('active')) return;
 
     dangDoiTab = true;
     nut.click();
-
-    if (capNhatHash) {
-      const hashMoi = '#' + tabId;
-      if (location.hash !== hashMoi) {
-        history.pushState({ tab: tabId }, '', hashMoi);
-      }
-    }
-
     setTimeout(function() { dangDoiTab = false; }, 150);
   }
 
-  // Theo dõi thay đổi class của các tab-content
-  function batDauTheoDoi() {
+  // --- Focus vào người theo ID ---
+  function focusNguoi(tabId, nguoiId) {
+    if (!nguoiId || !window.giaphaData) return;
+    const nguoi = window.giaphaData.nguoi.find(function(n) { return n.id === nguoiId; });
+    if (!nguoi) {
+      console.warn('History: Không tìm thấy người có ID:', nguoiId);
+      return;
+    }
+
+    const batDau = Date.now();
+    const wait = setInterval(function() {
+      const hetGio = Date.now() - batDau > 8000;
+      let xong = false;
+
+      if (tabId === 'phado') {
+        if (document.querySelectorAll('.phado-node').length > 0 &&
+            typeof chonNodePhado === 'function') {
+          chonNodePhado(nguoiId);
+          xong = true;
+        }
+      } else if (tabId === 'danhtinh' || tabId === 'phahe') {
+        if (typeof hienThiChiTiet === 'function') {
+          hienThiChiTiet(nguoi);
+          xong = true;
+        }
+      }
+
+      if (xong || hetGio) clearInterval(wait);
+    }, 200);
+  }
+
+  // --- Xử lý hash (load / popstate / hashchange) ---
+  function xuLyHash() {
+    const info = parseHash();
+    lanCuoiHash = taoHash(info.tabId, info.nguoiId);
+
+    chuyenTab(info.tabId);
+
+    if (info.nguoiId) {
+      setTimeout(function() {
+        focusNguoi(info.tabId, info.nguoiId);
+      }, 600);
+    }
+  }
+
+  // --- Lấy tên người từ panel ---
+  function layTenTuPanel(panel) {
+    const h = panel.querySelector('h2, h3');
+    return h ? h.textContent.trim() : '';
+  }
+
+  function timIdTheoTen(ten) {
+    if (!window.giaphaData || !ten) return null;
+    const tenSach = ten.replace(/^\(|\)$/g, '').trim();
+    const nguoi = window.giaphaData.nguoi.find(function(n) { return n.ho_ten === tenSach; });
+    return nguoi ? nguoi.id : null;
+  }
+
+  // --- Cập nhật hash khi panel mở/đóng ---
+  function capNhatHashTuPanel() {
+    const info = parseHash();
+    const tabId = info.tabId;
+
+    const panelChiTiet = document.getElementById('panel-chi-tiet');
+    const panelPhado = document.getElementById('phado-panel');
+
+    let nguoiId = null;
+
+    if (panelChiTiet && !panelChiTiet.classList.contains('an')) {
+      nguoiId = timIdTheoTen(layTenTuPanel(panelChiTiet));
+    } else if (panelPhado && !panelPhado.classList.contains('an')) {
+      nguoiId = timIdTheoTen(layTenTuPanel(panelPhado));
+    }
+
+    const hashMoi = taoHash(tabId, nguoiId);
+    if (hashMoi !== lanCuoiHash) {
+      lanCuoiHash = hashMoi;
+      if (location.hash !== hashMoi) {
+        history.replaceState({ tab: tabId, nguoi: nguoiId }, '', hashMoi);
+      }
+    }
+  }
+
+  // --- Theo dõi 2 panel ---
+  function theoDoiPanel() {
+    const panelChiTiet = document.getElementById('panel-chi-tiet');
+    const panelPhado = document.getElementById('phado-panel');
+    if (!panelChiTiet && !panelPhado) return;
+
+    observerPanel = new MutationObserver(function() {
+      if (dangDoiTab) return;
+      capNhatHashTuPanel();
+    });
+
+    [panelChiTiet, panelPhado].forEach(function(p) {
+      if (p) {
+        observerPanel.observe(p, { attributes: true, attributeFilter: ['class'] });
+      }
+    });
+  }
+
+  // --- Theo dõi tab-content ---
+  function theoDoiTab() {
     const dsTab = document.querySelectorAll('.tab-content');
     if (dsTab.length === 0) return;
 
-    observer = new MutationObserver(function() {
+    observerTab = new MutationObserver(function() {
       if (dangDoiTab) return;
 
       const activeTab = document.querySelector('.tab-content.active');
@@ -63,42 +163,38 @@
 
       const hashMoi = '#' + tabId;
       if (location.hash !== hashMoi) {
+        lanCuoiHash = hashMoi;
         history.pushState({ tab: tabId }, '', hashMoi);
       }
     });
 
     dsTab.forEach(function(el) {
-      observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+      observerTab.observe(el, { attributes: true, attributeFilter: ['class'] });
     });
   }
 
-  // Khởi tạo
+  // --- Khởi tạo ---
   function khoiTao() {
-    // 1. Mở đúng tab theo hash khi vào trang
-    const tabId = layTabTuHash();
-    if (tabId !== TAB_MAC_DINH) {
-      setTimeout(function() { chuyenTab(tabId, false); }, 200);
+    theoDoiTab();
+    theoDoiPanel();
+
+    const info = parseHash();
+    if (info.tabId !== TAB_MAC_DINH || info.nguoiId) {
+      setTimeout(function() { xuLyHash(); }, 400);
     } else if (location.hash === '' || location.hash === '#trangchu') {
       history.replaceState({ tab: 'trangchu' }, '', '#trangchu');
     }
 
-    // 2. Bắt đầu theo dõi
-    batDauTheoDoi();
-
-    // 3. Nghe sự kiện back/forward của trình duyệt
     window.addEventListener('popstate', function() {
-      const tabIdMoi = layTabTuHash();
-      chuyenTab(tabIdMoi, false);
+      xuLyHash();
     });
 
-    // 4. Nghe hashchange (khi user gõ URL trực tiếp)
     window.addEventListener('hashchange', function() {
       if (dangDoiTab) return;
-      const tabIdMoi = layTabTuHash();
-      chuyenTab(tabIdMoi, false);
+      xuLyHash();
     });
 
-    console.log('History Tab: Đã kích hoạt đồng bộ tab ↔ URL');
+    console.log('History Tab v2.0: Đã kích hoạt (hỗ trợ #tab/ID)');
   }
 
   if (document.readyState === 'loading') {
