@@ -1,9 +1,9 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 8.2 — Horizontal + Focus 3 đời + Auto scale
+// Phiên bản: 8.3 — Horizontal + Focus 3 đời (dời lên mép trên)
 // ============================================================
 
-console.log('Module Phả đồ đang khởi động (v8.2 — Horizontal + Focus 3 đời)...');
+console.log('Module Phả đồ đang khởi động (v8.3 — Focus 3 đời on top)...');
 
 let phadoData = null;
 let phadoSvg = null;
@@ -391,7 +391,6 @@ function buildTree(id, mapNguoi, visited) {
     height: 0
   };
 
-  // Lưu vào map để tra cứu nhanh sau này
   phadoAllNodes[nguoi.id] = node;
 
   return node;
@@ -598,14 +597,13 @@ function demSoNode(node) {
   return count;
 }
 
-// --- Tự động chọn scale tối đa theo kích thước màn hình ---
 function layMaxScaleTheoManHinh(svgW) {
   if (svgW < 1000) return 0.75;
   if (svgW < 1400) return 0.85;
   return 1.0;
 }
 
-// --- Focus 3 đời: ông nội → cha → con ---
+// --- Focus 3 đời: đặt cụm SÁT MÉP TRÊN ---
 function focusBaDoi() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   if (!phadoNodeFocusDoi6) {
@@ -660,23 +658,23 @@ function focusBaDoi() {
 
   const bboxW = maxX - minX;
   const bboxH = maxY - minY;
-  const pad = 60;
+  const pad = 40;
 
   const scaleX = (svgW - pad * 2) / bboxW;
   const scaleY = (svgH - pad * 2) / bboxH;
   let scale = Math.min(scaleX, scaleY);
 
-  // Giới hạn scale theo kích thước màn hình
   const maxScale = layMaxScaleTheoManHinh(svgW);
   scale = Math.min(scale, maxScale);
   scale = Math.max(scale, MIN_READABLE_SCALE);
 
+  // CĂN GIỮA NGANG + SÁT MÉP TRÊN (không căn giữa dọc)
   const centerX = (minX + maxX) / 2;
-  const centerY = (minY + maxY) / 2;
   const tx = svgW / 2 - centerX * scale;
-  const ty = svgH / 2 - centerY * scale;
+  const ty = pad - minY * scale;
 
-  console.log('Phả đồ: Focus 3 đời →', dsNode.map(n => n.nguoi.ho_ten).join(' → '), {
+  console.log('Phả đồ: Focus 3 đời (mép trên) →',
+    dsNode.map(n => n.nguoi.ho_ten).join(' → '), {
     scale: scale.toFixed(3),
     maxScale: maxScale.toFixed(3),
     bboxW: Math.round(bboxW),
