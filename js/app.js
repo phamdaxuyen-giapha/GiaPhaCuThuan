@@ -382,14 +382,16 @@ function hienThiChiTiet(nguoi) {
     html += '</ul>';
   }
 
+  // ============ HIỂN THỊ ĐÍNH CHÍNH VỚI NÚT XÓA ============
   const gcLienQuan = danhSachGhiChu.filter(gc => gc.nguoi_id === nguoi.id);
   if (gcLienQuan.length > 0) {
-    html += '<h3 style="color:#7A6320;margin:20px 0 10px;font-style:italic;">Ghi chú bổ sung</h3>';
+    html += '<h3 style="color:#7A6320;margin:20px 0 10px;font-style:italic;">Ghi chú bổ sung / Đính chính</h3>';
     gcLienQuan.forEach(gc => {
-      html += '<div style="background:#FFF8F0;padding:12px;border-left:3px solid #E23B3A;margin-bottom:8px;border-radius:4px;">';
-      html += '<div style="font-weight:700;color:#E23B3A;">' + (gc.loai || 'Ghi chú') + '</div>';
-      html += '<div>' + gc.noidung + '</div>';
-      html += '<div style="font-size:10pt;color:#888;font-style:italic;margin-top:4px;">' + (gc.nguoi_de_xuat || '') + ' — ' + (gc.ngay || '') + '</div>';
+      html += '<div class="khung-dinh-chinh" style="position:relative;">';
+      html += '<button onclick="xoaDinhChinhTrongPanel(\'' + gc.id + '\', \'' + nguoi.id + '\')" title="Xóa đính chính này" style="position:absolute;top:8px;right:8px;background:transparent;border:none;color:#c9282d;font-size:16pt;cursor:pointer;padding:0;width:24px;height:24px;line-height:1;">🗑️</button>';
+      html += '<div class="dc-tieude">' + (gc.loai || 'Ghi chú') + '</div>';
+      html += '<div class="dc-noidung">' + gc.noidung + '</div>';
+      html += '<div class="dc-meta">' + (gc.nguoi_de_xuat || '') + ' — ' + (gc.ngay || '') + '</div>';
       html += '</div>';
     });
   }
@@ -400,6 +402,21 @@ function hienThiChiTiet(nguoi) {
 
   panel.innerHTML = html;
   panel.classList.remove('an');
+}
+
+// ============ XÓA ĐÍNH CHÍNH TỪ PANEL ============
+function xoaDinhChinhTrongPanel(gcId, nguoiId) {
+  if (!confirm('Bạn có chắc muốn xóa đính chính này không?')) return;
+
+  danhSachGhiChu = danhSachGhiChu.filter(gc => gc.id !== gcId);
+  luuGhiChuVaoLocal();
+  hienThiDanhSachGhiChu();
+
+  // Refresh panel để thấy kết quả
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  if (nguoi) hienThiChiTiet(nguoi);
+
+  console.log('Đã xóa đính chính:', gcId);
 }
 
 // ============ FORM ĐÍNH CHÍNH ============
