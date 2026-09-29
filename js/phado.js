@@ -1,9 +1,9 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 7.2 — Tree Layout + Scale tối thiểu đọc được
+// Phiên bản: 8.0 — HORIZONTAL Tree Layout (gốc trái, con sang phải)
 // ============================================================
 
-console.log('Module Phả đồ đang khởi động...');
+console.log('Module Phả đồ đang khởi động (v8.0 — Horizontal)...');
 
 let phadoData = null;
 let phadoSvg = null;
@@ -15,16 +15,14 @@ let phadoFilterChi = '';
 // ===== HẰNG SỐ BỐ CỤC =====
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 70;
-const SPOUSE_WIDTH = 160;
 const SPOUSE_HEIGHT = 60;
-const COUPLE_GAP = 20;
-const SPOUSE_STACK_GAP = 10;
-const SIBLING_GAP = 30;
-const LEVEL_GAP = 90;
-const PADDING_X = 200;
+const SPOUSE_STACK_GAP = 10;      // k/c dọc giữa các vợ/chồng
+const SIBLING_GAP = 30;           // k/c dọc giữa các con cùng cha
+const LEVEL_GAP = 80;             // k/c ngang giữa cha và con
+const PADDING_X = 60;
 const PADDING_Y = 60;
 
-// Scale tối thiểu để chữ còn đọc được
+// Scale tối thiểu để chữ đọc được
 const MIN_READABLE_SCALE = 0.45;
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -253,7 +251,8 @@ function chuyenSangDanhTinh(nguoiId) {
 }
 
 // ============================================================
-// TREE LAYOUT ĐỆ QUY (Reingold–Tilford rút gọn)
+// HORIZONTAL TREE LAYOUT
+// Trục X = đời (trái → phải), Trục Y = thứ tự anh em
 // ============================================================
 
 function veCayPhado() {
@@ -275,8 +274,8 @@ function veCayPhado() {
   const tree = buildTree(rootId, mapNguoi, visited);
   if (!tree) return;
 
-  tinhSubtreeWidth(tree);
-  ganViTri(tree, 0, PADDING_Y);
+  tinhSubtreeHeight(tree);
+  ganViTri(tree, 0, 0);
   dichCanGiua(tree);
   veDuongNoi(tree);
   veNode(tree);
@@ -369,67 +368,65 @@ function buildTree(id, mapNguoi, visited) {
     con: con,
     x: 0,
     y: 0,
-    width: 0
+    height: 0
   };
 }
 
-function tinhUnitWidth(node) {
-  if (node.voChong.length === 0) return NODE_WIDTH;
-  return NODE_WIDTH + COUPLE_GAP + SPOUSE_WIDTH;
-}
-
+// Chiều cao unit = node chính + vợ/chồng xếp dọc bên dưới
 function tinhUnitHeight(node) {
-  const nVo = node.voChong.length;
-  if (nVo === 0) return NODE_HEIGHT;
-  const stackH = nVo * SPOUSE_HEIGHT + (nVo - 1) * SPOUSE_STACK_GAP;
-  return Math.max(NODE_HEIGHT, stackH);
+  return NODE_HEIGHT + node.voChong.length * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
 }
 
-function tinhSubtreeWidth(node) {
-  const unitW = tinhUnitWidth(node);
+// Post-order: tính chiều cao subtree
+function tinhSubtreeHeight(node) {
+  const unitH = tinhUnitHeight(node);
 
   if (node.con.length === 0) {
-    node.width = unitW;
-    return unitW;
+    node.height = unitH;
+    return unitH;
   }
 
   let totalCon = 0;
   node.con.forEach((c, i) => {
-    totalCon += tinhSubtreeWidth(c);
+    totalCon += tinhSubtreeHeight(c);
     if (i > 0) totalCon += SIBLING_GAP;
   });
 
-  node.width = Math.max(unitW, totalCon);
-  return node.width;
+  node.height = Math.max(unitH, totalCon);
+  return node.height;
 }
 
-function ganViTri(node, centerX, y) {
-  node.x = centerX;
-  node.y = y;
+// Pre-order: gán vị trí
+function ganViTri(node, x, centerY) {
+  node.x = x;
+  node.y = centerY;
 
   if (node.con.length === 0) return;
 
   let totalCon = 0;
   node.con.forEach((c, i) => {
-    totalCon += c.width;
+    totalCon += c.height;
     if (i > 0) totalCon += SIBLING_GAP;
   });
 
-  const yCon = y + tinhUnitHeight(node) + LEVEL_GAP;
-  let curX = centerX - totalCon / 2;
+  const xCon = x + NODE_WIDTH + LEVEL_GAP;
+  let curY = centerY - totalCon / 2;
 
   node.con.forEach(c => {
-    const conCenter = curX + c.width / 2;
-    ganViTri(c, conCenter, yCon);
-    curX += c.width + SIBLING_GAP;
+    const conCenter = curY + c.height / 2;
+    ganViTri(c, xCon, conCenter);
+    curY += c.height + SIBLING_GAP;
   });
 }
 
 function dichCanGiua(tree) {
   let minX = Infinity;
+  let minY = Infinity;
+
   function duyetMin(node) {
-    const unitW = tinhUnitWidth(node);
-    minX = Math.min(minX, node.x - unitW / 2);
+    const unitH = tinhUnitHeight(node);
+    minX = Math.min(minX, node.x);
+    minY = Math.min(minY, node.y - unitH / 2);
     node.con.forEach(duyetMin);
   }
   duyetMin(tree);
@@ -437,24 +434,32 @@ function dichCanGiua(tree) {
   if (!isFinite(minX)) return;
 
   const offsetX = PADDING_X - minX;
+  const offsetY = PADDING_Y - minY;
+
   function duyetDich(node) {
     node.x += offsetX;
+    node.y += offsetY;
     node.con.forEach(duyetDich);
   }
   duyetDich(tree);
 }
 
+// Đường nối elbow ngang: cha → con
 function veDuongNoi(tree) {
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
   function veChoNode(node) {
-    const yStart = node.y + tinhUnitHeight(node);
+    const unitHCha = tinhUnitHeight(node);
+    const xStart = node.x + NODE_WIDTH;
+    const yStart = node.y - unitHCha / 2 + NODE_HEIGHT / 2;
 
     node.con.forEach(con => {
-      const yEnd = con.y;
-      const midY = yStart + (yEnd - yStart) / 2;
+      const unitHCon = tinhUnitHeight(con);
+      const xEnd = con.x;
+      const yEnd = con.y - unitHCon / 2 + NODE_HEIGHT / 2;
+      const midX = xStart + (xEnd - xStart) / 2;
 
-      const duongPath = `M ${node.x} ${yStart} L ${node.x} ${midY} L ${con.x} ${midY} L ${con.x} ${yEnd}`;
+      const duongPath = `M ${xStart} ${yStart} L ${midX} ${yStart} L ${midX} ${yEnd} L ${xEnd} ${yEnd}`;
 
       duongNoi.append('path')
         .attr('d', duongPath)
@@ -474,18 +479,17 @@ function veNode(tree) {
   const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
 
   function veMotNode(node) {
-    const unitW = tinhUnitWidth(node);
-    const leftX = node.x - unitW / 2;
+    const unitH = tinhUnitHeight(node);
+    const topY = node.y - unitH / 2;
 
-    taoNodePhado(node.nguoi, leftX, node.y, nhomNode, 'chinh');
+    // Node chính ở trên cùng của unit
+    taoNodePhado(node.nguoi, node.x, topY, nhomNode, 'chinh');
 
-    if (node.voChong.length > 0) {
-      const spouseX = leftX + NODE_WIDTH + COUPLE_GAP;
-      node.voChong.forEach((vc, i) => {
-        const vcY = node.y + i * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
-        taoNodePhado(vc, spouseX, vcY, nhomNode, 'vo-chong');
-      });
-    }
+    // Vợ/chồng xếp dọc bên dưới node chính
+    node.voChong.forEach((vc, i) => {
+      const vcY = topY + NODE_HEIGHT + SPOUSE_STACK_GAP + i * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
+      taoNodePhado(vc, node.x, vcY, nhomNode, 'vo-chong');
+    });
 
     node.con.forEach(veMotNode);
   }
@@ -495,7 +499,7 @@ function veNode(tree) {
 
 function taoNodePhado(nguoi, x, y, nhomCha, loai) {
   const isChinh = loai === 'chinh';
-  const w = isChinh ? NODE_WIDTH : SPOUSE_WIDTH;
+  const w = NODE_WIDTH;
   const h = isChinh ? NODE_HEIGHT : SPOUSE_HEIGHT;
   const gioiTinh = nguoi.gioi_tinh === 'nu' ? 'nu' : 'nam';
 
@@ -511,7 +515,7 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
     .attr('ry', 8)
     .attr('cursor', 'pointer');
 
-  const maxNameLen = isChinh ? 22 : 18;
+  const maxNameLen = 22;
   const displayName = (nguoi.ho_ten || '(Không rõ)');
   const nameText = displayName.length > maxNameLen
     ? displayName.substring(0, maxNameLen - 2) + '...'
@@ -613,12 +617,10 @@ function fitCayVaoKhung() {
   let scale, tx, ty;
 
   if (scaleFit >= MIN_READABLE_SCALE) {
-    // Cây vừa khung ở scale đọc được → fit toàn bộ, căn giữa
     scale = scaleFit;
     tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
     ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
   } else {
-    // Cây quá to → dùng MIN_READABLE_SCALE, căn gốc cây ở trên cùng
     scale = MIN_READABLE_SCALE;
     tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
     ty = pad - bbox.y * scale;
