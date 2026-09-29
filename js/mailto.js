@@ -1,30 +1,26 @@
 // ============================================================
-// MAILTO — Nút "Gửi góp ý" qua email
+// PANEL TOOLS — Nút "Gửi góp ý" + "Copy link"
 // Tự động chèn vào panel chi tiết và panel phả đồ
-// Không cần sửa app.js hay phado.js
 // ============================================================
 
 (function() {
   'use strict';
 
-  // ⚠️ ĐỔI EMAIL NÀY THÀNH EMAIL CỦA BẠN
   const EMAIL_NHAN = 'hsnampham@gmail.com';
 
-  // Tìm người theo tên (dùng để lấy ID từ tên hiển thị)
+  // --- Tìm người theo tên ---
   function timNguoiTheoTen(ten) {
     if (!window.giaphaData || !ten) return null;
-    // Bỏ ký tự đặc biệt ở đầu (như "(Không rõ tên)")
     const tenSach = ten.replace(/^\(|\)$/g, '').trim();
-    return window.giaphaData.nguoi.find(n => n.ho_ten === tenSach);
+    return window.giaphaData.nguoi.find(function(n) { return n.ho_ten === tenSach; });
   }
 
-  // Lấy tên người từ panel (h2 hoặc h3 đầu tiên)
   function layTenTuPanel(panel) {
     const h = panel.querySelector('h2, h3');
     return h ? h.textContent.trim() : '';
   }
 
-  // Tạo nội dung email
+  // --- Tạo nội dung email ---
   function taoNoiDungMail(nguoi) {
     const subject = 'Góp ý gia phả — ' + nguoi.ho_ten +
                     ' (Đời ' + nguoi.doi + ', ID: ' + nguoi.id + ')';
@@ -57,47 +53,103 @@
     };
   }
 
-  // Mở Gmail với nội dung điền sẵn
   function guiGopY(nguoi) {
     if (!nguoi) {
       alert('Không xác định được người cần góp ý.');
       return;
     }
-    const { subject, body } = taoNoiDungMail(nguoi);
+    const x = taoNoiDungMail(nguoi);
     const mailtoLink = 'mailto:' + EMAIL_NHAN +
-                       '?subject=' + subject +
-                       '&body=' + body;
+                       '?subject=' + x.subject +
+                       '&body=' + x.body;
     window.location.href = mailtoLink;
     console.log('Mailto: Đã mở email cho', nguoi.ho_ten);
   }
 
-  // Chèn nút Mailto vào panel
-  function chenNutMailto(panel) {
-    if (!panel) return;
+  // --- Copy link với hash ---
+  function copyLink(nguoi) {
+    let url = location.origin + location.pathname;
 
-    // Không chèn 2 lần
-    if (panel.querySelector('.nut-mailto')) return;
-
-    // Panel phải đang mở (không có class 'an')
-    if (panel.classList.contains('an')) return;
-
-    // Lấy tên người → tìm ID
-    const ten = layTenTuPanel(panel);
-    const nguoi = timNguoiTheoTen(ten);
-    if (!nguoi) {
-      // Không phải panel chi tiết người → bỏ qua
-      return;
+    if (nguoi) {
+      // Tìm tab hiện tại
+      const activeTab = document.querySelector('.tab-content.active');
+      const tabId = activeTab ? activeTab.id.replace('tab-', '') : 'trangchu';
+      url += '#' + tabId + '/' + nguoi.id;
+    } else {
+      url += location.hash || '#trangchu';
     }
 
-    // Tìm khối chứa các nút (float:right)
-    const divNut = panel.querySelector('div[style*="float:right"]');
-    if (!divNut) return;
+    // Thử dùng Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        hienToast('✅ Đã copy link: ' + url);
+      }).catch(function() {
+        fallbackCopy(url);
+      });
+    } else {
+      fallbackCopy(url);
+    }
 
-    // Tạo nút Mailto
+    console.log('Copy link:', url);
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      hienToast('✅ Đã copy link!');
+    } catch (e) {
+      hienToast('❌ Không copy được. Link: ' + text);
+    }
+    document.body.removeChild(ta);
+  }
+
+  // --- Toast notification ---
+  function hienToast(msg) {
+    const toast = document.createElement('div');
+    toast.textContent = msg;
+    toast.style.cssText = [
+      'position:fixed',
+      'top:80px',
+      'left:50%',
+      'transform:translateX(-50%)',
+      'background:#7A6320',
+      'color:#fff',
+      'padding:12px 24px',
+      'border-radius:8px',
+      'font-size:12pt',
+      'font-family:Noto Serif, serif',
+      'z-index:9999',
+      'box-shadow:0 4px 16px rgba(0,0,0,0.25)',
+      'opacity:0',
+      'transition:opacity 0.3s ease',
+      'max-width:80%',
+      'word-break:break-all',
+      'text-align:center'
+    ].join(';');
+
+    document.body.appendChild(toast);
+
+    setTimeout(function() { toast.style.opacity = '1'; }, 10);
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 2500);
+  }
+
+  // --- Tạo nút ---
+  function taoNut(text, title, onClick) {
     const nut = document.createElement('button');
-    nut.className = 'nut-mailto';
-    nut.title = 'Gửi góp ý cho cụ này qua email';
-    nut.textContent = '📧 Gửi góp ý';
+    nut.className = 'nut-panel-tool';
+    nut.title = title;
+    nut.textContent = text;
     nut.style.cssText = [
       'border:1px solid #C9A961',
       'background:#FAF6EC',
@@ -122,45 +174,63 @@
 
     nut.addEventListener('click', function(e) {
       e.stopPropagation();
-      guiGopY(nguoi);
+      onClick();
     });
 
-    // Chèn vào đầu khối nút (trước nút Danh tính / Đính chính / ×)
-    divNut.insertBefore(nut, divNut.firstChild);
-
-    console.log('Mailto: Đã chèn nút gửi góp ý cho', nguoi.ho_ten);
+    return nut;
   }
 
-  // Theo dõi 2 panel
+  // --- Chèn 2 nút vào panel ---
+  function chenNutVaoPanel(panel) {
+    if (!panel) return;
+    if (panel.classList.contains('an')) return;
+    if (panel.querySelector('.nut-panel-tool')) return; // Đã chèn
+
+    const ten = layTenTuPanel(panel);
+    const nguoi = timNguoiTheoTen(ten);
+    if (!nguoi) return;
+
+    const divNut = panel.querySelector('div[style*="float:right"]');
+    if (!divNut) return;
+
+    const nutMail = taoNut('Gửi góp ý', 'Gửi góp ý cho cụ này qua email',
+      function() { guiGopY(nguoi); });
+
+    const nutCopy = taoNut('Copy link', 'Copy link chia sẻ trang này',
+      function() { copyLink(nguoi); });
+
+    divNut.insertBefore(nutCopy, divNut.firstChild);
+    divNut.insertBefore(nutMail, divNut.firstChild);
+
+    console.log('Panel Tools: Đã chèn 2 nút cho', nguoi.ho_ten);
+  }
+
+  // --- Theo dõi panel ---
   function theoDoiPanel(panelId) {
     const panel = document.getElementById(panelId);
     if (!panel) return;
 
-    // MutationObserver theo dõi sự thay đổi nội dung
-    const observer = new MutationObserver(function() {
-      chenNutMailto(panel);
+    const obs = new MutationObserver(function() {
+      chenNutVaoPanel(panel);
     });
 
-    observer.observe(panel, {
+    obs.observe(panel, {
       childList: true,
       subtree: true,
       attributes: true,
       attributeFilter: ['class']
     });
 
-    // Chèn ngay nếu panel đã mở sẵn
-    chenNutMailto(panel);
+    chenNutVaoPanel(panel);
   }
 
-  // Khởi tạo
   function khoiTao() {
-    // Chờ dữ liệu gia phả load xong (window.giaphaData)
-    const kiemTraDuLieu = setInterval(function() {
+    const wait = setInterval(function() {
       if (window.giaphaData) {
-        clearInterval(kiemTraDuLieu);
+        clearInterval(wait);
         theoDoiPanel('panel-chi-tiet');
         theoDoiPanel('phado-panel');
-        console.log('Mailto: Đã kích hoạt nút "📧 Gửi góp ý" trên 2 panel');
+        console.log('Panel Tools: Đã kích hoạt (Gửi góp ý + Copy link)');
       }
     }, 300);
   }
