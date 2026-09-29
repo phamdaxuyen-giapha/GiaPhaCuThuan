@@ -1,9 +1,9 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 8.0 — HORIZONTAL Tree Layout (gốc trái, con sang phải)
+// Phiên bản: 8.1 — Horizontal + Focus đời 6
 // ============================================================
 
-console.log('Module Phả đồ đang khởi động (v8.0 — Horizontal)...');
+console.log('Module Phả đồ đang khởi động (v8.1 — Horizontal + Focus đời 6)...');
 
 let phadoData = null;
 let phadoSvg = null;
@@ -11,19 +11,20 @@ let phadoG = null;
 let phadoZoom = null;
 let phadoSelectedId = null;
 let phadoFilterChi = '';
+let phadoNodeFocusDoi6 = null;
 
 // ===== HẰNG SỐ BỐ CỤC =====
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 70;
 const SPOUSE_HEIGHT = 60;
-const SPOUSE_STACK_GAP = 10;      // k/c dọc giữa các vợ/chồng
-const SIBLING_GAP = 30;           // k/c dọc giữa các con cùng cha
-const LEVEL_GAP = 80;             // k/c ngang giữa cha và con
+const SPOUSE_STACK_GAP = 10;
+const SIBLING_GAP = 30;
+const LEVEL_GAP = 80;
 const PADDING_X = 60;
 const PADDING_Y = 60;
 
-// Scale tối thiểu để chữ đọc được
 const MIN_READABLE_SCALE = 0.45;
+const FOCUS_SCALE = 0.85;
 
 document.addEventListener('DOMContentLoaded', async function() {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -97,6 +98,7 @@ function ganSuKienPhado() {
     phadoSvg.transition().duration(300).call(phadoZoom.scaleBy, 0.7);
   });
   if (nutZoomReset) nutZoomReset.addEventListener('click', () => {
+    // Nút "Về gốc" → fit toàn cây
     fitCayVaoKhung();
   });
 }
@@ -252,11 +254,11 @@ function chuyenSangDanhTinh(nguoiId) {
 
 // ============================================================
 // HORIZONTAL TREE LAYOUT
-// Trục X = đời (trái → phải), Trục Y = thứ tự anh em
 // ============================================================
 
 function veCayPhado() {
   phadoG.selectAll('*').remove();
+  phadoNodeFocusDoi6 = null;
 
   const mapNguoi = locVaTaoMap();
   if (Object.keys(mapNguoi).length === 0) {
@@ -280,9 +282,30 @@ function veCayPhado() {
   veDuongNoi(tree);
   veNode(tree);
 
-  setTimeout(fitCayVaoKhung, 500);
+  // Tìm node đời 6 để focus
+  timNodeDoi6(tree);
 
-  console.log('Phả đồ: Đã vẽ', demSoNode(tree), 'node — root:', tree.nguoi.ho_ten);
+  // Sau 500ms, focus đời 6 nếu có, ngược lại fit toàn cây
+  setTimeout(function() {
+    if (phadoNodeFocusDoi6) {
+      focusDoi6();
+    } else {
+      fitCayVaoKhung();
+    }
+  }, 500);
+
+  console.log('Phả đồ: Đã vẽ', demSoNode(tree), 'node — root:', tree.nguoi.ho_ten,
+    phadoNodeFocusDoi6 ? '| focus: ' + phadoNodeFocusDoi6.nguoi.ho_ten : '| không có đời 6');
+}
+
+// Tìm node đời 6 đầu tiên trong tree (BFS/DFS theo thứ tự con)
+function timNodeDoi6(node) {
+  if (phadoNodeFocusDoi6) return;
+  if (node.nguoi.doi === 6 && node.nguoi.ho_ten && node.nguoi.ho_ten.trim().startsWith('Phạm')) {
+    phadoNodeFocusDoi6 = node;
+    return;
+  }
+  node.con.forEach(timNodeDoi6);
 }
 
 function locVaTaoMap() {
@@ -372,12 +395,10 @@ function buildTree(id, mapNguoi, visited) {
   };
 }
 
-// Chiều cao unit = node chính + vợ/chồng xếp dọc bên dưới
 function tinhUnitHeight(node) {
   return NODE_HEIGHT + node.voChong.length * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
 }
 
-// Post-order: tính chiều cao subtree
 function tinhSubtreeHeight(node) {
   const unitH = tinhUnitHeight(node);
 
@@ -396,7 +417,6 @@ function tinhSubtreeHeight(node) {
   return node.height;
 }
 
-// Pre-order: gán vị trí
 function ganViTri(node, x, centerY) {
   node.x = x;
   node.y = centerY;
@@ -444,7 +464,6 @@ function dichCanGiua(tree) {
   duyetDich(tree);
 }
 
-// Đường nối elbow ngang: cha → con
 function veDuongNoi(tree) {
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
@@ -482,10 +501,8 @@ function veNode(tree) {
     const unitH = tinhUnitHeight(node);
     const topY = node.y - unitH / 2;
 
-    // Node chính ở trên cùng của unit
     taoNodePhado(node.nguoi, node.x, topY, nhomNode, 'chinh');
 
-    // Vợ/chồng xếp dọc bên dưới node chính
     node.voChong.forEach((vc, i) => {
       const vcY = topY + NODE_HEIGHT + SPOUSE_STACK_GAP + i * (SPOUSE_HEIGHT + SPOUSE_STACK_GAP);
       taoNodePhado(vc, node.x, vcY, nhomNode, 'vo-chong');
@@ -579,7 +596,55 @@ function demSoNode(node) {
   return count;
 }
 
-// --- Zoom-fit với scale tối thiểu đọc được ---
+// --- Focus vào node đời 6 với scale đọc được ---
+function focusDoi6() {
+  if (!phadoSvg || !phadoG || !phadoZoom) return;
+  if (!phadoNodeFocusDoi6) {
+    fitCayVaoKhung();
+    return;
+  }
+
+  const svgNode = phadoSvg.node();
+  if (!svgNode) return;
+
+  let svgW = svgNode.clientWidth;
+  let svgH = svgNode.clientHeight;
+
+  if ((!svgW || !svgH) && svgNode.parentElement) {
+    svgW = svgNode.parentElement.clientWidth;
+    svgH = svgNode.parentElement.clientHeight;
+  }
+
+  if (!svgW || !svgH) {
+    setTimeout(focusDoi6, 200);
+    return;
+  }
+
+  const node = phadoNodeFocusDoi6;
+  const unitH = tinhUnitHeight(node);
+  const topY = node.y - unitH / 2;
+  const centerX = node.x + NODE_WIDTH / 2;
+  const centerY = topY + NODE_HEIGHT / 2;
+
+  const scale = FOCUS_SCALE;
+
+  // Đặt node đời 6 ở giữa ngang, 1/3 dọc từ trên xuống
+  const tx = svgW / 2 - centerX * scale;
+  const ty = svgH / 3 - centerY * scale;
+
+  console.log('Phả đồ: Focus đời 6 →', node.nguoi.ho_ten, {
+    scale: scale,
+    centerX: Math.round(centerX),
+    centerY: Math.round(centerY)
+  });
+
+  phadoSvg.transition().duration(800).call(
+    phadoZoom.transform,
+    d3.zoomIdentity.translate(tx, ty).scale(scale)
+  );
+}
+
+// --- Zoom-fit toàn cây (dùng cho nút "Về gốc") ---
 function fitCayVaoKhung() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   const svgNode = phadoSvg.node();
@@ -626,11 +691,10 @@ function fitCayVaoKhung() {
     ty = pad - bbox.y * scale;
   }
 
-  console.log('Phả đồ: Zoom-fit →', {
+  console.log('Phả đồ: Fit toàn cây →', {
     svgW, svgH,
     bboxW: Math.round(bbox.width),
     bboxH: Math.round(bbox.height),
-    scaleFit: scaleFit.toFixed(3),
     scale: scale.toFixed(3),
     mode: scaleFit >= MIN_READABLE_SCALE ? 'fit-all' : 'readable-top'
   });
@@ -641,7 +705,7 @@ function fitCayVaoKhung() {
   );
 }
 
-// --- Theo dõi kích thước SVG, tự refit khi tab hiện ra ---
+// --- Theo dõi kích thước SVG ---
 function theoDoiKichThuocSVG() {
   if (!phadoSvg) return;
   const svgNode = phadoSvg.node();
@@ -650,6 +714,7 @@ function theoDoiKichThuocSVG() {
   let lanCuoiW = 0;
   let lanCuoiH = 0;
   let timer = null;
+  let lanDau = true;
 
   const kiemTra = function() {
     if (!svgNode) return;
@@ -662,10 +727,20 @@ function theoDoiKichThuocSVG() {
       lanCuoiW = w;
       lanCuoiH = h;
 
+      // Bỏ qua lần đầu (vì veCayPhado đã gọi focus/fit)
+      if (lanDau) {
+        lanDau = false;
+        return;
+      }
+
       clearTimeout(timer);
       timer = setTimeout(function() {
         console.log('Phả đồ: SVG đổi kích thước → ' + w + '×' + h + ', refit...');
-        fitCayVaoKhung();
+        if (phadoNodeFocusDoi6) {
+          focusDoi6();
+        } else {
+          fitCayVaoKhung();
+        }
       }, 300);
     }
   };
