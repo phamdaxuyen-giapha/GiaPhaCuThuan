@@ -145,7 +145,7 @@ function hienThiDanhSachChi() {
   });
 }
 
-// ============ TÌM KIẾM NÂNG CAO — BỎ DẤU TIẾNG VIỆT ============
+// ============ TÌM KIẾM NÂNG CAO ============
 function boDauTiengViet(str) {
   if (!str) return '';
   return str.normalize('NFD')
@@ -156,12 +156,9 @@ function boDauTiengViet(str) {
     .trim();
 }
 
-// ============ TÌM KIẾM NÂNG CAO — TRẢ VỀ GỢI Ý ============
 function timKiemNangCao(tuKhoa) {
   if (!window.giaphaData || !tuKhoa) return [];
-
   const tuKhoaKhongDau = boDauTiengViet(tuKhoa);
-
   const ketQua = window.giaphaData.nguoi
     .filter(n => n.doi <= 6 && laNguoiHoPham(n))
     .map(n => {
@@ -169,83 +166,65 @@ function timKiemNangCao(tuKhoa) {
       const chuKhongDau = boDauTiengViet(n.ten_chu || '');
       const hieuKhongDau = boDauTiengViet(n.ten_hieu || '');
       const huyKhongDau = boDauTiengViet(n.ten_huy || '');
-
       let diem = 0;
       if (tenKhongDau.startsWith(tuKhoaKhongDau)) diem = 100;
       else if (tenKhongDau.includes(tuKhoaKhongDau)) diem = 80;
       else if (chuKhongDau.includes(tuKhoaKhongDau)) diem = 60;
       else if (hieuKhongDau.includes(tuKhoaKhongDau)) diem = 40;
       else if (huyKhongDau.includes(tuKhoaKhongDau)) diem = 20;
-
       return { nguoi: n, diem: diem };
     })
     .filter(item => item.diem > 0)
     .sort((a, b) => b.diem - a.diem)
     .slice(0, 8)
     .map(item => item.nguoi);
-
   return ketQua;
 }
 
-// ============ HIỂN THỊ GỢI Ý ============
 function hienThiGoiY(dsGoiY, tuKhoa) {
   const ul = document.getElementById('goi-y-tim-kiem');
   if (!ul) return;
-
   ul.innerHTML = '';
-
   if (dsGoiY.length === 0) {
     ul.style.display = 'none';
     return;
   }
-
   ul.style.display = 'block';
-
   dsGoiY.forEach(nguoi => {
     const li = document.createElement('li');
     li.className = 'goi-y-item';
-
     const tenHienThi = nguoi.ho_ten || '(Không rõ)';
     li.innerHTML = `
       <span class="goi-y-ten">${tenHienThi}</span>
       <span class="goi-y-phu">Đời ${nguoi.doi} — ${nguoi.chi || ''}</span>
     `;
-
     li.addEventListener('click', function() {
       document.getElementById('o-tim-kiem').value = tenHienThi;
       ul.innerHTML = '';
       ul.style.display = 'none';
       hienThiChiTiet(nguoi);
     });
-
     ul.appendChild(li);
   });
 }
 
-// ============ KIỂM TRA NGƯỜI HỌ PHẠM ============
 function laNguoiHoPham(nguoi) {
   const ten = (nguoi.ho_ten || '').trim();
   return ten.startsWith('Phạm');
 }
 
-// ============ LẤY DANH SÁCH VỢ/CHỒNG ============
 function layDanhSachPhoiNgau(nguoi) {
   if (!nguoi.hon_nhan || nguoi.hon_nhan.length === 0) return [];
   const ds = [];
   nguoi.hon_nhan.forEach(hn => {
     const voChong = window.giaphaData.nguoi.find(n => n.id === hn.vo_id);
     if (voChong) {
-      ds.push({
-        nguoi: voChong,
-        loai: hn.loai,
-        ghi_chu: hn.ghi_chu
-      });
+      ds.push({ nguoi: voChong, loai: hn.loai, ghi_chu: hn.ghi_chu });
     }
   });
   return ds;
 }
 
-// ============ LẤY TÊN VAI VẾ PHỐI NGẪU ============
 function layVaiVePhoiNgau(loai) {
   const map = {
     'chinh_that': 'Chính thất',
@@ -256,7 +235,7 @@ function layVaiVePhoiNgau(loai) {
   return map[loai] || 'Vợ/Chồng';
 }
 
-// ============ HIỂN THỊ KẾT QUẢ — BẢNG 2 CỘT ============
+// ============ HIỂN THỊ KẾT QUẢ ============
 function hienThiKetQua(dsNguoi) {
   const container = document.getElementById('ds-nguoi');
   if (!container) return;
@@ -282,7 +261,6 @@ function hienThiKetQua(dsNguoi) {
 
     nguoiDoi.forEach(nguoi => {
       const dsPhoiNgau = layDanhSachPhoiNgau(nguoi);
-
       const cap = document.createElement('div');
       cap.className = 'cap-vo-chong';
 
@@ -314,7 +292,6 @@ function hienThiKetQua(dsNguoi) {
   });
 }
 
-// ============ TẠO THẺ NGƯỜI ============
 function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
   const the = document.createElement('div');
   the.className = 'the-nguoi';
@@ -337,7 +314,7 @@ function taoTheNguoi(nguoi, laPhoiNgau, nguoiChongVo, loaiHonNhan) {
   return the;
 }
 
-// ============ HIỂN THỊ CHI TIẾT NGƯỜI ============
+// ============ HIỂN THỊ CHI TIẾT ============
 function hienThiChiTiet(nguoi) {
   const panel = document.getElementById('panel-chi-tiet');
   if (!panel) return;
@@ -382,13 +359,16 @@ function hienThiChiTiet(nguoi) {
     html += '</ul>';
   }
 
-  // ============ HIỂN THỊ ĐÍNH CHÍNH VỚI NÚT XÓA ============
+  // ĐÍNH CHÍNH VỚI NÚT SỬA + XÓA
   const gcLienQuan = danhSachGhiChu.filter(gc => gc.nguoi_id === nguoi.id);
   if (gcLienQuan.length > 0) {
     html += '<h3 style="color:#7A6320;margin:20px 0 10px;font-style:italic;">Ghi chú bổ sung / Đính chính</h3>';
     gcLienQuan.forEach(gc => {
       html += '<div class="khung-dinh-chinh" style="position:relative;">';
-      html += '<button onclick="xoaDinhChinhTrongPanel(\'' + gc.id + '\', \'' + nguoi.id + '\')" title="Xóa đính chính này" style="position:absolute;top:8px;right:8px;background:transparent;border:none;color:#c9282d;font-size:16pt;cursor:pointer;padding:0;width:24px;height:24px;line-height:1;">🗑️</button>';
+      html += '<div style="position:absolute;top:8px;right:8px;display:flex;gap:6px;">';
+      html += '<button onclick="suaDinhChinhTrongPanel(\'' + gc.id + '\', \'' + nguoi.id + '\')" title="Sửa đính chính" style="background:transparent;border:none;color:#7A6320;font-size:14pt;cursor:pointer;padding:0;width:24px;height:24px;line-height:1;">✏️</button>';
+      html += '<button onclick="xoaDinhChinhTrongPanel(\'' + gc.id + '\', \'' + nguoi.id + '\')" title="Xóa đính chính" style="background:transparent;border:none;color:#c9282d;font-size:14pt;cursor:pointer;padding:0;width:24px;height:24px;line-height:1;">🗑️</button>';
+      html += '</div>';
       html += '<div class="dc-tieude">' + (gc.loai || 'Ghi chú') + '</div>';
       html += '<div class="dc-noidung">' + gc.noidung + '</div>';
       html += '<div class="dc-meta">' + (gc.nguoi_de_xuat || '') + ' — ' + (gc.ngay || '') + '</div>';
@@ -404,7 +384,84 @@ function hienThiChiTiet(nguoi) {
   panel.classList.remove('an');
 }
 
-// ============ XÓA ĐÍNH CHÍNH TỪ PANEL ============
+// ============ SỬA ĐÍNH CHÍNH ============
+function suaDinhChinhTrongPanel(gcId, nguoiId) {
+  const gc = danhSachGhiChu.find(g => g.id === gcId);
+  if (!gc) return;
+
+  const panel = document.getElementById('panel-chi-tiet');
+  if (!panel) return;
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+
+  let html = '<div style="float:right;">';
+  html += '<button onclick="hienThiChiTiet(window.giaphaData.nguoi.find(n => n.id === \'' + nguoiId + '\'))" style="border:none;background:none;font-size:20pt;cursor:pointer;">×</button>';
+  html += '</div>';
+
+  html += '<h3 style="color:#E23B3A;margin-bottom:16px;">✏️ Sửa đính chính</h3>';
+  html += '<p style="font-style:italic;color:#7A6320;">Cho: <strong>' + (nguoi ? nguoi.ho_ten : '(Không rõ)') + '</strong></p>';
+
+  html += '<div style="margin-top:16px;">';
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Loại đính chính:</label>';
+  html += '<select id="sdc-loai" style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:14px;">';
+  const loaiCodes = {
+    'Sửa chính tả': 'sua-chinh-ta',
+    'Nghi vấn cần kiểm chứng': 'nghi-van',
+    'Bổ sung thông tin': 'bo-sung',
+    'Khác': 'khac'
+  };
+  const loaiHienTai = gc.loai || 'Sửa chính tả';
+  Object.keys(loaiCodes).forEach(tenLoai => {
+    const selected = (tenLoai === loaiHienTai) ? ' selected' : '';
+    html += '<option value="' + loaiCodes[tenLoai] + '"' + selected + '>' + tenLoai + '</option>';
+  });
+  html += '</select>';
+
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Nội dung đính chính:</label>';
+  html += '<textarea id="sdc-noidung" rows="4" style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:14px;">' + gc.noidung + '</textarea>';
+
+  html += '<label style="display:block;font-weight:700;margin-bottom:6px;">Người đề xuất:</label>';
+  html += '<input type="text" id="sdc-nguoi-de-xuat" value="' + (gc.nguoi_de_xuat || '') + '" style="width:100%;padding:8px;border:1px solid #E5DDD0;border-radius:4px;font-family:inherit;font-size:11pt;margin-bottom:16px;">';
+
+  html += '<div style="display:flex;gap:8px;">';
+  html += '<button onclick="capNhatDinhChinh(\'' + gcId + '\', \'' + nguoiId + '\')" class="nut-chinh">💾 Cập nhật</button>';
+  html += '<button onclick="hienThiChiTiet(window.giaphaData.nguoi.find(n => n.id === \'' + nguoiId + '\'))" style="padding:10px 22px;background:#fff;color:#7A6320;border:1px solid #7A6320;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11pt;">↺ Quay lại</button>';
+  html += '</div>';
+  html += '</div>';
+
+  panel.innerHTML = html;
+  panel.classList.remove('an');
+}
+
+function capNhatDinhChinh(gcId, nguoiId) {
+  const loai = document.getElementById('sdc-loai').value;
+  const noidung = document.getElementById('sdc-noidung').value.trim();
+  const nguoiDeXuat = document.getElementById('sdc-nguoi-de-xuat').value.trim();
+
+  if (!noidung) {
+    alert('Vui lòng nhập nội dung đính chính!');
+    return;
+  }
+
+  const gcIndex = danhSachGhiChu.findIndex(g => g.id === gcId);
+  if (gcIndex === -1) return;
+
+  danhSachGhiChu[gcIndex].loai = tenLoaiGhiChu(loai);
+  danhSachGhiChu[gcIndex].loai_code = loai;
+  danhSachGhiChu[gcIndex].noidung = noidung;
+  danhSachGhiChu[gcIndex].nguoi_de_xuat = nguoiDeXuat || '(Không ghi tên)';
+  danhSachGhiChu[gcIndex].ngay_cap_nhat = new Date().toLocaleDateString('vi-VN');
+
+  luuGhiChuVaoLocal();
+  hienThiDanhSachGhiChu();
+
+  alert('Đã cập nhật đính chính!');
+
+  const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
+  if (nguoi) hienThiChiTiet(nguoi);
+}
+
+// ============ XÓA ĐÍNH CHÍNH ============
 function xoaDinhChinhTrongPanel(gcId, nguoiId) {
   if (!confirm('Bạn có chắc muốn xóa đính chính này không?')) return;
 
@@ -412,7 +469,6 @@ function xoaDinhChinhTrongPanel(gcId, nguoiId) {
   luuGhiChuVaoLocal();
   hienThiDanhSachGhiChu();
 
-  // Refresh panel để thấy kết quả
   const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
   if (nguoi) hienThiChiTiet(nguoi);
 
@@ -486,7 +542,7 @@ function luuDinhChinh(nguoiId) {
   luuGhiChuVaoLocal();
   hienThiDanhSachGhiChu();
 
-  alert('Đã lưu đính chính! Ghi chú hiện trên panel chi tiết.');
+  alert('Đã lưu đính chính!');
 
   if (nguoi) hienThiChiTiet(nguoi);
 }
@@ -671,7 +727,6 @@ function xuatFileGhiChu() {
 // ============ CHUYỂN SANG TAB PHẢ ĐỒ ============
 function chuyenSangPhaDo(nguoiId) {
   if (!nguoiId || !window.giaphaData) return;
-
   const nguoi = window.giaphaData.nguoi.find(n => n.id === nguoiId);
   if (!nguoi) {
     console.warn('Không tìm thấy người có id:', nguoiId);
