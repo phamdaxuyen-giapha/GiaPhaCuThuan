@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 5.0 (sắp xếp con theo cha + ẩn Đời 7)
+// Phiên bản: 6.0 (vẽ đường nối kiểu cây chuẩn)
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -237,7 +237,7 @@ function chuyenSangDanhTinh(nguoiId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============ VẼ CÂY CHÍNH — SẮP XẾP CON THEO CHA ============
+// ============ VẼ CÂY CHÍNH — SẮP XẾP THEO CÂY NHỊ PHÂN ============
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
@@ -255,8 +255,9 @@ function veCayPhado() {
     return;
   }
 
-  // Lấy danh sách ID có trong cây
-  const dsIdTrongCay = new Set(dsNguoi.map(n => n.id));
+  // Tạo map tra cứu nhanh
+  const mapNguoi = {};
+  dsNguoi.forEach(n => { mapNguoi[n.id] = n; });
 
   // Nhóm theo đời
   const theoDoi = {};
@@ -267,20 +268,41 @@ function veCayPhado() {
 
   const dsDoi = Object.keys(theoDoi).map(Number).sort((a, b) => a - b);
 
-  // SẮP XẾP: Duyệt từ đời 1 → đời 6, con đặt theo vị trí CHA
+  // ============ THUẬT TOÁN: SẮP XẾP THEO CÂY ============
+  // Bước 1: Sắp xếp từng đời theo thứ tự cha_id
   const viTriNode = {};
   let y = 50;
 
-  dsDoi.forEach(doi => {
+  dsDoi.forEach((doi, idxDoi) => {
     const dsNguoiDoi = theoDoi[doi];
 
-    // Sắp xếp theo vị trí cha (nếu cha có trong cây)
-    dsNguoiDoi.sort((a, b) => {
-      const chaA = viTriNode[a.cha_id] ? viTriNode[a.cha_id].x : 999999;
-      const chaB = viTriNode[b.cha_id] ? viTriNode[b.cha_id].x : 999999;
-      if (chaA !== chaB) return chaA - chaB;
-      return (a.ho_ten || '').localeCompare(b.ho_ten || '');
-    });
+    // Nếu là đời 1 → sắp xếp theo tên
+    if (idxDoi === 0) {
+      dsNguoiDoi.sort((a, b) => (a.ho_ten || '').localeCompare(b.ho_ten || ''));
+    } else {
+      // Sắp xếp theo thứ tự cha trong đời trên
+      dsNguoiDoi.sort((a, b) => {
+        const chaA = viTriNode[a.cha_id];
+        const chaB = viTriNode[b.cha_id];
+
+        // Nếu cha chưa có vị trí → xếp cuối
+        if (!chaA && !chaB) return 0;
+        if (!chaA) return 1;
+        if (!chaB) return -1;
+
+        // Ưu tiên cha có vị trí x nhỏ hơn
+        if (chaA.x !== chaB.x) return chaA.x - chaB.x;
+
+        // Cùng cha → xếp theo thứ tự trong con_ids của cha
+        const chaNguoi = mapNguoi[a.cha_id];
+        if (chaNguoi && chaNguoi.con_ids) {
+          const idxA = chaNguoi.con_ids.indexOf(a.id);
+          const idxB = chaNguoi.con_ids.indexOf(b.id);
+          return idxA - idxB;
+        }
+        return 0;
+      });
+    }
 
     const tongWidth = dsNguoiDoi.length * (NODE_WIDTH + NODE_SPACING_X);
     let x = -tongWidth / 2;
@@ -293,13 +315,50 @@ function veCayPhado() {
     y += NODE_HEIGHT + NODE_SPACING_Y;
   });
 
-  // VẼ ĐƯỜNG NỐI CHA-CON (chỉ khi cha có trong cây)
+  // ============ BƯỚC 2: TINH CHỈNH VỊ TRÍ X THEO CHA ============
+  // Duyệt lại từng đời, kéo con về gần cha
+  dsDoi.forEach((doi, idxDoi) => {
+    if (idxDoi === 0) return;
+
+    const dsNguoiDoi = theoDoi[doi];
+    const dsNguoiDoiSorted = dsNguoiDoi.map(n => viTriNode[n.id]).sort((a, b) => a.x - b.x);
+
+    // Nhóm con theo cha
+    const nhomTheoCha = {};
+    dsNguoiDoiSorted.forEach(viTri => {
+      const chaId = viTri.nguoi.cha_id || 'khong_co_cha';
+      if (!nhomTheoCha[chaId]) nhomTheoCha[chaId] = [];
+      nhomTheoCha[chaId].push(viTri);
+    });
+
+    // Với mỗi nhóm con → căn giữa dưới cha
+    Object.keys(nhomTheoCha).forEach(chaId => {
+      const nhomCon = nhomTheoCha[chaId];
+      const chaViTri = viTriNode[chaId];
+
+      if (chaViTri) {
+        // Tính tâm của nhóm con
+        const tamNhomCon = (nhomCon[0].x + nhomCon[nhomCon.length - 1].x + NODE_WIDTH) / 2;
+        const tamCha = chaViTri.x + NODE_WIDTH / 2;
+
+        // Dịch chuyển nhóm con để căn giữa dưới cha
+        const dichChuyen = tamCha - tamNhomCon;
+
+        if (Math.abs(dichChuyen) < NODE_WIDTH * 2) {
+          nhomCon.forEach(viTri => {
+            viTri.x += dichChuyen;
+            viTriNode[viTri.nguoi.id].x = viTri.x;
+          });
+        }
+      }
+    });
+  });
+
+  // ============ BƯỚC 3: VẼ ĐƯỜNG NỐI ============
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
   dsNguoi.forEach(nguoi => {
-    const chaCoTrongCay = nguoi.cha_id && dsIdTrongCay.has(nguoi.cha_id);
-
-    if (chaCoTrongCay && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
+    if (nguoi.cha_id && viTriNode[nguoi.cha_id] && viTriNode[nguoi.id]) {
       const cha = viTriNode[nguoi.cha_id];
       const con = viTriNode[nguoi.id];
 
@@ -308,6 +367,7 @@ function veCayPhado() {
       const x2 = con.x + NODE_WIDTH / 2;
       const y2 = con.y;
 
+      // Đường gấp khúc: Xuống → Ngang → Xuống
       const yMid = y1 + (NODE_SPACING_Y / 2);
       const duongPath = `M ${x1} ${y1} L ${x1} ${yMid} L ${x2} ${yMid} L ${x2} ${y2}`;
 
