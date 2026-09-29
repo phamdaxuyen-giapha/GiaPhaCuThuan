@@ -722,3 +722,29 @@ body {
 .phado-duong-noi path {
   pointer-events: none;
 }
+
+/* ============================================================
+   FIX v7.0 — Đảm bảo SVG có kích thước để auto zoom-fit
+   ============================================================ */
+
+#phado-svg {
+  display: block;
+  width: 100%;
+  height: 700px;
+  cursor: grab;
+  background: #FAF6EC;
+}
+
+#phado-svg:active {
+  cursor: grabbing;
+}
+
+.pha-do {
+  min-height: 700px;
+  height: 700px;
+}
+
+@media (max-width: 768px) {
+  #phado-svg { height: 500px; }
+  .pha-do { min-height: 500px; height: 500px; }
+}
