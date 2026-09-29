@@ -1,9 +1,9 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 8.1 — Horizontal + Focus đời 6
+// Phiên bản: 8.2 — Horizontal + Focus 3 đời + Auto scale
 // ============================================================
 
-console.log('Module Phả đồ đang khởi động (v8.1 — Horizontal + Focus đời 6)...');
+console.log('Module Phả đồ đang khởi động (v8.2 — Horizontal + Focus 3 đời)...');
 
 let phadoData = null;
 let phadoSvg = null;
@@ -12,6 +12,7 @@ let phadoZoom = null;
 let phadoSelectedId = null;
 let phadoFilterChi = '';
 let phadoNodeFocusDoi6 = null;
+let phadoAllNodes = {};
 
 // ===== HẰNG SỐ BỐ CỤC =====
 const NODE_WIDTH = 180;
@@ -24,7 +25,6 @@ const PADDING_X = 60;
 const PADDING_Y = 60;
 
 const MIN_READABLE_SCALE = 0.45;
-const FOCUS_SCALE = 0.85;
 
 document.addEventListener('DOMContentLoaded', async function() {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -98,7 +98,6 @@ function ganSuKienPhado() {
     phadoSvg.transition().duration(300).call(phadoZoom.scaleBy, 0.7);
   });
   if (nutZoomReset) nutZoomReset.addEventListener('click', () => {
-    // Nút "Về gốc" → fit toàn cây
     fitCayVaoKhung();
   });
 }
@@ -259,6 +258,7 @@ function chuyenSangDanhTinh(nguoiId) {
 function veCayPhado() {
   phadoG.selectAll('*').remove();
   phadoNodeFocusDoi6 = null;
+  phadoAllNodes = {};
 
   const mapNguoi = locVaTaoMap();
   if (Object.keys(mapNguoi).length === 0) {
@@ -282,13 +282,11 @@ function veCayPhado() {
   veDuongNoi(tree);
   veNode(tree);
 
-  // Tìm node đời 6 để focus
   timNodeDoi6(tree);
 
-  // Sau 500ms, focus đời 6 nếu có, ngược lại fit toàn cây
   setTimeout(function() {
     if (phadoNodeFocusDoi6) {
-      focusDoi6();
+      focusBaDoi();
     } else {
       fitCayVaoKhung();
     }
@@ -298,7 +296,6 @@ function veCayPhado() {
     phadoNodeFocusDoi6 ? '| focus: ' + phadoNodeFocusDoi6.nguoi.ho_ten : '| không có đời 6');
 }
 
-// Tìm node đời 6 đầu tiên trong tree (BFS/DFS theo thứ tự con)
 function timNodeDoi6(node) {
   if (phadoNodeFocusDoi6) return;
   if (node.nguoi.doi === 6 && node.nguoi.ho_ten && node.nguoi.ho_ten.trim().startsWith('Phạm')) {
@@ -385,7 +382,7 @@ function buildTree(id, mapNguoi, visited) {
     .map(cid => buildTree(cid, mapNguoi, visited))
     .filter(Boolean);
 
-  return {
+  const node = {
     nguoi: nguoi,
     voChong: voChong,
     con: con,
@@ -393,6 +390,11 @@ function buildTree(id, mapNguoi, visited) {
     y: 0,
     height: 0
   };
+
+  // Lưu vào map để tra cứu nhanh sau này
+  phadoAllNodes[nguoi.id] = node;
+
+  return node;
 }
 
 function tinhUnitHeight(node) {
@@ -596,8 +598,15 @@ function demSoNode(node) {
   return count;
 }
 
-// --- Focus vào node đời 6 với scale đọc được ---
-function focusDoi6() {
+// --- Tự động chọn scale tối đa theo kích thước màn hình ---
+function layMaxScaleTheoManHinh(svgW) {
+  if (svgW < 1000) return 0.75;
+  if (svgW < 1400) return 0.85;
+  return 1.0;
+}
+
+// --- Focus 3 đời: ông nội → cha → con ---
+function focusBaDoi() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   if (!phadoNodeFocusDoi6) {
     fitCayVaoKhung();
@@ -616,26 +625,63 @@ function focusDoi6() {
   }
 
   if (!svgW || !svgH) {
-    setTimeout(focusDoi6, 200);
+    setTimeout(focusBaDoi, 200);
     return;
   }
 
-  const node = phadoNodeFocusDoi6;
-  const unitH = tinhUnitHeight(node);
-  const topY = node.y - unitH / 2;
-  const centerX = node.x + NODE_WIDTH / 2;
-  const centerY = topY + NODE_HEIGHT / 2;
+  // Thu thập 3 đời: focus (đời 6) → cha (đời 5) → ông (đời 4)
+  const dsNode = [];
+  let current = phadoNodeFocusDoi6;
+  for (let i = 0; i < 3 && current; i++) {
+    dsNode.push(current);
+    if (current.nguoi.cha_id && phadoAllNodes[current.nguoi.cha_id]) {
+      current = phadoAllNodes[current.nguoi.cha_id];
+    } else {
+      break;
+    }
+  }
 
-  const scale = FOCUS_SCALE;
+  if (dsNode.length === 0) {
+    fitCayVaoKhung();
+    return;
+  }
 
-  // Đặt node đời 6 ở giữa ngang, 1/3 dọc từ trên xuống
+  // Tính bbox của 3 node + vợ/chồng
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  dsNode.forEach(node => {
+    const unitH = tinhUnitHeight(node);
+    const topY = node.y - unitH / 2;
+    const bottomY = topY + unitH;
+    minX = Math.min(minX, node.x);
+    maxX = Math.max(maxX, node.x + NODE_WIDTH);
+    minY = Math.min(minY, topY);
+    maxY = Math.max(maxY, bottomY);
+  });
+
+  const bboxW = maxX - minX;
+  const bboxH = maxY - minY;
+  const pad = 60;
+
+  const scaleX = (svgW - pad * 2) / bboxW;
+  const scaleY = (svgH - pad * 2) / bboxH;
+  let scale = Math.min(scaleX, scaleY);
+
+  // Giới hạn scale theo kích thước màn hình
+  const maxScale = layMaxScaleTheoManHinh(svgW);
+  scale = Math.min(scale, maxScale);
+  scale = Math.max(scale, MIN_READABLE_SCALE);
+
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
   const tx = svgW / 2 - centerX * scale;
-  const ty = svgH / 3 - centerY * scale;
+  const ty = svgH / 2 - centerY * scale;
 
-  console.log('Phả đồ: Focus đời 6 →', node.nguoi.ho_ten, {
-    scale: scale,
-    centerX: Math.round(centerX),
-    centerY: Math.round(centerY)
+  console.log('Phả đồ: Focus 3 đời →', dsNode.map(n => n.nguoi.ho_ten).join(' → '), {
+    scale: scale.toFixed(3),
+    maxScale: maxScale.toFixed(3),
+    bboxW: Math.round(bboxW),
+    bboxH: Math.round(bboxH),
+    svgW, svgH
   });
 
   phadoSvg.transition().duration(800).call(
@@ -644,7 +690,7 @@ function focusDoi6() {
   );
 }
 
-// --- Zoom-fit toàn cây (dùng cho nút "Về gốc") ---
+// --- Zoom-fit toàn cây (nút "Về gốc") ---
 function fitCayVaoKhung() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   const svgNode = phadoSvg.node();
@@ -727,7 +773,6 @@ function theoDoiKichThuocSVG() {
       lanCuoiW = w;
       lanCuoiH = h;
 
-      // Bỏ qua lần đầu (vì veCayPhado đã gọi focus/fit)
       if (lanDau) {
         lanDau = false;
         return;
@@ -737,7 +782,7 @@ function theoDoiKichThuocSVG() {
       timer = setTimeout(function() {
         console.log('Phả đồ: SVG đổi kích thước → ' + w + '×' + h + ', refit...');
         if (phadoNodeFocusDoi6) {
-          focusDoi6();
+          focusBaDoi();
         } else {
           fitCayVaoKhung();
         }
