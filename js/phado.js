@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 7.1 — Tree Layout đệ quy + ResizeObserver
+// Phiên bản: 7.2 — Tree Layout + Scale tối thiểu đọc được
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -23,6 +23,9 @@ const SIBLING_GAP = 30;
 const LEVEL_GAP = 90;
 const PADDING_X = 200;
 const PADDING_Y = 60;
+
+// Scale tối thiểu để chữ còn đọc được
+const MIN_READABLE_SCALE = 0.45;
 
 document.addEventListener('DOMContentLoaded', async function() {
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -572,7 +575,7 @@ function demSoNode(node) {
   return count;
 }
 
-// --- Zoom-fit toàn cây vào khung ---
+// --- Zoom-fit với scale tối thiểu đọc được ---
 function fitCayVaoKhung() {
   if (!phadoSvg || !phadoG || !phadoZoom) return;
   const svgNode = phadoSvg.node();
@@ -587,7 +590,6 @@ function fitCayVaoKhung() {
   }
 
   if (!svgW || !svgH) {
-    console.log('Phả đồ: SVG chưa có kích thước, thử lại sau 200ms...');
     setTimeout(fitCayVaoKhung, 200);
     return;
   }
@@ -606,16 +608,29 @@ function fitCayVaoKhung() {
   const pad = 40;
   const scaleX = (svgW - pad * 2) / bbox.width;
   const scaleY = (svgH - pad * 2) / bbox.height;
-  const scale = Math.min(scaleX, scaleY) * 0.95;
+  const scaleFit = Math.min(scaleX, scaleY) * 0.95;
 
-  const tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
-  const ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
+  let scale, tx, ty;
+
+  if (scaleFit >= MIN_READABLE_SCALE) {
+    // Cây vừa khung ở scale đọc được → fit toàn bộ, căn giữa
+    scale = scaleFit;
+    tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
+    ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
+  } else {
+    // Cây quá to → dùng MIN_READABLE_SCALE, căn gốc cây ở trên cùng
+    scale = MIN_READABLE_SCALE;
+    tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
+    ty = pad - bbox.y * scale;
+  }
 
   console.log('Phả đồ: Zoom-fit →', {
     svgW, svgH,
     bboxW: Math.round(bbox.width),
     bboxH: Math.round(bbox.height),
-    scale: scale.toFixed(3)
+    scaleFit: scaleFit.toFixed(3),
+    scale: scale.toFixed(3),
+    mode: scaleFit >= MIN_READABLE_SCALE ? 'fit-all' : 'readable-top'
   });
 
   phadoSvg.transition().duration(500).call(
