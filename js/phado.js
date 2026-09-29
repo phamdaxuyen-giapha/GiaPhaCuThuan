@@ -1,6 +1,6 @@
 // ============================================================
 // MODULE PHẢ ĐỒ — Vẽ cây gia phả bằng D3.js
-// Phiên bản: 7.0 — Tree Layout đệ quy (Reingold–Tilford rút gọn)
+// Phiên bản: 7.1 — Tree Layout đệ quy + ResizeObserver
 // ============================================================
 
 console.log('Module Phả đồ đang khởi động...');
@@ -69,6 +69,7 @@ async function khoiTaoPhado() {
 
   ganSuKienPhado();
   veCayPhado();
+  theoDoiKichThuocSVG();
 
   console.log('Phả đồ: Khởi tạo xong!');
 }
@@ -621,4 +622,41 @@ function fitCayVaoKhung() {
     phadoZoom.transform,
     d3.zoomIdentity.translate(tx, ty).scale(scale)
   );
+}
+
+// --- Theo dõi kích thước SVG, tự refit khi tab hiện ra ---
+function theoDoiKichThuocSVG() {
+  if (!phadoSvg) return;
+  const svgNode = phadoSvg.node();
+  if (!svgNode) return;
+
+  let lanCuoiW = 0;
+  let lanCuoiH = 0;
+  let timer = null;
+
+  const kiemTra = function() {
+    if (!svgNode) return;
+    const w = svgNode.clientWidth;
+    const h = svgNode.clientHeight;
+
+    if (!w || !h) return;
+
+    if (w !== lanCuoiW || h !== lanCuoiH) {
+      lanCuoiW = w;
+      lanCuoiH = h;
+
+      clearTimeout(timer);
+      timer = setTimeout(function() {
+        console.log('Phả đồ: SVG đổi kích thước → ' + w + '×' + h + ', refit...');
+        fitCayVaoKhung();
+      }, 300);
+    }
+  };
+
+  if (typeof ResizeObserver !== 'undefined') {
+    const ro = new ResizeObserver(kiemTra);
+    ro.observe(svgNode);
+  }
+
+  setInterval(kiemTra, 500);
 }
