@@ -60,7 +60,7 @@ async function khoiTaoPhado() {
   phadoG = phadoSvg.append('g').attr('class', 'phado-main-group');
 
   phadoZoom = d3.zoom()
-    .scaleExtent([0.1, 3])
+    .scaleExtent([0.05, 3])
     .on('zoom', function(event) {
       phadoG.attr('transform', event.transform);
     });
@@ -248,7 +248,6 @@ function chuyenSangDanhTinh(nguoiId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-
 // ============================================================
 // TREE LAYOUT ĐỆ QUY (Reingold–Tilford rút gọn)
 // ============================================================
@@ -256,57 +255,41 @@ function chuyenSangDanhTinh(nguoiId) {
 function veCayPhado() {
   phadoG.selectAll('*').remove();
 
-  // 1. Lọc + tạo map
   const mapNguoi = locVaTaoMap();
   if (Object.keys(mapNguoi).length === 0) {
     console.warn('Phả đồ: Không có người nào để vẽ');
     return;
   }
 
-  // 2. Xác định root
   const rootId = xacDinhRootId(mapNguoi);
   if (!rootId) {
     console.warn('Phả đồ: Không xác định được root');
     return;
   }
 
-  // 3. Xây tree đệ quy
   const visited = new Set();
   const tree = buildTree(rootId, mapNguoi, visited);
   if (!tree) return;
 
-  // 4. Tính subtreeWidth (post-order)
   tinhSubtreeWidth(tree);
-
-  // 5. Gán vị trí (pre-order), bắt đầu x=0
   ganViTri(tree, 0, PADDING_Y);
-
-  // 6. Dịch để căn giữa khung
   dichCanGiua(tree);
-
-  // 7. Vẽ đường nối
   veDuongNoi(tree);
-
-  // 8. Vẽ node
   veNode(tree);
 
-  // 9. Auto zoom-fit
-  setTimeout(fitCayVaoKhung, 30);
+  setTimeout(fitCayVaoKhung, 500);
 
   console.log('Phả đồ: Đã vẽ', demSoNode(tree), 'node — root:', tree.nguoi.ho_ten);
 }
 
-// --- Lọc người + tạo map id → người ---
 function locVaTaoMap() {
   const mapNguoi = {};
 
-  // Bước 1: lọc theo đời ≤ 6 và theo chi (nếu có)
   let dsNguoi = phadoData.nguoi.filter(n => n.doi <= 6);
   if (phadoFilterChi) {
     dsNguoi = dsNguoi.filter(n => n.chi === phadoFilterChi);
   }
 
-  // Bước 2: tập người họ Phạm
   const idHoPham = new Set();
   dsNguoi.forEach(n => {
     if (n.ho_ten && n.ho_ten.trim().startsWith('Phạm')) {
@@ -314,7 +297,6 @@ function locVaTaoMap() {
     }
   });
 
-  // Bước 3: tập vợ/chồng của người họ Phạm
   const idTrongDs = new Set(dsNguoi.map(n => n.id));
   const idVoChong = new Set();
   dsNguoi.forEach(n => {
@@ -327,7 +309,6 @@ function locVaTaoMap() {
     }
   });
 
-  // Bước 4: tạo map
   dsNguoi.forEach(n => {
     if (idHoPham.has(n.id) || idVoChong.has(n.id)) {
       mapNguoi[n.id] = n;
@@ -337,7 +318,6 @@ function locVaTaoMap() {
   return mapNguoi;
 }
 
-// --- Xác định root ---
 function xacDinhRootId(mapNguoi) {
   if (!phadoFilterChi) {
     return mapNguoi['P1'] ? 'P1' : null;
@@ -355,20 +335,17 @@ function xacDinhRootId(mapNguoi) {
   return dsUuTien[0].id;
 }
 
-// --- Xây tree đệ quy ---
 function buildTree(id, mapNguoi, visited) {
   if (visited.has(id) || !mapNguoi[id]) return null;
   visited.add(id);
 
   const nguoi = mapNguoi[id];
 
-  // Vợ/chồng
   const voChong = (nguoi.hon_nhan || [])
     .map(h => mapNguoi[h.vo_id])
     .filter(Boolean);
   voChong.forEach(vc => visited.add(vc.id));
 
-  // Con: hợp nhất con_ids + các node có cha_id trỏ đến id
   const conIdsSet = new Set();
   (nguoi.con_ids || []).forEach(cid => {
     if (mapNguoi[cid] && !visited.has(cid)) conIdsSet.add(cid);
@@ -392,7 +369,6 @@ function buildTree(id, mapNguoi, visited) {
   };
 }
 
-// --- Bề rộng / cao của unit (node chính + vợ/chồng xếp dọc) ---
 function tinhUnitWidth(node) {
   if (node.voChong.length === 0) return NODE_WIDTH;
   return NODE_WIDTH + COUPLE_GAP + SPOUSE_WIDTH;
@@ -405,7 +381,6 @@ function tinhUnitHeight(node) {
   return Math.max(NODE_HEIGHT, stackH);
 }
 
-// --- Post-order: tính width subtree ---
 function tinhSubtreeWidth(node) {
   const unitW = tinhUnitWidth(node);
 
@@ -424,7 +399,6 @@ function tinhSubtreeWidth(node) {
   return node.width;
 }
 
-// --- Pre-order: gán vị trí ---
 function ganViTri(node, centerX, y) {
   node.x = centerX;
   node.y = y;
@@ -447,7 +421,6 @@ function ganViTri(node, centerX, y) {
   });
 }
 
-// --- Dịch chuyển toàn cây để căn giữa ---
 function dichCanGiua(tree) {
   let minX = Infinity;
   function duyetMin(node) {
@@ -467,7 +440,6 @@ function dichCanGiua(tree) {
   duyetDich(tree);
 }
 
-// --- Vẽ đường nối kiểu elbow ---
 function veDuongNoi(tree) {
   const duongNoi = phadoG.append('g').attr('class', 'phado-duong-noi');
 
@@ -494,7 +466,6 @@ function veDuongNoi(tree) {
   veChoNode(tree);
 }
 
-// --- Vẽ toàn bộ node ---
 function veNode(tree) {
   const nhomNode = phadoG.append('g').attr('class', 'phado-nhom-node');
 
@@ -502,10 +473,8 @@ function veNode(tree) {
     const unitW = tinhUnitWidth(node);
     const leftX = node.x - unitW / 2;
 
-    // Node chính (họ Phạm)
     taoNodePhado(node.nguoi, leftX, node.y, nhomNode, 'chinh');
 
-    // Vợ/chồng xếp dọc bên phải
     if (node.voChong.length > 0) {
       const spouseX = leftX + NODE_WIDTH + COUPLE_GAP;
       node.voChong.forEach((vc, i) => {
@@ -520,7 +489,6 @@ function veNode(tree) {
   veMotNode(tree);
 }
 
-// --- Tạo 1 node SVG ---
 function taoNodePhado(nguoi, x, y, nhomCha, loai) {
   const isChinh = loai === 'chinh';
   const w = isChinh ? NODE_WIDTH : SPOUSE_WIDTH;
@@ -532,7 +500,6 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
     .attr('transform', `translate(${x}, ${y})`)
     .attr('data-id', nguoi.id);
 
-  // Nền
   nodeGroup.append('rect')
     .attr('width', w)
     .attr('height', h)
@@ -540,7 +507,6 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
     .attr('ry', 8)
     .attr('cursor', 'pointer');
 
-  // Tên
   const maxNameLen = isChinh ? 22 : 18;
   const displayName = (nguoi.ho_ten || '(Không rõ)');
   const nameText = displayName.length > maxNameLen
@@ -558,7 +524,6 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
     .attr('cursor', 'pointer')
     .text(nameText);
 
-  // Tên chữ (chỉ node chính)
   if (isChinh && nguoi.ten_chu) {
     const tenChu = nguoi.ten_chu.length > 24
       ? nguoi.ten_chu.substring(0, 22) + '...'
@@ -574,7 +539,6 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
       .text(tenChu);
   }
 
-  // Đời
   nodeGroup.append('text')
     .attr('x', w / 2)
     .attr('y', isChinh ? 62 : 50)
@@ -583,7 +547,6 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
     .attr('fill', '#C9A961')
     .text(`Đời ${nguoi.doi}`);
 
-  // Sự kiện
   nodeGroup.on('click', function(event) {
     event.stopPropagation();
     chonNodePhado(nguoi.id);
@@ -602,13 +565,11 @@ function taoNodePhado(nguoi, x, y, nhomCha, loai) {
   return nodeGroup;
 }
 
-// --- Đếm tổng số node đã vẽ ---
 function demSoNode(node) {
   let count = 1 + node.voChong.length;
   node.con.forEach(c => count += demSoNode(c));
   return count;
 }
-
 
 // --- Zoom-fit toàn cây vào khung ---
 function fitCayVaoKhung() {
@@ -644,7 +605,7 @@ function fitCayVaoKhung() {
   const pad = 40;
   const scaleX = (svgW - pad * 2) / bbox.width;
   const scaleY = (svgH - pad * 2) / bbox.height;
-  const scale = Math.min(scaleX, scaleY, 1);
+  const scale = Math.min(scaleX, scaleY) * 0.95;
 
   const tx = (svgW - bbox.width * scale) / 2 - bbox.x * scale;
   const ty = (svgH - bbox.height * scale) / 2 - bbox.y * scale;
