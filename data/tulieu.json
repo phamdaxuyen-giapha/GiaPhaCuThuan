@@ -5,167 +5,32 @@
     "tong_so": 27
   },
   "anh": [
-    {
-      "file": "assets/tu-lieu/tu-lieu-01.webp",
-      "chuthich": "Quyển gia phả gốc phần chữ nho chỉ có đến đời thứ 6, các cụ chỉ có năm sinh không có năm mât. Năm mất của cụ Phạm Ngọc Thiện/Phạm Văn Thiện là tôi cập nhật theo 2 trang viết tay bố tôi (Cụ Phạm Văn Mỹ - đời thứ 7) trao cho. Dữ kiện trang đó cũng sơ sài/ Cho nên trang Web gia phả này tôi chỉ trích đến đời thứ 6  ",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-02.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-03.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-04.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-05.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-06.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-07.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-08.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-09.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-10.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-11.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-12.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-13.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-14.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-15.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-16.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-17.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-18.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-19.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-20.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-21.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-22.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-23.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-24.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-25.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-26.webp",
-      "chuthich": "",
-      "huong": "ngang",
-      "kich_thuoc": "1200×900"
-    },
-    {
-      "file": "assets/tu-lieu/tu-lieu-27.webp",
-      "chuthich": "",
-      "huong": "doc",
-      "kich_thuoc": "900×1200"
-    }
+    { "file": "assets/tu-lieu/tu-lieu-01.webp", "chuthich": "Trang 1", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-02.webp", "chuthich": "Trang 2", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-03.webp", "chuthich": "Trang 3", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-04.webp", "chuthich": "Trang 4", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-05.webp", "chuthich": "Trang 5", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-06.webp", "chuthich": "Trang 6", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-07.webp", "chuthich": "Trang 7", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-08.webp", "chuthich": "Trang 8", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-09.webp", "chuthich": "Trang 9", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-10.webp", "chuthich": "Trang 10", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-11.webp", "chuthich": "Trang 11", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-12.webp", "chuthich": "Trang 12", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-13.webp", "chuthich": "Trang 13", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-14.webp", "chuthich": "Trang 14", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-15.webp", "chuthich": "Trang 15", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-16.webp", "chuthich": "Trang 16", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-17.webp", "chuthich": "Trang 17", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-18.webp", "chuthich": "Trang 18", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-19.webp", "chuthich": "Trang 19", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-20.webp", "chuthich": "Trang 20", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-21.webp", "chuthich": "Trang 21", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-22.webp", "chuthich": "Trang 22", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-23.webp", "chuthich": "Trang 23", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-24.webp", "chuthich": "Trang 24", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-25.webp", "chuthich": "Trang 25", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-26.webp", "chuthich": "Trang 26", "huong": "ngang", "kich_thuoc": "1200x900" },
+    { "file": "assets/tu-lieu/tu-lieu-27.webp", "chuthich": "Trang 27", "huong": "doc", "kich_thuoc": "900x1200" }
   ]
 }
